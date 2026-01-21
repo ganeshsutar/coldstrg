@@ -1,0 +1,29 @@
+{
+  "title": "Cold Storage Management System",
+  "description": "Documentation for Cold Storage Management System - A comprehensive solution for managing agricultural cold storage operations",
+  "author": "Ganesh Sutar",
+  "language": "en",
+  "gitbook": ">=3.2.0",
+  "plugins": [
+    "search",
+    "fontsettings",
+    "theme-default"
+  ],
+  "pluginsConfig": {
+    "fontsettings": {
+      "theme": "white",
+      "family": "sans",
+      "size": 2
+    }
+  },
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md",
+    "glossary": "docs/glossary.md"
+  },
+  "links": {
+    "sidebar": {
+      "Home": "/"
+    }
+  }
+}

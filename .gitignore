@@ -1,0 +1,21 @@
+# GitBook build output
+_book/
+docs/screenshots/
+.claude/
+
+# Node modules (if using GitBook CLI locally)
+node_modules/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
