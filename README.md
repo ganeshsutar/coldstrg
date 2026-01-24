@@ -2,29 +2,31 @@
 
 A comprehensive cold storage management system designed to manage farmers (Kissan), traders (Vyapari), inventory, billing, accounting, and reporting for an agricultural cold storage facility.
 
-## Overview
-
-This system handles the complete lifecycle of agricultural cold storage operations:
-
-- **Party Management** - Register and manage farmers, traders, and other stakeholders
-- **Stock Management** - Track incoming (Amad) and outgoing (Nikasi) inventory
-- **Financial Transactions** - Vouchers, payments, receipts, and advances
-- **Deals & Trading** - Sauda (deals) between farmers and traders
-- **Billing** - Chitti (delivery receipts), Nikasi bills, and cash memos
-- **Reports** - Ledgers, balance sheets, and operational reports
-
-## Key Features
-
-| Feature | Description |
-|---------|-------------|
-| Multi-party Accounting | Separate ledgers for Kissan, Vyapari, and other parties |
-| Lot-based Tracking | Track goods by lot with room allocation |
-| Rent Management | Automatic rent calculation with grace periods |
-| Bardana Advances | Track packaging material advances to farmers |
-| Sauda Management | Create and execute deals between parties |
-| Comprehensive Reports | Financial and operational reporting |
-
 ## Documentation
+
+This repository contains the design documentation for the Cold Storage Management System. The documentation is built using MkDocs with the Material theme.
+
+### Serve Locally
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Serve documentation locally
+mkdocs serve
+```
+
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
+### Build Static Site
+
+```bash
+mkdocs build
+```
+
+The static site will be generated in the `site/` directory.
+
+## Documentation Structure
 
 | Document | Description |
 |----------|-------------|
@@ -32,18 +34,16 @@ This system handles the complete lifecycle of agricultural cold storage operatio
 | [Entities & Operations](docs/entities.md) | Data entities, relationships, and CRUD operations |
 | [Use Cases](docs/use-cases.md) | Detailed use case specifications |
 | [Dashboards & Reports](docs/dashboards.md) | KPIs, dashboards, and report catalog |
+| [Glossary](docs/glossary.md) | Hindi/industry terminology reference |
 
-## Technology
+## Key Features
 
-- **Platform:** Desktop Application (Windows)
-- **Language Support:** English and Hindi (Devanagari)
-
-## Quick Links
-
-- [Getting Started](docs/app-requirements.md#overview)
-- [Entity Relationships](docs/entities.md#entity-relationship-diagram)
-- [Use Case Overview](docs/use-cases.md#use-case-overview)
-- [KPIs by Role](docs/dashboards.md#kpis-by-role)
+- **Party Management** - Register and manage farmers, traders, and other stakeholders
+- **Stock Management** - Track incoming (Amad) and outgoing (Nikasi) inventory
+- **Financial Transactions** - Vouchers, payments, receipts, and advances
+- **Deals & Trading** - Sauda (deals) between farmers and traders
+- **Billing** - Chitti (delivery receipts), Nikasi bills, and cash memos
+- **Reports** - Ledgers, balance sheets, and operational reports
 
 ---
 

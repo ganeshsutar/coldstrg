@@ -1,9 +1,22 @@
-# GitBook build output
-_book/
+# MkDocs build output
+site/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+.venv/
+
+# Screenshots and assets (if local only)
 docs/screenshots/
+
+# Claude config
 .claude/
 
-# Node modules (if using GitBook CLI locally)
+# Node modules
 node_modules/
 
 # OS generated files

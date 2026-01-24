@@ -69,6 +69,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 **Purpose:** Create and manage party accounts (farmers, traders, and other stakeholders)
 
 **Fields:**
+
 | Field | Description |
 |-------|-------------|
 | Type of Account | Kissan (Farmer), Vyapari (Trader), etc. |
@@ -89,6 +90,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 | Remark | Additional notes |
 
 **Financial Settings:**
+
 | Field | Description |
 |-------|-------------|
 | Opening Bal | Opening balance (Dr/Cr) |
@@ -134,12 +136,14 @@ This is a comprehensive cold storage management system designed to manage farmer
 **Display Sections:**
 
 **Amad (Incoming):**
+
 | Category | Pkts | Wt | Rent |
 |----------|------|----|----|
 | Seedhi (Straight/Fresh) | Count | Weight | Amount |
 | Dump | Count | Weight | Amount |
 
 **Nikasi (Outgoing):**
+
 | Category | Pkts | Wt | Rent |
 |----------|------|----|----|
 | Seedhi | Count | Weight | Amount |
@@ -167,6 +171,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 **Purpose:** Configure commodities and their pricing
 
 **Fields:**
+
 | Field | Description |
 |-------|-------------|
 | Commodity | Name (AKHROT, POTATO, S.S COLD, etc.) |
@@ -177,6 +182,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 | Rate/Unit | Rate per unit (Field/Mandi) |
 
 **Grace Period Settings:**
+
 | Field | Description |
 |-------|-------------|
 | Zero Rent | Days of zero rent |
@@ -240,6 +246,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 **Purpose:** Financial voucher entry for all transactions
 
 **Voucher Types (Hotkeys):**
+
 | Key | Type |
 |-----|------|
 | F1 | List of Vouchers |
@@ -264,6 +271,7 @@ This is a comprehensive cold storage management system designed to manage farmer
 - Narration lines
 
 **Party Balance Display:**
+
 | Item | Dr Amount | Cr Amount | Balance |
 |------|-----------|-----------|---------|
 | Party Amad Bal | - | - | - |
@@ -487,8 +495,29 @@ This is a comprehensive cold storage management system designed to manage farmer
 
 ## 9. Security Requirements
 
-- User authentication (implied by software registration)
-- Role-based access (Master, Transaction, Reports)
+### 9.1 Authentication
+- User authentication with email/password
+- Session management with secure tokens
+
+### 9.2 Role-Based Access Control
+
+The system uses a simplified permission-based access control model:
+
+| Role | Permissions | Description |
+|------|-------------|-------------|
+| **Admin** | All permissions | Full access to all system features, settings, and user management |
+| **Operator** | All permissions (for now) | Currently has full access; will be limited to specific operational permissions in future versions |
+
+> **Note:** In the initial version, both Admin and Operator roles have full access. Future versions will introduce granular permissions to restrict Operator access to specific modules (e.g., Administration, Financial approvals).
+
+### 9.3 System Actors
+
+| Actor | Description |
+|-------|-------------|
+| **System** | Automated processes for calculations, alerts, and scheduled tasks |
+| **Operator** | Human users performing all operations (data entry, transactions, reports, configuration) |
+
+### 9.4 Audit & Backup
 - Audit trail for financial transactions
 - Data backup utilities
 

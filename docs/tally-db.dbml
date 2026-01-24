@@ -1,0 +1,429 @@
+// Tally ERP Database Schema
+// Generated from docs/tally-db.md
+//
+// DBML Documentation: https://dbml.dbdiagram.io/docs
+// View this diagram: https://dbdiagram.io/
+
+Project TallyERP {
+  database_type: 'SQL Server'
+  Note: '''
+    # Tally ERP Database Schema
+
+    This schema represents the relational structure of Tally ERP 9 / Tally Prime
+    as exposed through ODBC, TDL, or XML/API interfaces.
+
+    ## Conventions
+    - **mst_** prefix = Master/Reference tables
+    - **trn_** prefix = Transaction tables
+    - GUID is the primary key for most entities
+    - Name-based joins are common (ledger, item names)
+
+    ## Sign Conventions
+    - Amount: Negative (-) = Debit, Positive (+) = Credit
+    - Quantity: Negative (-) = Outward, Positive (+) = Inward
+  '''
+}
+
+// =============================================================================
+// ACCOUNTING MASTERS
+// =============================================================================
+
+Table mst_group {
+  guid varchar(64) [pk, not null, note: 'Globally Unique Identifier']
+  name nvarchar(1024) [not null, default: '', note: 'Group name (unique within company)']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent group name']
+  primary_group nvarchar(1024) [not null, default: '', note: 'Root-level ancestor group']
+  is_revenue tinyint [note: '1 = Revenue, 0 = Capital']
+  is_deemedpositive tinyint [note: '1 = Debit nature, 0 = Credit nature']
+  is_reserved tinyint [note: '1 = System group (predefined)']
+  affects_gross_profit tinyint [note: '1 = Affects Profit & Loss']
+  sort_position int
+
+  Note: '''
+    Organizes ledgers into classification hierarchy.
+    Tally provides 28 predefined groups:
+    - Assets: Bank Accounts, Cash-in-Hand, Fixed Assets, Sundry Debtors
+    - Liabilities: Bank OD, Current Liabilities, Sundry Creditors
+    - Income: Direct Income, Indirect Income, Sales Accounts
+    - Expenses: Direct Expenses, Indirect Expenses, Purchase Accounts
+    - Capital: Capital Account, Reserves & Surplus
+  '''
+}
+
+Table mst_ledger {
+  guid varchar(64) [pk, not null, note: 'Globally Unique Identifier']
+  name nvarchar(1024) [not null, default: '', note: 'Ledger name (unique)']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent group name']
+  alias nvarchar(256) [not null, default: '']
+  description nvarchar(64) [not null, default: '']
+  notes nvarchar(64) [not null, default: '']
+
+  // Classification
+  is_revenue tinyint [note: '1 = Revenue, 0 = Capital']
+  is_deemedpositive tinyint [note: '1 = Debit nature, 0 = Credit nature']
+
+  // Balances
+  opening_balance decimal(17,2) [default: 0]
+  closing_balance decimal(17,2) [default: 0, note: 'Calculated field']
+
+  // Contact Details
+  mailing_name nvarchar(256) [not null, default: '']
+  mailing_address nvarchar(1024) [not null, default: '']
+  mailing_state nvarchar(256) [not null, default: '']
+  mailing_country nvarchar(256) [not null, default: '']
+  mailing_pincode nvarchar(64) [not null, default: '']
+  email nvarchar(256) [not null, default: '']
+  mobile nvarchar(32) [not null, default: '']
+
+  // Statutory Information
+  it_pan nvarchar(64) [not null, default: '', note: 'Income Tax PAN']
+  gstn nvarchar(64) [not null, default: '', note: 'GST Number (15-char)']
+  gst_registration_type nvarchar(64) [not null, default: '', note: 'Regular/Composition/Unregistered/Consumer']
+  gst_supply_type nvarchar(64) [not null, default: '', note: 'Goods/Services']
+  gst_duty_head nvarchar(16) [not null, default: '', note: 'CGST/SGST/IGST']
+  tax_rate decimal(9,4) [default: 0]
+
+  // Banking Details
+  bank_account_holder nvarchar(256) [not null, default: '']
+  bank_account_number nvarchar(64) [not null, default: '']
+  bank_ifsc nvarchar(64) [not null, default: '']
+  bank_swift nvarchar(64) [not null, default: '']
+  bank_name nvarchar(64) [not null, default: '']
+  bank_branch nvarchar(64) [not null, default: '']
+
+  // Credit Terms
+  bill_credit_period int [not null, default: 0, note: 'Credit period in days']
+
+  Note: '''
+    Individual accounts where transactions are posted.
+    Every debit/credit entry in a voucher references a ledger.
+
+    Hierarchy: Primary Group → User Group → Ledger
+    Example: "Sundry Debtors" → "North Zone Debtors" → "ABC Corporation"
+  '''
+}
+
+// =============================================================================
+// INVENTORY MASTERS
+// =============================================================================
+
+Table mst_stock_group {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '', note: 'Stock group name']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent stock group']
+
+  Note: '''
+    Hierarchical classification for stock items.
+    Example: Primary → Electronics → Mobile Phones
+  '''
+}
+
+Table mst_stock_item {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '', note: 'Stock item name']
+  parent nvarchar(1024) [not null, default: '', note: 'Stock Group name']
+  category nvarchar(1024) [not null, default: '', note: 'Stock Category']
+  alias nvarchar(256) [not null, default: '']
+  description nvarchar(64) [not null, default: '']
+  notes nvarchar(64) [not null, default: '']
+  part_number nvarchar(256) [not null, default: '', note: 'Vendor catalog number']
+
+  // Units of Measure
+  uom nvarchar(32) [not null, default: '', note: 'Base unit (e.g., nos, kg)']
+  alternate_uom nvarchar(32) [not null, default: '', note: 'Alternate unit']
+  conversion decimal(15,4) [not null, default: 0, note: 'Conversion factor']
+
+  // Opening Stock
+  opening_balance decimal(15,4) [default: 0, note: 'Opening quantity']
+  opening_rate decimal(15,4) [default: 0, note: 'Opening rate per unit']
+  opening_value decimal(17,2) [default: 0, note: 'Opening total value']
+
+  // Closing Stock (Calculated)
+  closing_balance decimal(15,4) [default: 0]
+  closing_rate decimal(15,4) [default: 0]
+  closing_value decimal(17,2) [default: 0]
+
+  // Valuation
+  costing_method nvarchar(32) [not null, default: '', note: 'FIFO/LIFO/Avg Cost/Std Cost']
+
+  // GST Details
+  gst_type_of_supply nvarchar(32) [default: '', note: 'Goods/Services']
+  gst_hsn_code nvarchar(64) [default: '', note: 'HSN Code (Goods) or SAC Code (Services)']
+  gst_hsn_description nvarchar(256) [default: '']
+  gst_rate decimal(9,4) [default: 0, note: 'Tax rate % (0, 5, 12, 18, 28)']
+  gst_taxability nvarchar(32) [default: '', note: 'Taxable/Exempt/Nil Rated']
+
+  Note: '''
+    Individual inventory products or materials.
+
+    Costing Methods:
+    - Avg Cost (Weighted Average)
+    - FIFO (First In First Out)
+    - LIFO (Last In First Out)
+    - Std Cost (Standard Cost)
+    - Last Purchase Cost
+  '''
+}
+
+Table mst_godown {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '', note: 'Location name']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent godown (hierarchical)']
+  address nvarchar(1024) [not null, default: '']
+
+  Note: '''
+    Physical storage locations for inventory.
+    Default godown: "Main Location"
+  '''
+}
+
+Table mst_uom {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '', note: 'Symbol (e.g., nos, kg, ltr)']
+  formalname nvarchar(256) [not null, default: '', note: 'Full name (e.g., Numbers)']
+  is_simple_unit tinyint [not null, note: '1 = Simple, 0 = Compound']
+  base_units nvarchar(1024) [not null, note: 'For compound units']
+  additional_units nvarchar(1024) [not null, note: 'Secondary unit']
+  conversion decimal(15,4) [not null, note: 'Conversion factor']
+
+  Note: '''
+    Units of Measure.
+
+    Simple: nos, pcs, kg, ltr, mtr
+    Compound: dozen = 12 nos, box = 24 pcs
+  '''
+}
+
+// =============================================================================
+// VOUCHER CONFIGURATION
+// =============================================================================
+
+Table mst_vouchertype {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '', note: 'Voucher type name']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent voucher type']
+  numbering_method nvarchar(64) [not null, default: '', note: 'Auto/Manual']
+  is_deemedpositive tinyint
+  affects_stock tinyint [note: '1 = Updates inventory']
+
+  Note: '''
+    Standard Voucher Types:
+
+    Accounting: Receipt, Payment, Contra, Journal, Credit Note, Debit Note
+    Inventory: Purchase, Sales, Stock Journal, Delivery Note, Receipt Note
+    Order: Purchase Order, Sales Order
+  '''
+}
+
+// =============================================================================
+// COST ACCOUNTING
+// =============================================================================
+
+Table mst_cost_category {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '']
+
+  Note: 'Cost category masters for cost allocation'
+}
+
+Table mst_cost_centre {
+  guid varchar(64) [pk, not null]
+  name nvarchar(1024) [not null, default: '']
+  parent nvarchar(1024) [not null, default: '', note: 'Parent cost centre']
+  category nvarchar(1024) [not null, default: '', note: 'Cost category']
+
+  Note: 'Cost centre masters for tracking costs by department/project'
+}
+
+// =============================================================================
+// TRANSACTIONS (VOUCHERS)
+// =============================================================================
+
+Table trn_voucher {
+  guid varchar(64) [pk, not null, note: 'Voucher unique identifier']
+  date date [not null, note: 'Transaction date']
+  voucher_type nvarchar(1024) [not null, note: 'e.g., Sales, Purchase, Receipt']
+  voucher_number nvarchar(64) [not null, default: '']
+  reference_number nvarchar(64) [not null, default: '']
+  reference_date date
+  narration nvarchar(4000) [not null, default: '', note: 'Transaction description']
+  party_name nvarchar(256) [not null, note: 'Primary party']
+  place_of_supply nvarchar(256) [not null, note: 'For GST state determination']
+
+  // Classification Flags
+  is_invoice tinyint [note: '1 = Invoice voucher']
+  is_accounting_voucher tinyint [note: '1 = Affects accounts only']
+  is_inventory_voucher tinyint [note: '1 = Affects inventory']
+  is_order_voucher tinyint [note: '1 = Order (not actual transaction)']
+
+  Note: '''
+    Transaction header using Master-Detail architecture.
+
+    Child tables linked by guid:
+    - trn_accounting (ledger entries)
+    - trn_inventory (stock entries)
+    - trn_bill (bill allocations)
+    - trn_batch (batch allocations)
+  '''
+}
+
+Table trn_accounting {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  ledger nvarchar(1024) [not null, default: '', note: 'Ledger name']
+  amount decimal(17,2) [not null, default: 0, note: 'Negative = Debit, Positive = Credit']
+  amount_forex decimal(17,2) [not null, default: 0, note: 'Foreign currency amount']
+  currency nvarchar(16) [not null, default: '', note: 'Currency code']
+
+  indexes {
+    guid [name: 'idx_trn_accounting_guid']
+  }
+
+  Note: '''
+    Ledger entries (debits/credits) for each voucher.
+
+    Sign Convention:
+    - Negative (-) = Debit
+    - Positive (+) = Credit
+
+    Example Sales Invoice:
+    | Ledger        | Amount   | Type   |
+    |---------------|----------|--------|
+    | ABC Customer  | -11,800  | Debit  |
+    | Sales Account | 10,000   | Credit |
+    | CGST Output   | 900      | Credit |
+    | SGST Output   | 900      | Credit |
+  '''
+}
+
+Table trn_inventory {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  item nvarchar(1024) [not null, default: '', note: 'Stock item name']
+  quantity decimal(15,4) [not null, default: 0, note: 'Negative = Outward, Positive = Inward']
+  rate decimal(15,4) [not null, default: 0]
+  amount decimal(17,2) [not null, default: 0]
+  additional_amount decimal(17,2) [not null, default: 0, note: 'Freight, handling, etc.']
+  discount_amount decimal(17,2) [not null, default: 0]
+  godown nvarchar(1024) [note: 'Storage location name']
+  tracking_number nvarchar(256) [note: 'For order tracking']
+  order_number nvarchar(256)
+  order_duedate date
+
+  indexes {
+    guid [name: 'idx_trn_inventory_guid']
+  }
+
+  Note: '''
+    Stock line items for inventory vouchers.
+
+    Quantity Sign Convention:
+    - Negative (-) = Stock Outward (Sales, Issue)
+    - Positive (+) = Stock Inward (Purchase, Receipt)
+  '''
+}
+
+Table trn_bill {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  ledger nvarchar(1024) [not null, default: '', note: 'Party ledger name']
+  name nvarchar(1024) [not null, default: '', note: 'Bill/Invoice reference number']
+  amount decimal(17,2) [not null, default: 0]
+  billtype nvarchar(256) [not null, default: '', note: 'New Ref/Against Ref/Advance/On Account']
+  bill_credit_period int [not null, default: 0, note: 'Credit days']
+
+  indexes {
+    guid [name: 'idx_trn_bill_guid']
+  }
+
+  Note: '''
+    Invoice-wise payment allocations for party ledgers.
+
+    Bill Types:
+    - New Ref: Creating a new bill/invoice
+    - Against Ref: Settling against existing bill
+    - Advance: Advance payment/receipt
+    - On Account: Unallocated payment
+  '''
+}
+
+Table trn_batch {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  item nvarchar(1024) [not null, default: '', note: 'Stock item name']
+  name nvarchar(1024) [not null, default: '', note: 'Batch name/number']
+  quantity decimal(15,4) [not null, default: 0]
+  amount decimal(17,2) [not null, default: 0]
+  godown nvarchar(1024) [note: 'Source godown']
+  destination_godown nvarchar(1024) [note: 'For stock transfers']
+  tracking_number nvarchar(1024)
+
+  indexes {
+    guid [name: 'idx_trn_batch_guid']
+  }
+
+  Note: 'Batch-wise and godown-wise inventory tracking'
+}
+
+Table trn_bank {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  // Bank transaction details fields
+
+  indexes {
+    guid [name: 'idx_trn_bank_guid']
+  }
+
+  Note: 'Bank transaction details (cheque, transfer, etc.)'
+}
+
+Table trn_cost_centre {
+  guid varchar(64) [not null, default: '', note: 'FK to trn_voucher.guid']
+  cost_centre nvarchar(1024) [not null, default: '', note: 'Cost centre name']
+  amount decimal(17,2) [not null, default: 0]
+
+  indexes {
+    guid [name: 'idx_trn_cost_centre_guid']
+  }
+
+  Note: 'Cost centre allocations for transactions'
+}
+
+// =============================================================================
+// RELATIONSHIPS
+// =============================================================================
+
+// Accounting Masters
+Ref mst_group_self: mst_group.parent > mst_group.name [note: 'Group hierarchy (self-reference)']
+Ref ledger_to_group: mst_ledger.parent > mst_group.name [note: 'Ledger belongs to Group']
+
+// Inventory Masters
+Ref stock_group_self: mst_stock_group.parent > mst_stock_group.name [note: 'Stock group hierarchy']
+Ref stock_item_to_group: mst_stock_item.parent > mst_stock_group.name [note: 'Item belongs to Stock Group']
+Ref stock_item_to_uom: mst_stock_item.uom > mst_uom.name [note: 'Item uses Unit of Measure']
+
+// Godown hierarchy
+Ref godown_self: mst_godown.parent > mst_godown.name [note: 'Godown hierarchy']
+
+// Voucher type hierarchy
+Ref vouchertype_self: mst_vouchertype.parent > mst_vouchertype.name [note: 'Voucher type inheritance']
+
+// Cost Centre hierarchy
+Ref cost_centre_self: mst_cost_centre.parent > mst_cost_centre.name
+Ref cost_centre_to_category: mst_cost_centre.category > mst_cost_category.name
+
+// Transaction relationships (Header → Line Items)
+Ref accounting_to_voucher: trn_accounting.guid > trn_voucher.guid [note: 'Ledger entries for voucher']
+Ref inventory_to_voucher: trn_inventory.guid > trn_voucher.guid [note: 'Stock entries for voucher']
+Ref bill_to_voucher: trn_bill.guid > trn_voucher.guid [note: 'Bill allocations for voucher']
+Ref batch_to_voucher: trn_batch.guid > trn_voucher.guid [note: 'Batch allocations for voucher']
+Ref bank_to_voucher: trn_bank.guid > trn_voucher.guid [note: 'Bank details for voucher']
+Ref cost_centre_trn_to_voucher: trn_cost_centre.guid > trn_voucher.guid [note: 'Cost allocations for voucher']
+
+// Transaction to Master relationships (Name-based joins)
+Ref accounting_to_ledger: trn_accounting.ledger > mst_ledger.name [note: 'Entry references Ledger']
+Ref inventory_to_item: trn_inventory.item > mst_stock_item.name [note: 'Entry references Stock Item']
+Ref inventory_to_godown: trn_inventory.godown > mst_godown.name [note: 'Entry references Godown']
+Ref bill_to_ledger: trn_bill.ledger > mst_ledger.name [note: 'Bill references Party Ledger']
+Ref batch_to_item: trn_batch.item > mst_stock_item.name [note: 'Batch references Stock Item']
+Ref batch_to_godown: trn_batch.godown > mst_godown.name [note: 'Batch source godown']
+Ref batch_to_dest_godown: trn_batch.destination_godown > mst_godown.name [note: 'Batch destination godown']
+Ref cost_centre_trn_to_master: trn_cost_centre.cost_centre > mst_cost_centre.name
+
+// Voucher to Voucher Type
+Ref voucher_to_type: trn_voucher.voucher_type > mst_vouchertype.name [note: 'Voucher uses Voucher Type']

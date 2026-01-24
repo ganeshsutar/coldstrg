@@ -7,27 +7,31 @@ This document describes all entities in the Cold Storage Management System, thei
 ## Table of Contents
 
 1. [Entity Overview](#entity-overview)
-2. [Core Entities](#core-entities)
-   - [Party (Account)](#1-party-account)
-   - [Commodity (Item)](#2-commodity-item)
-   - [Room](#3-room)
-   - [Lot](#4-lot)
-3. [Transaction Entities](#transaction-entities)
-   - [Stock Transaction (Amad/Nikasi)](#5-stock-transaction-amadnikasi)
-   - [Voucher](#6-voucher)
-   - [Bardana (Packaging Advance)](#7-bardana-packaging-advance)
-   - [Chitti (Receipt/Slip)](#8-chitti-receiptslip)
-   - [Sauda (Deal)](#9-sauda-deal)
-4. [Supporting Entities](#supporting-entities)
-   - [Village/Location](#10-villagelocation)
-   - [Meter Reading](#11-meter-reading)
-   - [Temperature Record](#12-temperature-record)
-5. [Ledger & Report Entities](#ledger--report-entities)
-   - [Party Ledger](#13-party-ledger)
-   - [Cash Book](#14-cash-book)
-   - [Stock Register](#15-stock-register)
-6. [Entity Relationship Diagram](#entity-relationship-diagram)
-7. [Interaction Flows](#interaction-flows)
+2. [Multi-Tenancy Entities](#multi-tenancy-entities)
+   - [Global User](#1-global-user)
+   - [Organization (Tenant)](#2-organization-tenant)
+   - [Organization Membership](#3-organization-membership)
+3. [Core Entities](#core-entities)
+   - [Party (Account)](#4-party-account)
+   - [Commodity (Item)](#5-commodity-item)
+   - [Room](#6-room)
+   - [Lot](#7-lot)
+4. [Transaction Entities](#transaction-entities)
+   - [Stock Transaction (Amad/Nikasi)](#8-stock-transaction-amadnikasi)
+   - [Voucher](#9-voucher)
+   - [Bardana (Packaging Advance)](#10-bardana-packaging-advance)
+   - [Chitti (Receipt/Slip)](#11-chitti-receiptslip)
+   - [Sauda (Deal)](#12-sauda-deal)
+5. [Supporting Entities](#supporting-entities)
+   - [Village/Location](#13-villagelocation)
+   - [Meter Reading](#14-meter-reading)
+   - [Temperature Record](#15-temperature-record)
+6. [Ledger & Report Entities](#ledger--report-entities)
+   - [Party Ledger](#16-party-ledger)
+   - [Cash Book](#17-cash-book)
+   - [Stock Register](#18-stock-register)
+7. [Entity Relationship Diagram](#entity-relationship-diagram)
+8. [Interaction Flows](#interaction-flows)
 
 ---
 
@@ -35,27 +39,168 @@ This document describes all entities in the Cold Storage Management System, thei
 
 | # | Entity | Type | Description |
 |---|--------|------|-------------|
-| 1 | Party | Master | Farmers, traders, staff, and other stakeholders |
-| 2 | Commodity | Master | Items stored (potato, walnut, etc.) |
-| 3 | Room | Master | Physical storage rooms in cold storage |
-| 4 | Lot | Master | A batch of commodity belonging to a party |
-| 5 | Stock Transaction | Transaction | Incoming (Amad) and outgoing (Nikasi) movements |
-| 6 | Voucher | Transaction | Financial entries (payment, receipt, journal) |
-| 7 | Bardana | Transaction | Packaging material advances and returns |
-| 8 | Chitti | Transaction | Delivery receipts/slips |
-| 9 | Sauda | Transaction | Deals/agreements between parties |
-| 10 | Village | Master | Location master for party addresses |
-| 11 | Meter Reading | Record | Electricity meter photo documentation |
-| 12 | Temperature Record | Record | Storage temperature logs |
-| 13 | Party Ledger | Derived | Financial ledger per party (computed) |
-| 14 | Cash Book | Derived | Daily cash transactions (computed) |
-| 15 | Stock Register | Derived | Stock movement register (computed) |
+| 1 | Global User | Identity | Individual user identity across all organizations |
+| 2 | Organization | Tenant | Cold storage facility (tenant boundary) |
+| 3 | Organization Membership | Junction | Links users to organizations with roles |
+| 4 | Party | Master | Farmers, traders, staff, and other stakeholders |
+| 5 | Commodity | Master | Items stored (potato, walnut, etc.) |
+| 6 | Room | Master | Physical storage rooms in cold storage |
+| 7 | Lot | Master | A batch of commodity belonging to a party |
+| 8 | Stock Transaction | Transaction | Incoming (Amad) and outgoing (Nikasi) movements |
+| 9 | Voucher | Transaction | Financial entries (payment, receipt, journal) |
+| 10 | Bardana | Transaction | Packaging material advances and returns |
+| 11 | Chitti | Transaction | Delivery receipts/slips |
+| 12 | Sauda | Transaction | Deals/agreements between parties |
+| 13 | Village | Master | Location master for party addresses |
+| 14 | Meter Reading | Record | Electricity meter photo documentation |
+| 15 | Temperature Record | Record | Storage temperature logs |
+| 16 | Party Ledger | Derived | Financial ledger per party (computed) |
+| 17 | Cash Book | Derived | Daily cash transactions (computed) |
+| 18 | Stock Register | Derived | Stock movement register (computed) |
+
+---
+
+## Multi-Tenancy Entities
+
+These entities support the multi-tenant architecture, enabling users to access multiple organizations with a single identity.
+
+### 1. Global User
+
+**Description:** Represents an individual's identity, existing independently of any organization. Users can belong to multiple organizations.
+
+#### Attributes
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| id | UUID | Yes | Unique identifier |
+| email | String | Yes | Login email (unique across system) |
+| password_hash | String | Yes | Securely hashed password |
+| full_name | String | Yes | Display name |
+| phone | String | No | Contact number |
+| avatar_url | String | No | Profile picture URL |
+| email_verified | Boolean | Yes | Email verification status |
+| is_active | Boolean | Yes | Account active status |
+| last_login_at | DateTime | No | Last successful login |
+| created_at | DateTime | Yes | Account creation timestamp |
+| updated_at | DateTime | Yes | Last update timestamp |
+
+#### Operations
+
+| Operation | Description | Records Created/Modified |
+|-----------|-------------|--------------------------|
+| **Register** | Create new user account | Global User record |
+| **Login** | Authenticate user | Updates last_login_at |
+| **Update Profile** | Modify user details | Global User record |
+| **Change Password** | Update password | Global User password_hash |
+| **Deactivate** | Disable user account | Global User is_active = false |
+
+#### Relationships
+
+- **Has many:** Organization Memberships
+- **Belongs to many:** Organizations (through Membership)
+
+---
+
+### 2. Organization (Tenant)
+
+**Description:** Represents a cold storage facility - the top-level boundary for data isolation and billing.
+
+#### Attributes
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| id | UUID | Yes | Unique identifier |
+| name | String | Yes | Organization name |
+| name_hindi | String | No | Name in Hindi |
+| slug | String | Yes | URL-friendly identifier (unique) |
+| address | Text | No | Physical address |
+| city | String | No | City name |
+| state | String | No | State name |
+| phone | String | No | Contact number |
+| email | String | No | Organization email |
+| gst_no | String | No | GST registration number |
+| logo_url | String | No | Organization logo |
+| timezone | String | Yes | Timezone (default: Asia/Kolkata) |
+| financial_year_start | Integer | Yes | Financial year start month (1-12) |
+| billing_status | Enum | Yes | TRIAL, ACTIVE, SUSPENDED, CANCELLED |
+| subscription_plan | String | No | Current subscription tier |
+| settings | JSONB | No | Organization-specific settings |
+| is_active | Boolean | Yes | Organization active status |
+| created_at | DateTime | Yes | Creation timestamp |
+| updated_at | DateTime | Yes | Last update timestamp |
+
+#### Operations
+
+| Operation | Description | Records Created/Modified |
+|-----------|-------------|--------------------------|
+| **Create** | Create new organization | Organization, Owner Membership |
+| **Read** | View organization details | - |
+| **Update** | Modify organization settings | Organization record |
+| **Delete** | Soft delete organization | Organization is_active = false |
+| **Switch** | Change user's active organization | Client state |
+
+#### Relationships
+
+- **Has many:** Organization Memberships, Parties, Lots, Vouchers, etc.
+- **Belongs to many:** Global Users (through Membership)
+
+---
+
+### 3. Organization Membership
+
+**Description:** Junction entity linking Global Users to Organizations, defining their role and permissions within each organization.
+
+#### Attributes
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| id | UUID | Yes | Unique identifier |
+| user_id | UUID (FK) | Yes | Reference to Global User |
+| organization_id | UUID (FK) | Yes | Reference to Organization |
+| role | Enum | Yes | ADMIN, OPERATOR |
+| is_default | Boolean | Yes | Whether this is user's default organization |
+| invited_by | UUID (FK) | No | User who sent invitation |
+| invited_at | DateTime | No | Invitation timestamp |
+| joined_at | DateTime | No | When user accepted invitation |
+| status | Enum | Yes | PENDING, ACTIVE, SUSPENDED |
+| permissions | JSONB | No | Custom permission overrides |
+| created_at | DateTime | Yes | Creation timestamp |
+| updated_at | DateTime | Yes | Last update timestamp |
+
+**Unique Constraint:** `(user_id, organization_id)` - User can only have one membership per organization.
+
+#### Roles
+
+| Role | Description | Key Permissions |
+|------|-------------|-----------------|
+| **ADMIN** | Organization administrator | Full control, user management, settings, all operations |
+| **OPERATOR** | Primary system user (staff) | All operations (for now); will be limited in future versions |
+
+> **Note:** In the initial version, both Admin and Operator roles have full access. Future versions will introduce granular permissions to restrict Operator access to specific modules.
+>
+> **Actor Consolidation:** The original design had multiple roles (Owner, Manager, Accountant, Operator, Viewer). These have been consolidated into Admin and Operator for simplicity, with access control managed through the permission system rather than separate roles.
+
+#### Operations
+
+| Operation | Description | Records Created/Modified |
+|-----------|-------------|--------------------------|
+| **Invite** | Invite user to organization | Membership (PENDING) or direct (ACTIVE) |
+| **Accept** | Accept invitation | Membership status = ACTIVE |
+| **Update Role** | Change user's role | Membership role |
+| **Suspend** | Temporarily disable access | Membership status = SUSPENDED |
+| **Remove** | Remove user from organization | Membership deleted |
+
+#### Relationships
+
+- **Belongs to:** Global User, Organization
 
 ---
 
 ## Core Entities
 
-### 1. Party (Account)
+> **Note:** All core entities below include an `organization_id` field for multi-tenancy data isolation.
+
+### 4. Party (Account)
 
 **Description:** Represents all stakeholders - farmers who store produce, traders who buy/sell, staff, and other parties.
 
@@ -63,7 +208,9 @@ This document describes all entities in the Cold Storage Management System, thei
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| account_no | String | Yes | Unique identifier |
+| id | UUID | Yes | Unique identifier |
+| organization_id | UUID (FK) | Yes | Reference to Organization (tenant isolation) |
+| account_no | String | Yes | Unique identifier within organization |
 | account_name | String | Yes | Full name |
 | account_type | Enum | Yes | KISSAN, VYAPARI, STAFF, SUNDRY_DEBTOR, AARTI |
 | father_husband_name | String | No | Guardian name |
@@ -124,13 +271,14 @@ This document describes all entities in the Cold Storage Management System, thei
 
 #### Relationships
 
+- **Belongs to:** Organization (tenant)
 - **Has many:** Lots, Stock Transactions, Vouchers, Bardana Transactions, Sauda
 - **Belongs to:** Village
 - **References:** Guarantor (another Party)
 
 ---
 
-### 2. Commodity (Item)
+### 5. Commodity (Item)
 
 **Description:** Products stored in the cold storage facility (potatoes, walnuts, etc.).
 
@@ -172,7 +320,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 3. Room
+### 6. Room
 
 **Description:** Physical storage rooms within the cold storage facility.
 
@@ -202,7 +350,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 4. Lot
+### 7. Lot
 
 **Description:** A batch/lot of commodity belonging to a specific party, stored in a room.
 
@@ -243,7 +391,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ## Transaction Entities
 
-### 5. Stock Transaction (Amad/Nikasi)
+### 8. Stock Transaction (Amad/Nikasi)
 
 **Description:** Records all stock movements - incoming (Amad) and outgoing (Nikasi).
 
@@ -292,7 +440,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 6. Voucher
+### 9. Voucher
 
 **Description:** Financial transactions - payments, receipts, journals, and contra entries.
 
@@ -340,7 +488,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 7. Bardana (Packaging Advance)
+### 10. Bardana (Packaging Advance)
 
 **Description:** Advance payments for jute bags/packaging materials given to farmers.
 
@@ -391,7 +539,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 8. Chitti (Receipt/Slip)
+### 11. Chitti (Receipt/Slip)
 
 **Description:** Delivery receipt issued when stock leaves the cold storage.
 
@@ -427,7 +575,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 9. Sauda (Deal)
+### 12. Sauda (Deal)
 
 **Description:** Deals/agreements between parties for buying/selling stored goods.
 
@@ -468,7 +616,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ## Supporting Entities
 
-### 10. Village/Location
+### 13. Village/Location
 
 **Description:** Master list of villages and cities for party addresses.
 
@@ -498,7 +646,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 11. Meter Reading
+### 14. Meter Reading
 
 **Description:** Electricity meter photo documentation.
 
@@ -523,7 +671,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 ---
 
-### 12. Temperature Record
+### 15. Temperature Record
 
 **Description:** Storage temperature monitoring logs.
 
@@ -552,7 +700,7 @@ This document describes all entities in the Cold Storage Management System, thei
 
 These are derived/computed entities based on transaction data.
 
-### 13. Party Ledger
+### 16. Party Ledger
 
 **Description:** Complete financial ledger for a party showing all transactions.
 
@@ -579,7 +727,7 @@ These are derived/computed entities based on transaction data.
 
 ---
 
-### 14. Cash Book
+### 17. Cash Book
 
 **Description:** Daily record of all cash transactions.
 
@@ -601,7 +749,7 @@ These are derived/computed entities based on transaction data.
 
 ---
 
-### 15. Stock Register
+### 18. Stock Register
 
 **Description:** Complete stock movement register.
 
