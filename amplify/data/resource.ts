@@ -19,7 +19,6 @@ const schema = a.schema({
       billingStatus: a.string(),
       settings: a.json(),
       isActive: a.boolean().default(true),
-      memberships: a.hasMany('Membership', 'organizationId'),
     })
     .authorization((allow) => [
       allow.authenticated(),
@@ -31,7 +30,6 @@ const schema = a.schema({
     .model({
       userId: a.id().required(),
       organizationId: a.id().required(),
-      organization: a.belongsTo('Organization', 'organizationId'),
       role: a.string(),
       status: a.string(),
       isDefault: a.boolean().default(false),

@@ -40,24 +40,28 @@ export function useAuth() {
       try {
         const { data: memberships } = await client.models.Membership.membershipsByUserId(
           { userId },
-          { selectionSet: ['id', 'organizationId', 'role', 'isDefault', 'organization.*'] }
+          { selectionSet: ['id', 'organizationId', 'role', 'isDefault'] }
         );
 
         if (!memberships || memberships.length === 0) {
           return [];
         }
 
-        return memberships
-          .filter((m) => m.organization)
-          .map((m) => {
-            const org = m.organization as unknown as Organization;
-            return {
-              ...org,
+        // Fetch organizations separately
+        const orgsWithRoles: OrganizationWithRole[] = [];
+        for (const m of memberships) {
+          const { data: org } = await client.models.Organization.get({ id: m.organizationId });
+          if (org) {
+            orgsWithRoles.push({
+              ...(org as unknown as Organization),
               role: m.role as 'ADMIN' | 'OPERATOR',
               membershipId: m.id,
               isDefault: m.isDefault ?? false,
-            };
-          });
+            });
+          }
+        }
+
+        return orgsWithRoles;
       } catch (error) {
         console.error('Error fetching organizations:', error);
         return [];
