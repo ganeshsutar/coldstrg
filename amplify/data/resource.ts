@@ -1,17 +1,78 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any user authenticated via an API key can "create", "read",
-"update", and "delete" any "Todo" records.
-=========================================================================*/
+// Enums
+const BillingStatus = a.enum(['TRIAL', 'ACTIVE', 'SUSPENDED', 'CANCELLED']);
+const MemberRole = a.enum(['ADMIN', 'OPERATOR']);
+const MemberStatus = a.enum(['PENDING', 'ACTIVE', 'SUSPENDED']);
+const Language = a.enum(['EN', 'HI']);
+const Theme = a.enum(['LIGHT', 'DARK', 'SYSTEM']);
+
 const schema = a.schema({
-  Todo: a
+  // Organization - tenant entity
+  Organization: a
     .model({
-      content: a.string(),
+      name: a.string().required(),
+      nameHindi: a.string(),
+      slug: a.string().required(),
+      address: a.string(),
+      city: a.string(),
+      state: a.string(),
+      phone: a.string(),
+      email: a.email(),
+      gstin: a.string(),
+      logoUrl: a.url(),
+      timezone: a.string().default('Asia/Kolkata'),
+      financialYearStart: a.integer().default(4), // April
+      billingStatus: a.ref('BillingStatus'),
+      settings: a.json(),
+      isActive: a.boolean().default(true),
+      memberships: a.hasMany('Membership', 'organizationId'),
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .authorization((allow) => [
+      allow.authenticated(),
+      allow.publicApiKey().to(['read']),
+    ]),
+
+  // Membership - user-organization junction
+  Membership: a
+    .model({
+      userId: a.string().required(),
+      organizationId: a.id().required(),
+      organization: a.belongsTo('Organization', 'organizationId'),
+      role: a.ref('MemberRole').required(),
+      status: a.ref('MemberStatus'),
+      isDefault: a.boolean().default(false),
+      joinedAt: a.datetime(),
+      invitedBy: a.string(),
+      invitedAt: a.datetime(),
+    })
+    .secondaryIndexes((index) => [
+      index('userId').sortKeys(['organizationId']).queryField('membershipsByUserId'),
+      index('organizationId').sortKeys(['userId']).queryField('membershipsByOrganizationId'),
+    ])
+    .authorization((allow) => [
+      allow.authenticated(),
+    ]),
+
+  // UserSettings - per-user preferences
+  UserSettings: a
+    .model({
+      userId: a.id().required(),
+      lastOrganizationId: a.id(),
+      preferredLanguage: a.ref('Language'),
+      theme: a.ref('Theme'),
+    })
+    .identifier(['userId'])
+    .authorization((allow) => [
+      allow.authenticated(),
+    ]),
+
+  // Enum definitions
+  BillingStatus,
+  MemberRole,
+  MemberStatus,
+  Language,
+  Theme,
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,39 +80,9 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    // API Key is used for a.allow.public() rules
+    defaultAuthorizationMode: "userPool",
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
   },
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>

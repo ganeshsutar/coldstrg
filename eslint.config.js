@@ -45,6 +45,9 @@ export default defineConfig([{
     rules: {
         "react-refresh/only-export-components": ["warn", {
             allowConstantExport: true,
+            allowExportNames: ["buttonVariants", "useFormField", "router", "PageLoader", "ProtectedRoute", "PublicRoute"],
         }],
+        // Disable incompatible library warnings for react-hook-form
+        "react-hooks/incompatible-library": "off",
     },
 }, globalIgnores(["**/dist"])]);
