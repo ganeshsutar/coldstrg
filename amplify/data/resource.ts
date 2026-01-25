@@ -1,12 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-// Enums
-const BillingStatus = a.enum(['TRIAL', 'ACTIVE', 'SUSPENDED', 'CANCELLED']);
-const MemberRole = a.enum(['ADMIN', 'OPERATOR']);
-const MemberStatus = a.enum(['PENDING', 'ACTIVE', 'SUSPENDED']);
-const Language = a.enum(['EN', 'HI']);
-const Theme = a.enum(['LIGHT', 'DARK', 'SYSTEM']);
-
 const schema = a.schema({
   // Organization - tenant entity
   Organization: a
@@ -22,8 +15,8 @@ const schema = a.schema({
       gstin: a.string(),
       logoUrl: a.url(),
       timezone: a.string().default('Asia/Kolkata'),
-      financialYearStart: a.integer().default(4), // April
-      billingStatus: a.ref('BillingStatus'),
+      financialYearStart: a.integer().default(4),
+      billingStatus: a.enum(['TRIAL', 'ACTIVE', 'SUSPENDED', 'CANCELLED']),
       settings: a.json(),
       isActive: a.boolean().default(true),
       memberships: a.hasMany('Membership', 'organizationId'),
@@ -39,8 +32,8 @@ const schema = a.schema({
       userId: a.string().required(),
       organizationId: a.id().required(),
       organization: a.belongsTo('Organization', 'organizationId'),
-      role: a.ref('MemberRole').required(),
-      status: a.ref('MemberStatus'),
+      role: a.enum(['ADMIN', 'OPERATOR']),
+      status: a.enum(['PENDING', 'ACTIVE', 'SUSPENDED']),
       isDefault: a.boolean().default(false),
       joinedAt: a.datetime(),
       invitedBy: a.string(),
@@ -59,20 +52,13 @@ const schema = a.schema({
     .model({
       userId: a.id().required(),
       lastOrganizationId: a.id(),
-      preferredLanguage: a.ref('Language'),
-      theme: a.ref('Theme'),
+      preferredLanguage: a.enum(['EN', 'HI']),
+      theme: a.enum(['LIGHT', 'DARK', 'SYSTEM']),
     })
     .identifier(['userId'])
     .authorization((allow) => [
       allow.authenticated(),
     ]),
-
-  // Enum definitions
-  BillingStatus,
-  MemberRole,
-  MemberStatus,
-  Language,
-  Theme,
 });
 
 export type Schema = ClientSchema<typeof schema>;
