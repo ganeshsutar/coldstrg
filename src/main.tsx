@@ -1,16 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Amplify } from 'aws-amplify';
-import { AppProvider } from './app/provider';
-import outputs from '../amplify_outputs.json';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { Amplify } from "aws-amplify";
+import outputs from "../amplify_outputs.json";
 
-// Configure Amplify with the outputs file
-// Note: For local development, run `npx ampx sandbox` to generate proper configuration
 Amplify.configure(outputs);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AppProvider />
+    <App />
   </React.StrictMode>
 );
