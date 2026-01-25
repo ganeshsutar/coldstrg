@@ -1,13 +1,6 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
-  // Enum definitions (schema-level)
-  BillingStatus: a.enum(['TRIAL', 'ACTIVE', 'SUSPENDED', 'CANCELLED']),
-  MembershipRole: a.enum(['ADMIN', 'OPERATOR']),
-  MembershipStatus: a.enum(['PENDING', 'ACTIVE', 'SUSPENDED']),
-  Language: a.enum(['EN', 'HI']),
-  Theme: a.enum(['LIGHT', 'DARK', 'SYSTEM']),
-
   // Organization - tenant entity
   Organization: a
     .model({
@@ -23,7 +16,7 @@ const schema = a.schema({
       logoUrl: a.url(),
       timezone: a.string().default('Asia/Kolkata'),
       financialYearStart: a.integer().default(4),
-      billingStatus: a.ref('BillingStatus'),
+      billingStatus: a.string(),
       settings: a.json(),
       isActive: a.boolean().default(true),
       memberships: a.hasMany('Membership', 'organizationId'),
@@ -39,8 +32,8 @@ const schema = a.schema({
       userId: a.id().required(),
       organizationId: a.id().required(),
       organization: a.belongsTo('Organization', 'organizationId'),
-      role: a.ref('MembershipRole'),
-      status: a.ref('MembershipStatus'),
+      role: a.string(),
+      status: a.string(),
       isDefault: a.boolean().default(false),
       joinedAt: a.datetime(),
       invitedBy: a.string(),
@@ -59,8 +52,8 @@ const schema = a.schema({
     .model({
       userId: a.id().required(),
       lastOrganizationId: a.id(),
-      preferredLanguage: a.ref('Language'),
-      theme: a.ref('Theme'),
+      preferredLanguage: a.string(),
+      theme: a.string(),
     })
     .identifier(['userId'])
     .authorization((allow) => [
