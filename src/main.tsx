@@ -6,7 +6,7 @@ import outputs from '../amplify_outputs.json';
 import './index.css';
 
 // Configure Amplify with the outputs file
-// Note: Run `npx ampx sandbox` to generate proper configuration
+// Note: For local development, run `npx ampx sandbox` to generate proper configuration
 Amplify.configure(outputs);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
