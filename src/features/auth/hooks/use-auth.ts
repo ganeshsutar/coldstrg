@@ -11,8 +11,7 @@ import {
   resendSignUpCode,
 } from 'aws-amplify/auth';
 import { useAuthStore } from '@/stores/auth-store';
-import { client } from '@/lib/amplify';
-import type { AuthUser, OrganizationWithRole, Organization } from '../types';
+import type { AuthUser, OrganizationWithRole } from '../types';
 
 interface RegisterData {
   fullName: string;
@@ -20,6 +19,31 @@ interface RegisterData {
   phone?: string;
   password: string;
 }
+
+// Mock organization for demo purposes
+const mockOrganization: OrganizationWithRole = {
+  id: 'mock-org-1',
+  name: 'Demo Organization',
+  nameHindi: 'डेमो संगठन',
+  slug: 'demo-org',
+  address: '123 Demo Street',
+  city: 'Delhi',
+  state: 'Delhi',
+  phone: '+91 9876543210',
+  email: 'demo@example.com',
+  gstin: '07AAACR5055K1Z5',
+  logoUrl: null,
+  timezone: 'Asia/Kolkata',
+  financialYearStart: 4,
+  billingStatus: 'ACTIVE',
+  settings: null,
+  isActive: true,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  role: 'ADMIN',
+  membershipId: 'mock-membership-1',
+  isDefault: true,
+};
 
 export function useAuth() {
   const {
@@ -35,125 +59,15 @@ export function useAuth() {
     logout: storeLogout,
   } = useAuthStore();
 
-  const fetchOrganizations = useCallback(
-    async (userId: string): Promise<OrganizationWithRole[]> => {
-      try {
-        const { data: memberships } = await client.models.Membership.membershipsByUserId(
-          { userId },
-          { selectionSet: ['id', 'organizationId', 'role', 'isDefault'] }
-        );
-
-        if (!memberships || memberships.length === 0) {
-          return [];
-        }
-
-        // Fetch organizations separately
-        const orgsWithRoles: OrganizationWithRole[] = [];
-        for (const m of memberships) {
-          const { data: org } = await client.models.Organization.get({ id: m.organizationId });
-          if (org) {
-            orgsWithRoles.push({
-              ...(org as unknown as Organization),
-              role: m.role as 'ADMIN' | 'OPERATOR',
-              membershipId: m.id,
-              isDefault: m.isDefault ?? false,
-            });
-          }
-        }
-
-        return orgsWithRoles;
-      } catch (error) {
-        console.error('Error fetching organizations:', error);
-        return [];
-      }
-    },
-    []
-  );
-
-  const getUserSettings = useCallback(async (userId: string) => {
-    try {
-      const { data: settings } = await client.models.UserSettings.get({ userId });
-      return settings;
-    } catch {
-      return null;
-    }
+  // Mock: Return dummy organization array
+  const fetchOrganizations = useCallback(async (): Promise<OrganizationWithRole[]> => {
+    return [mockOrganization];
   }, []);
 
-  const updateLastOrganization = useCallback(async (userId: string, organizationId: string) => {
-    try {
-      const { data: existing } = await client.models.UserSettings.get({ userId });
-
-      if (existing) {
-        await client.models.UserSettings.update({
-          userId,
-          lastOrganizationId: organizationId,
-        });
-      } else {
-        await client.models.UserSettings.create({
-          userId,
-          lastOrganizationId: organizationId,
-        });
-      }
-    } catch (error) {
-      console.error('Error updating last organization:', error);
-    }
+  // Mock: Return dummy organization
+  const createDefaultOrganization = useCallback(async (): Promise<OrganizationWithRole | null> => {
+    return mockOrganization;
   }, []);
-
-  const createDefaultOrganization = useCallback(
-    async (userId: string, userName: string): Promise<OrganizationWithRole | null> => {
-      try {
-        // Create slug from name
-        const slug = userName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)/g, '')
-          .slice(0, 50) + '-org';
-
-        // Create organization
-        const { data: org } = await client.models.Organization.create({
-          name: `${userName}'s Organization`,
-          slug,
-          isActive: true,
-        });
-
-        if (!org) {
-          throw new Error('Failed to create organization');
-        }
-
-        // Create membership as ADMIN
-        const { data: membership } = await client.models.Membership.create({
-          userId,
-          organizationId: org.id,
-          role: 'ADMIN',
-          status: 'ACTIVE',
-          isDefault: true,
-          joinedAt: new Date().toISOString(),
-        });
-
-        if (!membership) {
-          throw new Error('Failed to create membership');
-        }
-
-        // Create user settings
-        await client.models.UserSettings.create({
-          userId,
-          lastOrganizationId: org.id,
-        });
-
-        const orgData = org as unknown as Organization;
-        return {
-          ...orgData,
-          role: 'ADMIN',
-          membershipId: membership.id,
-          isDefault: true,
-        };
-      } catch (error) {
-        console.error('Error creating default organization:', error);
-        return null;
-      }
-    },
-    []
-  );
 
   const checkAuth = useCallback(async () => {
     setIsLoading(true);
@@ -171,26 +85,12 @@ export function useAuth() {
 
       setUser(authUser);
 
-      // Fetch organizations
-      const orgs = await fetchOrganizations(cognitoUser.userId);
+      // Use mock organizations
+      const orgs = await fetchOrganizations();
       setOrganizations(orgs);
 
-      // Get user settings to find last organization
-      const settings = await getUserSettings(cognitoUser.userId);
-
-      // Set current organization based on priority:
-      // 1. Last used organization
-      // 2. Default organization
-      // 3. First organization
-      let currentOrg: OrganizationWithRole | null = null;
-
-      if (settings?.lastOrganizationId) {
-        currentOrg = orgs.find((o) => o.id === settings.lastOrganizationId) || null;
-      }
-
-      if (!currentOrg) {
-        currentOrg = orgs.find((o) => o.isDefault) || orgs[0] || null;
-      }
+      // Set current organization to mock
+      const currentOrg = orgs[0] || null;
 
       if (currentOrg) {
         setCurrentOrganization(currentOrg);
@@ -205,7 +105,7 @@ export function useAuth() {
     } finally {
       setIsLoading(false);
     }
-  }, [fetchOrganizations, getUserSettings, setCurrentOrganization, setIsLoading, setOrganizations, setUser]);
+  }, [fetchOrganizations, setCurrentOrganization, setIsLoading, setOrganizations, setUser]);
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -273,14 +173,12 @@ export function useAuth() {
     storeLogout();
   }, [storeLogout]);
 
+  // Mock: Just update state with selected org
   const switchOrganization = useCallback(
     async (organization: OrganizationWithRole) => {
       setCurrentOrganization(organization);
-      if (user) {
-        await updateLastOrganization(user.userId, organization.id);
-      }
     },
-    [setCurrentOrganization, updateLastOrganization, user]
+    [setCurrentOrganization]
   );
 
   return {

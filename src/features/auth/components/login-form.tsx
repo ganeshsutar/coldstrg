@@ -62,10 +62,7 @@ export function LoginForm() {
 
         // If no organizations, create default one
         if (orgs.length === 0) {
-          const defaultOrg = await createDefaultOrganization(
-            result.user.userId,
-            result.user.fullName
-          );
+          const defaultOrg = await createDefaultOrganization();
           if (defaultOrg) {
             orgs = [defaultOrg];
             setOrganizations(orgs);
