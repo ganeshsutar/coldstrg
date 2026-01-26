@@ -1,0 +1,9 @@
+export interface NavItem {
+  id: string;
+  label: string;
+  icon: string;
+  href?: string;
+  to?: string;
+  children?: NavItem[];
+  badge?: number;
+}
