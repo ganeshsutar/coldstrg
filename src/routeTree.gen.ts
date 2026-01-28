@@ -17,6 +17,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedInventoryTakpattiRouteImport } from './routes/_authenticated/inventory/takpatti'
+import { Route as AuthenticatedInventoryStockTransferRouteImport } from './routes/_authenticated/inventory/stock-transfer'
+import { Route as AuthenticatedInventoryNikasiRouteImport } from './routes/_authenticated/inventory/nikasi'
+import { Route as AuthenticatedInventoryAmadRouteImport } from './routes/_authenticated/inventory/amad'
+import { Route as AuthenticatedInventoryAmadAmadIdRouteImport } from './routes/_authenticated/inventory/amad.$amadId'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -57,6 +62,36 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedInventoryTakpattiRoute =
+  AuthenticatedInventoryTakpattiRouteImport.update({
+    id: '/inventory/takpatti',
+    path: '/inventory/takpatti',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInventoryStockTransferRoute =
+  AuthenticatedInventoryStockTransferRouteImport.update({
+    id: '/inventory/stock-transfer',
+    path: '/inventory/stock-transfer',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInventoryNikasiRoute =
+  AuthenticatedInventoryNikasiRouteImport.update({
+    id: '/inventory/nikasi',
+    path: '/inventory/nikasi',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInventoryAmadRoute =
+  AuthenticatedInventoryAmadRouteImport.update({
+    id: '/inventory/amad',
+    path: '/inventory/amad',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInventoryAmadAmadIdRoute =
+  AuthenticatedInventoryAmadAmadIdRouteImport.update({
+    id: '/$amadId',
+    path: '/$amadId',
+    getParentRoute: () => AuthenticatedInventoryAmadRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +101,11 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
+  '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
+  '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
+  '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,6 +115,11 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
+  '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
+  '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
+  '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +131,11 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
+  '/_authenticated/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
+  '/_authenticated/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
+  '/_authenticated/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/_authenticated/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +147,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/inventory/amad'
+    | '/inventory/nikasi'
+    | '/inventory/stock-transfer'
+    | '/inventory/takpatti'
+    | '/inventory/amad/$amadId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,6 +161,11 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/inventory/amad'
+    | '/inventory/nikasi'
+    | '/inventory/stock-transfer'
+    | '/inventory/takpatti'
+    | '/inventory/amad/$amadId'
   id:
     | '__root__'
     | '/'
@@ -116,6 +176,11 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/masters'
     | '/_authenticated/settings'
+    | '/_authenticated/inventory/amad'
+    | '/_authenticated/inventory/nikasi'
+    | '/_authenticated/inventory/stock-transfer'
+    | '/_authenticated/inventory/takpatti'
+    | '/_authenticated/inventory/amad/$amadId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,19 +249,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/inventory/takpatti': {
+      id: '/_authenticated/inventory/takpatti'
+      path: '/inventory/takpatti'
+      fullPath: '/inventory/takpatti'
+      preLoaderRoute: typeof AuthenticatedInventoryTakpattiRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/inventory/stock-transfer': {
+      id: '/_authenticated/inventory/stock-transfer'
+      path: '/inventory/stock-transfer'
+      fullPath: '/inventory/stock-transfer'
+      preLoaderRoute: typeof AuthenticatedInventoryStockTransferRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/inventory/nikasi': {
+      id: '/_authenticated/inventory/nikasi'
+      path: '/inventory/nikasi'
+      fullPath: '/inventory/nikasi'
+      preLoaderRoute: typeof AuthenticatedInventoryNikasiRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/inventory/amad': {
+      id: '/_authenticated/inventory/amad'
+      path: '/inventory/amad'
+      fullPath: '/inventory/amad'
+      preLoaderRoute: typeof AuthenticatedInventoryAmadRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/inventory/amad/$amadId': {
+      id: '/_authenticated/inventory/amad/$amadId'
+      path: '/$amadId'
+      fullPath: '/inventory/amad/$amadId'
+      preLoaderRoute: typeof AuthenticatedInventoryAmadAmadIdRouteImport
+      parentRoute: typeof AuthenticatedInventoryAmadRoute
+    }
   }
 }
+
+interface AuthenticatedInventoryAmadRouteChildren {
+  AuthenticatedInventoryAmadAmadIdRoute: typeof AuthenticatedInventoryAmadAmadIdRoute
+}
+
+const AuthenticatedInventoryAmadRouteChildren: AuthenticatedInventoryAmadRouteChildren =
+  {
+    AuthenticatedInventoryAmadAmadIdRoute:
+      AuthenticatedInventoryAmadAmadIdRoute,
+  }
+
+const AuthenticatedInventoryAmadRouteWithChildren =
+  AuthenticatedInventoryAmadRoute._addFileChildren(
+    AuthenticatedInventoryAmadRouteChildren,
+  )
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedInventoryAmadRoute: typeof AuthenticatedInventoryAmadRouteWithChildren
+  AuthenticatedInventoryNikasiRoute: typeof AuthenticatedInventoryNikasiRoute
+  AuthenticatedInventoryStockTransferRoute: typeof AuthenticatedInventoryStockTransferRoute
+  AuthenticatedInventoryTakpattiRoute: typeof AuthenticatedInventoryTakpattiRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedInventoryAmadRoute: AuthenticatedInventoryAmadRouteWithChildren,
+  AuthenticatedInventoryNikasiRoute: AuthenticatedInventoryNikasiRoute,
+  AuthenticatedInventoryStockTransferRoute:
+    AuthenticatedInventoryStockTransferRoute,
+  AuthenticatedInventoryTakpattiRoute: AuthenticatedInventoryTakpattiRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

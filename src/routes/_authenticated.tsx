@@ -81,6 +81,10 @@ function AuthenticatedContent() {
   function getActiveNavItem(): string {
     if (matchRoute({ to: "/settings" })) return "settings";
     if (matchRoute({ to: "/masters" })) return "masters";
+    if (matchRoute({ to: "/inventory/amad", fuzzy: true })) return "amad";
+    if (matchRoute({ to: "/inventory/nikasi" })) return "nikasi";
+    if (matchRoute({ to: "/inventory/takpatti" })) return "takpatti";
+    if (matchRoute({ to: "/inventory/stock-transfer" })) return "stock-transfer";
     if (matchRoute({ to: "/dashboard" })) return "dashboard";
     return "dashboard";
   }
@@ -97,6 +101,42 @@ function AuthenticatedContent() {
       return [
         { label: "Home", href: "/dashboard" },
         { label: "Masters" },
+      ];
+    }
+    if (matchRoute({ to: "/inventory/amad/$amadId" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Inventory" },
+        { label: "Amad", href: "/inventory/amad" },
+        { label: "Detail" },
+      ];
+    }
+    if (matchRoute({ to: "/inventory/amad" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Inventory" },
+        { label: "Amad" },
+      ];
+    }
+    if (matchRoute({ to: "/inventory/nikasi" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Inventory" },
+        { label: "Nikasi" },
+      ];
+    }
+    if (matchRoute({ to: "/inventory/takpatti" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Inventory" },
+        { label: "Takpatti" },
+      ];
+    }
+    if (matchRoute({ to: "/inventory/stock-transfer" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Inventory" },
+        { label: "Stock Transfer" },
       ];
     }
     if (matchRoute({ to: "/dashboard" })) {
@@ -117,6 +157,18 @@ function AuthenticatedContent() {
         break;
       case "masters":
         navigate({ to: "/masters" });
+        break;
+      case "amad":
+        navigate({ to: "/inventory/amad" });
+        break;
+      case "nikasi":
+        navigate({ to: "/inventory/nikasi" });
+        break;
+      case "takpatti":
+        navigate({ to: "/inventory/takpatti" });
+        break;
+      case "stock-transfer":
+        navigate({ to: "/inventory/stock-transfer" });
         break;
       default:
         // Future routes will be added here

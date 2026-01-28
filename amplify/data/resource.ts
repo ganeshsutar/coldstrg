@@ -34,6 +34,12 @@ const SoftwareMode = a.enum(["STANDARD", "ADVANCED"]);
 // Rent processing mode enum
 const RentProcessingMode = a.enum(["LEDGER", "BILL"]);
 
+// Amad status enum
+const AmadStatus = a.enum(["IN_STOCK", "PARTIAL_DISPATCH", "DISPATCHED", "PENDING"]);
+
+// Stock transfer status enum
+const TransferStatus = a.enum(["PENDING", "COMPLETED", "CANCELLED"]);
+
 const schema = a.schema({
   // Billing status enum reference
   BillingStatus,
@@ -45,6 +51,8 @@ const schema = a.schema({
   AuditAction,
   SoftwareMode,
   RentProcessingMode,
+  AmadStatus,
+  TransferStatus,
 
   // Organization model - represents a cold storage facility/tenant
   Organization: a
@@ -283,6 +291,127 @@ const schema = a.schema({
       details: a.string(),
       entityId: a.string(),
       entityType: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Amad model - Goods arrival record
+  Amad: a
+    .model({
+      organizationId: a.id().required(),
+      amadNo: a.integer().required(),
+      date: a.date().required(),
+      partyName: a.string().required(),
+      villageName: a.string(),
+      post: a.string(),
+      district: a.string(),
+      road: a.string(),
+      floor: a.string(),
+      room: a.string(),
+      position: a.string(),
+      commodityId: a.string(),
+      commodityName: a.string(),
+      variety: a.string(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      pwt1: a.float().default(0),
+      pwt2: a.float().default(0),
+      pwt3: a.float().default(0),
+      totalWeight: a.float().default(0),
+      totalPackets: a.integer().default(0),
+      mark1: a.string(),
+      mark2: a.string(),
+      partyMark: a.string(),
+      dalaCharges: a.float(),
+      rentRate: a.float(),
+      graceDays: a.integer(),
+      graceDays1: a.integer(),
+      takpattiNo: a.integer(),
+      eWayBillNo: a.string(),
+      eWayBillDate: a.date(),
+      transferRef: a.string(),
+      status: a.ref("AmadStatus"),
+      dispatchedPackets: a.integer().default(0),
+      grading: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Rent model - Goods dispatch/Nikasi record
+  Rent: a
+    .model({
+      organizationId: a.id().required(),
+      serialNo: a.integer().required(),
+      date: a.date().required(),
+      partyName: a.string().required(),
+      amadId: a.string(),
+      amadNo: a.integer(),
+      receiverName: a.string(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalPackets: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      storageDays: a.integer(),
+      rent: a.float(),
+      rate: a.float(),
+      amount: a.float(),
+      loadingAmt: a.float(),
+      unloadingAmt: a.float(),
+      dumpingAmt: a.float(),
+      vehicleNo: a.string(),
+      cgst: a.float(),
+      sgst: a.float(),
+      igst: a.float(),
+      billAmount: a.float(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Takpatti model - Weighment slip
+  Takpatti: a
+    .model({
+      organizationId: a.id().required(),
+      takpattiNo: a.integer().required(),
+      amadNo: a.integer(),
+      amadId: a.string(),
+      date: a.date().required(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalPackets: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      serialNo: a.integer(),
+      room: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // StockTransfer model - Transfer between rooms/parties
+  StockTransfer: a
+    .model({
+      organizationId: a.id().required(),
+      transferNo: a.integer().required(),
+      date: a.date().required(),
+      amadId: a.string(),
+      amadNo: a.integer(),
+      fromPartyName: a.string(),
+      toPartyName: a.string(),
+      commodityName: a.string(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalPackets: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      sourceRoom: a.string(),
+      destRoom: a.string(),
+      status: a.ref("TransferStatus"),
+      remarks: a.string(),
       isActive: a.boolean().default(true),
     })
     .secondaryIndexes((index) => [index("organizationId")])
