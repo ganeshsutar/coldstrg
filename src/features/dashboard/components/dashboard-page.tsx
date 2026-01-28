@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "./metric-card";
 import { ChartSection } from "./chart-section";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/shared/data-table";
 import { transactionColumns } from "./transaction-columns";
 import { useDashboardData } from "../hooks/use-dashboard-data";
 

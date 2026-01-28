@@ -1,5 +1,64 @@
-import type { NavItem } from "@/types/navigation";
+import type { NavItem, QuickCreateItem } from "@/types/navigation";
 
+// Quick Create items with keyboard shortcuts
+export const quickCreateItems: QuickCreateItem[] = [
+  { id: "new-amad", label: "New Amad (Goods Receipt)", shortcut: "N" },
+  { id: "new-dispatch", label: "New Dispatch (Nikasi)", shortcut: "D" },
+  { id: "new-voucher", label: "New Voucher", shortcut: "V" },
+  { id: "new-bill", label: "New Bill", shortcut: "B" },
+  { id: "separator-1", label: "", separator: true },
+  { id: "new-party", label: "New Party" },
+  { id: "new-sauda", label: "New Deal (Sauda)" },
+  { id: "issue-bardana", label: "Issue Bardana" },
+];
+
+// MAIN section - Core daily operations
+export const mainNavItems: NavItem[] = [
+  { id: "dashboard", label: "Dashboard", icon: "layout-dashboard", to: "/dashboard" },
+  {
+    id: "inventory",
+    label: "Inventory",
+    icon: "warehouse",
+    children: [
+      { id: "amad", label: "Amad (Receipts)", icon: "truck" },
+      { id: "nikasi", label: "Nikasi (Dispatch)", icon: "package-open" },
+      { id: "takpatti", label: "Takpatti", icon: "file-stack" },
+      { id: "stock-transfer", label: "Stock Transfer", icon: "arrow-right-left" },
+    ],
+  },
+  { id: "chambers", label: "Chambers", icon: "door-open", to: "/chambers" },
+  {
+    id: "accounts",
+    label: "Accounts",
+    icon: "indian-rupee",
+    children: [
+      { id: "party-ledger", label: "Party Ledger", icon: "book-open" },
+      { id: "chart-of-accounts", label: "Chart of Accounts", icon: "list" },
+      { id: "vouchers", label: "Vouchers", icon: "receipt" },
+      { id: "daybook", label: "Daybook", icon: "calendar" },
+      { id: "interest", label: "Interest", icon: "percent" },
+    ],
+  },
+  { id: "billing", label: "Billing", icon: "credit-card", to: "/billing" },
+  { id: "trading", label: "Trading", icon: "handshake", to: "/trading" },
+];
+
+// OPERATIONS section - Secondary workflows
+export const operationsNavItems: NavItem[] = [
+  { id: "bardana", label: "Bardana", icon: "package", to: "/bardana" },
+  { id: "loans", label: "Loans", icon: "banknote", to: "/loans" },
+  { id: "payroll", label: "Payroll", icon: "users", to: "/payroll" },
+];
+
+// SYSTEM section - Configuration and administration
+export const systemNavItems: NavItem[] = [
+  { id: "masters", label: "Masters", icon: "database", to: "/masters" },
+  { id: "reports", label: "Reports", icon: "bar-chart-3", to: "/reports" },
+  { id: "settings", label: "Settings", icon: "settings", to: "/settings" },
+  { id: "help", label: "Help", icon: "help-circle", to: "/help" },
+];
+
+// Legacy exports for backwards compatibility
 export const navigationItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: "layout-dashboard", to: "/dashboard" },
   {

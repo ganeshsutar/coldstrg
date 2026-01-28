@@ -80,6 +80,7 @@ function AuthenticatedContent() {
   // Determine active nav item from current route
   function getActiveNavItem(): string {
     if (matchRoute({ to: "/settings" })) return "settings";
+    if (matchRoute({ to: "/masters" })) return "masters";
     if (matchRoute({ to: "/dashboard" })) return "dashboard";
     return "dashboard";
   }
@@ -90,6 +91,12 @@ function AuthenticatedContent() {
       return [
         { label: "Home", href: "/dashboard" },
         { label: "Settings" },
+      ];
+    }
+    if (matchRoute({ to: "/masters" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Masters" },
       ];
     }
     if (matchRoute({ to: "/dashboard" })) {
@@ -107,6 +114,9 @@ function AuthenticatedContent() {
         break;
       case "settings":
         navigate({ to: "/settings" });
+        break;
+      case "masters":
+        navigate({ to: "/masters" });
         break;
       default:
         // Future routes will be added here

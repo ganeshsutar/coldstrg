@@ -7,3 +7,10 @@ export interface NavItem {
   children?: NavItem[];
   badge?: number;
 }
+
+export interface QuickCreateItem {
+  id: string;
+  label: string;
+  shortcut?: string;
+  separator?: boolean;
+}

@@ -11,6 +11,8 @@ interface AppShellProps {
   breadcrumbs: BreadcrumbItemData[]
   activeNavItem: string
   onNavItemClick: (id: string) => void
+  onQuickCreateClick?: (id: string) => void
+  onSearchClick?: () => void
 }
 
 export function AppShell({
@@ -22,6 +24,8 @@ export function AppShell({
   breadcrumbs,
   activeNavItem,
   onNavItemClick,
+  onQuickCreateClick,
+  onSearchClick,
 }: AppShellProps) {
   return (
     <SidebarProvider>
@@ -32,6 +36,8 @@ export function AppShell({
         onSignOut={onSignOut}
         activeItem={activeNavItem}
         onItemClick={onNavItemClick}
+        onQuickCreateClick={onQuickCreateClick}
+        onSearchClick={onSearchClick}
       />
       <SidebarInset>
         <Header breadcrumbs={breadcrumbs} />

@@ -8,9 +8,18 @@ export interface Organization {
   state?: string | null;
   phone?: string | null;
   email?: string | null;
+  fax?: string | null;
   gstNo?: string | null;
+  panNo?: string | null;
+  tanNo?: string | null;
+  cinNo?: string | null;
+  bankName?: string | null;
+  bankAccountNo?: string | null;
+  bankIfsc?: string | null;
+  bankBranch?: string | null;
   timezone?: string | null;
   financialYearStart?: number | null;
+  financialYearEnd?: number | null;
   billingStatus?: "TRIAL" | "ACTIVE" | "SUSPENDED" | "CANCELLED" | null;
   isActive?: boolean | null;
   createdAt: string;
@@ -21,10 +30,20 @@ export interface OrganizationMembership {
   id: string;
   userId: string;
   organizationId: string;
-  role: "ADMIN" | "OPERATOR";
+  role: "ADMIN" | "SUPERVISOR" | "OPERATOR";
   isDefault?: boolean | null;
   status?: "PENDING" | "ACTIVE" | "SUSPENDED" | null;
   joinedAt?: string | null;
+  lastLoginAt?: string | null;
+  // Module access
+  moduleAccessAccounts?: boolean | null;
+  moduleAccessColdStorageReports?: boolean | null;
+  moduleAccessMISReports?: boolean | null;
+  moduleAccessPayroll?: boolean | null;
+  moduleAccessMultiRoom?: boolean | null;
+  // Limits
+  loanPerBagLimit?: number | null;
+  backdateEntryDays?: number | null;
   createdAt: string;
   updatedAt: string;
   organization?: Organization | null;

@@ -22,10 +22,13 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
+  SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { SidebarUser } from "./sidebar-user"
+import { QuickCreateDropdown } from "./quick-create-dropdown"
+import { SidebarSearch } from "./sidebar-search"
 import { Badge } from "@/components/ui/badge"
-import { navigationItems, settingsNavItem } from "@/config"
+import { mainNavItems, operationsNavItems, systemNavItems } from "@/config"
 import { getIcon } from "@/lib/icons"
 import type { NavItem } from "@/types"
 
@@ -36,6 +39,8 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   onSignOut: () => void
   activeItem: string
   onItemClick: (id: string) => void
+  onQuickCreateClick?: (id: string) => void
+  onSearchClick?: () => void
 }
 
 export function AppSidebar({
@@ -45,6 +50,8 @@ export function AppSidebar({
   onSignOut,
   activeItem,
   onItemClick,
+  onQuickCreateClick,
+  onSearchClick,
   ...props
 }: AppSidebarProps) {
   return (
@@ -66,13 +73,48 @@ export function AppSidebar({
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <QuickCreateDropdown onItemClick={onQuickCreateClick} />
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
+        {/* MAIN Section */}
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarMenu>
-            {navigationItems.map((item) => (
+            {mainNavItems.map((item) => (
+              <NavItemComponent
+                key={item.id}
+                item={item}
+                activeItem={activeItem}
+                onItemClick={onItemClick}
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        {/* OPERATIONS Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Operations</SidebarGroupLabel>
+          <SidebarMenu>
+            {operationsNavItems.map((item) => (
+              <NavItemComponent
+                key={item.id}
+                item={item}
+                activeItem={activeItem}
+                onItemClick={onItemClick}
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        {/* SYSTEM Section - pushed to bottom */}
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupLabel>System</SidebarGroupLabel>
+          <SidebarMenu>
+            {systemNavItems.map((item) => (
               <NavItemComponent
                 key={item.id}
                 item={item}
@@ -83,14 +125,14 @@ export function AppSidebar({
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
         <SidebarMenu>
-          <NavItemComponent
-            item={settingsNavItem}
-            activeItem={activeItem}
-            onItemClick={onItemClick}
-          />
+          <SidebarMenuItem>
+            <SidebarSearch onClick={onSearchClick} />
+          </SidebarMenuItem>
         </SidebarMenu>
+        <SidebarSeparator />
         <SidebarUser
           email={userEmail}
           name={userName}

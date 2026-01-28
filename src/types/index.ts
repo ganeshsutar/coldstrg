@@ -1,1 +1,1 @@
-export type { NavItem } from "./navigation";
+export type { NavItem, QuickCreateItem } from "./navigation";
