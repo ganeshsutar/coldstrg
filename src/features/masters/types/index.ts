@@ -1,4 +1,8 @@
 // Commodity types
+export type RentOnType = "QUANTITY" | "WEIGHT";
+export type ChargeRentTypeValue = "MONTHLY" | "SEASONALLY" | "DAILY";
+export type RentCalculationModeType = "NIKASI_TOTAL" | "SAUDA_BOLAN";
+
 export interface Commodity {
   id: string;
   organizationId: string;
@@ -6,14 +10,31 @@ export interface Commodity {
   nameHindi?: string | null;
   code: string;
   commodityType?: "SEASONAL" | "REGULAR" | null;
+  // Rent rates
   rentRatePKT1?: number | null;
   rentRatePKT2?: number | null;
   rentRatePKT3?: number | null;
   rateWT?: number | null;
+  // Grace period settings
   gracePeriod?: number | null;
+  zeroRentDays?: number | null;
+  halfRentDays?: number | null;
+  // Rent calculation settings
   rentBasis?: "QUINTAL" | "PACKET" | "WEIGHT" | null;
-  hsnCode?: string | null;
+  rentOn?: RentOnType | null;
+  chargeRentType?: ChargeRentTypeValue | null;
+  rentCalculationMode?: RentCalculationModeType | null;
+  // Pricing fields
+  ratePerUnitField?: number | null;
+  ratePerUnitMandi?: number | null;
+  purchasePrice?: number | null;
+  salePrice?: number | null;
+  mrp?: number | null;
   loanRate?: number | null;
+  // Stock & identification
+  hsnCode?: string | null;
+  barcode?: string | null;
+  openingStock?: number | null;
   isActive?: boolean | null;
   createdAt: string;
   updatedAt: string;
@@ -25,14 +46,31 @@ export interface CreateCommodityInput {
   nameHindi?: string;
   code: string;
   commodityType?: "SEASONAL" | "REGULAR";
+  // Rent rates
   rentRatePKT1?: number;
   rentRatePKT2?: number;
   rentRatePKT3?: number;
   rateWT?: number;
+  // Grace period settings
   gracePeriod?: number;
+  zeroRentDays?: number;
+  halfRentDays?: number;
+  // Rent calculation settings
   rentBasis?: "QUINTAL" | "PACKET" | "WEIGHT";
-  hsnCode?: string;
+  rentOn?: RentOnType;
+  chargeRentType?: ChargeRentTypeValue;
+  rentCalculationMode?: RentCalculationModeType;
+  // Pricing fields
+  ratePerUnitField?: number;
+  ratePerUnitMandi?: number;
+  purchasePrice?: number;
+  salePrice?: number;
+  mrp?: number;
   loanRate?: number;
+  // Stock & identification
+  hsnCode?: string;
+  barcode?: string;
+  openingStock?: number;
   isActive?: boolean;
 }
 

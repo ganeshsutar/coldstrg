@@ -15,6 +15,15 @@ const CommodityType = a.enum(["SEASONAL", "REGULAR"]);
 // Rent basis enum
 const RentBasis = a.enum(["QUINTAL", "PACKET", "WEIGHT"]);
 
+// Rent on enum (what rent is charged on)
+const RentOn = a.enum(["QUANTITY", "WEIGHT"]);
+
+// Charge rent type enum (billing frequency)
+const ChargeRentType = a.enum(["MONTHLY", "SEASONALLY", "DAILY"]);
+
+// Rent calculation mode enum
+const RentCalculationMode = a.enum(["NIKASI_TOTAL", "SAUDA_BOLAN"]);
+
 // Labor rate type enum
 const LaborRateType = a.enum([
   "LOADING",
@@ -40,6 +49,40 @@ const AmadStatus = a.enum(["IN_STOCK", "PARTIAL_DISPATCH", "DISPATCHED", "PENDIN
 // Stock transfer status enum
 const TransferStatus = a.enum(["PENDING", "COMPLETED", "CANCELLED"]);
 
+// Rack status enum for chamber management
+const RackStatus = a.enum(["EMPTY", "PARTIAL", "FULL", "RESERVED", "MAINTENANCE"]);
+
+// Temperature status enum
+const TemperatureStatus = a.enum(["NORMAL", "WARNING", "CRITICAL", "OFFLINE"]);
+
+// Shifting status enum
+const ShiftingStatus = a.enum(["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED"]);
+
+// ============== BARDANA ENUMS ==============
+
+// Bardana issue type enum (regular or advance)
+const BardanaIssueType = a.enum(["REGULAR", "ADVANCE"]);
+
+// Bardana transaction status enum
+const BardanaStatus = a.enum(["DRAFT", "CONFIRMED", "CANCELLED"]);
+
+// Bardana condition enum (for returns)
+const BardanaCondition = a.enum(["GOOD", "FAIR", "DAMAGED", "UNUSABLE"]);
+
+// ============== ACCOUNTING ENUMS ==============
+
+// Account type enum (Group or Account in chart of accounts)
+const AccountType = a.enum(["GROUP", "ACCOUNT"]);
+
+// Account nature enum (Debit or Credit)
+const AccountNature = a.enum(["DR", "CR"]);
+
+// Voucher type enum
+const VoucherType = a.enum(["CR", "DR", "JV", "CV", "BH"]);
+
+// Payment mode enum
+const PaymentMode = a.enum(["CASH", "CHEQUE", "BANK", "UPI"]);
+
 const schema = a.schema({
   // Billing status enum reference
   BillingStatus,
@@ -47,12 +90,25 @@ const schema = a.schema({
   MembershipStatus,
   CommodityType,
   RentBasis,
+  RentOn,
+  ChargeRentType,
+  RentCalculationMode,
   LaborRateType,
   AuditAction,
   SoftwareMode,
   RentProcessingMode,
   AmadStatus,
   TransferStatus,
+  RackStatus,
+  TemperatureStatus,
+  ShiftingStatus,
+  AccountType,
+  AccountNature,
+  VoucherType,
+  PaymentMode,
+  BardanaIssueType,
+  BardanaStatus,
+  BardanaCondition,
 
   // Organization model - represents a cold storage facility/tenant
   Organization: a
@@ -128,14 +184,31 @@ const schema = a.schema({
       nameHindi: a.string(),
       code: a.string().required(),
       commodityType: a.ref("CommodityType"),
+      // Rent rates
       rentRatePKT1: a.float(),
       rentRatePKT2: a.float(),
       rentRatePKT3: a.float(),
       rateWT: a.float(),
+      // Grace period settings
       gracePeriod: a.integer(),
+      zeroRentDays: a.integer().default(0),
+      halfRentDays: a.integer().default(0),
+      // Rent calculation settings
       rentBasis: a.ref("RentBasis"),
-      hsnCode: a.string(),
+      rentOn: a.ref("RentOn"),
+      chargeRentType: a.ref("ChargeRentType"),
+      rentCalculationMode: a.ref("RentCalculationMode"),
+      // Pricing fields
+      ratePerUnitField: a.float(),
+      ratePerUnitMandi: a.float(),
+      purchasePrice: a.float(),
+      salePrice: a.float(),
+      mrp: a.float(),
       loanRate: a.float(),
+      // Stock & identification
+      hsnCode: a.string(),
+      barcode: a.string(),
+      openingStock: a.integer().default(0),
       isActive: a.boolean().default(true),
     })
     .secondaryIndexes((index) => [index("organizationId")])
@@ -415,6 +488,520 @@ const schema = a.schema({
       isActive: a.boolean().default(true),
     })
     .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Chamber model - Room/chamber configuration
+  Chamber: a
+    .model({
+      organizationId: a.id().required(),
+      code: a.string().required(),
+      roomNumber: a.integer().required(),
+      name: a.string().required(),
+      nameHindi: a.string(),
+      floors: a.integer().default(1),
+      totalRacks: a.integer().default(0),
+      racksPerRow: a.integer().default(10),
+      rackCapacity: a.integer().default(100), // Bags per rack
+      targetTemperature: a.float().default(-18),
+      minTemperature: a.float().default(-25),
+      maxTemperature: a.float().default(-15),
+      currentTemperature: a.float(),
+      temperatureStatus: a.ref("TemperatureStatus"),
+      description: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // ChamberFloor model - Floor-wise rack configuration
+  ChamberFloor: a
+    .model({
+      organizationId: a.id().required(),
+      chamberId: a.id().required(),
+      floorNumber: a.integer().required(),
+      floorName: a.string(),
+      fromRack: a.integer().required(),
+      toRack: a.integer().required(),
+      racksPerRow: a.integer().default(10),
+      description: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("chamberId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Loading model - Goods placement in racks
+  Loading: a
+    .model({
+      organizationId: a.id().required(),
+      loadingNo: a.integer().required(),
+      date: a.date().required(),
+      amadId: a.id().required(),
+      amadNo: a.integer(),
+      partyName: a.string(),
+      commodityName: a.string(),
+      chamberId: a.id().required(),
+      chamberName: a.string(),
+      floorNumber: a.integer().required(),
+      rackNumber: a.integer().required(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalQuantity: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      rackStatus: a.ref("RackStatus"),
+      remarks: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("amadId"),
+      index("chamberId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Unloading model - Goods removal from racks
+  Unloading: a
+    .model({
+      organizationId: a.id().required(),
+      unloadingNo: a.integer().required(),
+      date: a.date().required(),
+      amadId: a.id().required(),
+      amadNo: a.integer(),
+      rentId: a.id(),
+      rentSerialNo: a.integer(),
+      partyName: a.string(),
+      commodityName: a.string(),
+      chamberId: a.id().required(),
+      chamberName: a.string(),
+      floorNumber: a.integer().required(),
+      rackNumber: a.integer().required(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalQuantity: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      vehicleNo: a.string(),
+      remarks: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("amadId"),
+      index("chamberId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // ShiftingHeader model - Internal goods shifting transaction header
+  ShiftingHeader: a
+    .model({
+      organizationId: a.id().required(),
+      shiftNo: a.integer().required(),
+      shiftDate: a.date().required(),
+      fromChamberId: a.id().required(),
+      fromChamberName: a.string(),
+      toChamberId: a.id().required(),
+      toChamberName: a.string(),
+      totalItems: a.integer().default(0),
+      totalQuantity: a.integer().default(0),
+      status: a.ref("ShiftingStatus"),
+      reason: a.string(),
+      remarks: a.string(),
+      completedAt: a.datetime(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Shifting model - Internal goods shifting detail lines
+  Shifting: a
+    .model({
+      organizationId: a.id().required(),
+      shiftingHeaderId: a.id().required(),
+      amadId: a.id().required(),
+      amadNo: a.integer(),
+      partyName: a.string(),
+      commodityName: a.string(),
+      fromChamberId: a.id().required(),
+      fromFloorNumber: a.integer().required(),
+      fromRackNumber: a.integer().required(),
+      toChamberId: a.id().required(),
+      toFloorNumber: a.integer().required(),
+      toRackNumber: a.integer().required(),
+      pkt1: a.integer().default(0),
+      pkt2: a.integer().default(0),
+      pkt3: a.integer().default(0),
+      totalQuantity: a.integer().default(0),
+      totalWeight: a.float().default(0),
+      remarks: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("shiftingHeaderId"),
+      index("amadId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // TemperatureLog model - Temperature readings
+  TemperatureLog: a
+    .model({
+      organizationId: a.id().required(),
+      chamberId: a.id().required(),
+      chamberName: a.string(),
+      date: a.date().required(),
+      time: a.time().required(),
+      lowTemp: a.float().required(),
+      highTemp: a.float().required(),
+      avgTemp: a.float(),
+      humidity: a.float(),
+      status: a.ref("TemperatureStatus"),
+      recordedBy: a.string(),
+      remarks: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("chamberId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // MeterReading model - Electricity meter readings
+  MeterReading: a
+    .model({
+      organizationId: a.id().required(),
+      chamberId: a.id(),
+      chamberName: a.string(),
+      meterNumber: a.string(),
+      readingDate: a.date().required(),
+      readingTime: a.time(),
+      previousReading: a.float(),
+      currentReading: a.float().required(),
+      consumption: a.float(),
+      unit: a.string().default("kWh"),
+      photoUrl: a.string(),
+      recordedBy: a.string(),
+      remarks: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("chamberId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // ============== ACCOUNTING MODELS ==============
+
+  // Account model - Chart of Accounts / Party Master
+  Account: a
+    .model({
+      organizationId: a.id().required(),
+      code: a.string().required(),
+      name: a.string().required(),
+      nameHindi: a.string(),
+      accountType: a.ref("AccountType").required(),
+      nature: a.ref("AccountNature").required(),
+      parentId: a.string(),
+      level: a.integer().default(0),
+      under: a.string(),
+      // Address fields
+      address1: a.string(),
+      address2: a.string(),
+      city: a.string(),
+      state: a.string(),
+      phone: a.string(),
+      // Balances
+      openingBalance: a.float().default(0),
+      dr: a.float().default(0),
+      cr: a.float().default(0),
+      balance: a.float().default(0),
+      // Component balances - Rent
+      rentDr: a.float().default(0),
+      rentCr: a.float().default(0),
+      // Component balances - Bardana
+      barDr: a.float().default(0),
+      barCr: a.float().default(0),
+      // Component balances - Loan
+      loanDr: a.float().default(0),
+      loanCr: a.float().default(0),
+      // Component balances - Interest
+      intrstDr: a.float().default(0),
+      intrstCr: a.float().default(0),
+      // Component balances - Other
+      othDr: a.float().default(0),
+      othCr: a.float().default(0),
+      // Packets arrived
+      pkt1A: a.integer().default(0),
+      pkt2A: a.integer().default(0),
+      pkt3A: a.integer().default(0),
+      // Packets dispatched (Nikasi)
+      pkt1N: a.integer().default(0),
+      pkt2N: a.integer().default(0),
+      pkt3N: a.integer().default(0),
+      // Identity fields
+      aadhar: a.string(),
+      pan: a.string(),
+      gst: a.string(),
+      // Settings
+      interestRate: a.float(),
+      drLimit: a.float(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("parentId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Voucher model - Daybook Transactions
+  Voucher: a
+    .model({
+      organizationId: a.id().required(),
+      voucherNo: a.integer().required(),
+      voucherType: a.ref("VoucherType").required(),
+      date: a.date().required(),
+      // Debit account
+      drAccountId: a.string(),
+      drAccountCode: a.string(),
+      drAccountName: a.string(),
+      // Credit account
+      crAccountId: a.string(),
+      crAccountCode: a.string(),
+      crAccountName: a.string(),
+      // Amounts
+      amount: a.float().required(),
+      rentAmount: a.float().default(0),
+      loanAmount: a.float().default(0),
+      interestAmount: a.float().default(0),
+      bardanaAmount: a.float().default(0),
+      otherAmount: a.float().default(0),
+      // Payment details
+      paymentMode: a.ref("PaymentMode"),
+      chequeNo: a.string(),
+      chequeDate: a.date(),
+      bankName: a.string(),
+      // Meta
+      narration: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("drAccountId"),
+      index("crAccountId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // PartyLedger model - Transaction Ledger
+  PartyLedger: a
+    .model({
+      organizationId: a.id().required(),
+      srNo: a.integer().required(),
+      accountId: a.string().required(),
+      accountCode: a.string(),
+      accountName: a.string(),
+      voucherType: a.ref("VoucherType"),
+      billNo: a.string(),
+      date: a.date().required(),
+      // Amounts
+      amount: a.float().default(0),
+      rent: a.float().default(0),
+      loan: a.float().default(0),
+      interest: a.float().default(0),
+      bardana: a.float().default(0),
+      other: a.float().default(0),
+      // References
+      amadId: a.string(),
+      amadNo: a.integer(),
+      rentId: a.string(),
+      rentNo: a.integer(),
+      gpNo: a.string(),
+      // Bardana
+      barQtyIn: a.integer().default(0),
+      barQtyOut: a.integer().default(0),
+      roi: a.float(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("accountId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Daybook model - Daily Summary
+  Daybook: a
+    .model({
+      organizationId: a.id().required(),
+      date: a.date().required(),
+      description: a.string(),
+      // Cash balances
+      cashOpenDr: a.float().default(0),
+      cashOpenCr: a.float().default(0),
+      cashDr: a.float().default(0),
+      cashCr: a.float().default(0),
+      cashCloseDr: a.float().default(0),
+      cashCloseCr: a.float().default(0),
+      // Bank balances
+      bankOpenDr: a.float().default(0),
+      bankOpenCr: a.float().default(0),
+      bankDr: a.float().default(0),
+      bankCr: a.float().default(0),
+      bankCloseDr: a.float().default(0),
+      bankCloseCr: a.float().default(0),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // ============== BARDANA MODELS ==============
+
+  // BardanaType model - Master for bag types
+  BardanaType: a
+    .model({
+      organizationId: a.id().required(),
+      code: a.string().required(),
+      name: a.string().required(),
+      nameHindi: a.string(),
+      defaultRate: a.float().default(0),
+      unit: a.string().default("bags"),
+      openingStock: a.integer().default(0),
+      currentStock: a.integer().default(0),
+      description: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [index("organizationId")])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // BardanaStock model - Party-wise stock balances (denormalized)
+  BardanaStock: a
+    .model({
+      organizationId: a.id().required(),
+      partyId: a.string().required(),
+      partyName: a.string(),
+      partyVillage: a.string(),
+      bardanaTypeId: a.string().required(),
+      bardanaTypeName: a.string(),
+      totalIssued: a.integer().default(0),
+      totalReturned: a.integer().default(0),
+      balance: a.integer().default(0),
+      totalValue: a.float().default(0),
+      lastIssueDate: a.date(),
+      lastReturnDate: a.date(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("partyId"),
+      index("bardanaTypeId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // BardanaIssueHeader model - Issue voucher header
+  BardanaIssueHeader: a
+    .model({
+      organizationId: a.id().required(),
+      voucherNo: a.integer().required(),
+      issueDate: a.date().required(),
+      partyId: a.string().required(),
+      partyName: a.string(),
+      partyVillage: a.string(),
+      issueType: a.ref("BardanaIssueType").required(),
+      // Advance-specific fields
+      interestRatePm: a.float(),
+      expectedArrivalDate: a.date(),
+      expectedBags: a.integer(),
+      referenceNo: a.string(),
+      // Linked Amad (optional)
+      amadId: a.string(),
+      amadNo: a.integer(),
+      // Totals
+      totalQuantity: a.integer().default(0),
+      totalAmount: a.float().default(0),
+      // Status
+      status: a.ref("BardanaStatus").required(),
+      confirmedAt: a.datetime(),
+      confirmedBy: a.string(),
+      narration: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("partyId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // BardanaIssueItem model - Issue line items
+  BardanaIssueItem: a
+    .model({
+      organizationId: a.id().required(),
+      issueHeaderId: a.id().required(),
+      bardanaTypeId: a.string().required(),
+      bardanaTypeName: a.string(),
+      quantity: a.integer().required(),
+      rate: a.float().required(),
+      amount: a.float().required(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("issueHeaderId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // BardanaReceiptHeader model - Return voucher header
+  BardanaReceiptHeader: a
+    .model({
+      organizationId: a.id().required(),
+      voucherNo: a.integer().required(),
+      receiptDate: a.date().required(),
+      partyId: a.string().required(),
+      partyName: a.string(),
+      partyVillage: a.string(),
+      // Linked Rent/Nikasi (optional)
+      rentId: a.string(),
+      rentSerialNo: a.integer(),
+      // Totals
+      totalQuantity: a.integer().default(0),
+      totalGoodQuantity: a.integer().default(0),
+      totalFairQuantity: a.integer().default(0),
+      totalDamagedQuantity: a.integer().default(0),
+      totalAmount: a.float().default(0),
+      totalDeduction: a.float().default(0),
+      netAmount: a.float().default(0),
+      // Status
+      status: a.ref("BardanaStatus").required(),
+      confirmedAt: a.datetime(),
+      confirmedBy: a.string(),
+      narration: a.string(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("partyId"),
+    ])
+    .authorization((allow) => [allow.authenticated()]),
+
+  // BardanaReceiptItem model - Return line items
+  BardanaReceiptItem: a
+    .model({
+      organizationId: a.id().required(),
+      receiptHeaderId: a.id().required(),
+      bardanaTypeId: a.string().required(),
+      bardanaTypeName: a.string(),
+      quantity: a.integer().required(),
+      condition: a.ref("BardanaCondition").required(),
+      rate: a.float().required(),
+      creditRate: a.float().required(), // Adjusted rate based on condition
+      amount: a.float().required(),
+      deduction: a.float().default(0),
+      netAmount: a.float().required(),
+      isActive: a.boolean().default(true),
+    })
+    .secondaryIndexes((index) => [
+      index("organizationId"),
+      index("receiptHeaderId"),
+    ])
     .authorization((allow) => [allow.authenticated()]),
 });
 

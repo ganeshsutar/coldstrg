@@ -81,10 +81,22 @@ function AuthenticatedContent() {
   function getActiveNavItem(): string {
     if (matchRoute({ to: "/settings" })) return "settings";
     if (matchRoute({ to: "/masters" })) return "masters";
+    if (matchRoute({ to: "/chambers" })) return "chambers";
     if (matchRoute({ to: "/inventory/amad", fuzzy: true })) return "amad";
     if (matchRoute({ to: "/inventory/nikasi" })) return "nikasi";
     if (matchRoute({ to: "/inventory/takpatti" })) return "takpatti";
     if (matchRoute({ to: "/inventory/stock-transfer" })) return "stock-transfer";
+    if (matchRoute({ to: "/accounts/party-ledger", fuzzy: true })) return "party-ledger";
+    if (matchRoute({ to: "/accounts/chart-of-accounts" })) return "chart-of-accounts";
+    if (matchRoute({ to: "/accounts/vouchers" })) return "vouchers";
+    if (matchRoute({ to: "/accounts/daybook" })) return "daybook";
+    if (matchRoute({ to: "/accounts/interest" })) return "interest";
+    // Bardana routes
+    if (matchRoute({ to: "/bardana/issues" })) return "bardana-issues";
+    if (matchRoute({ to: "/bardana/receipts" })) return "bardana-receipts";
+    if (matchRoute({ to: "/bardana/outstanding" })) return "bardana-outstanding";
+    if (matchRoute({ to: "/bardana/types" })) return "bardana-types";
+    if (matchRoute({ to: "/bardana" })) return "bardana-stock";
     if (matchRoute({ to: "/dashboard" })) return "dashboard";
     return "dashboard";
   }
@@ -101,6 +113,12 @@ function AuthenticatedContent() {
       return [
         { label: "Home", href: "/dashboard" },
         { label: "Masters" },
+      ];
+    }
+    if (matchRoute({ to: "/chambers" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Chambers" },
       ];
     }
     if (matchRoute({ to: "/inventory/amad/$amadId" })) {
@@ -139,8 +157,78 @@ function AuthenticatedContent() {
         { label: "Stock Transfer" },
       ];
     }
+    if (matchRoute({ to: "/accounts/party-ledger" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Accounts" },
+        { label: "Party Ledger" },
+      ];
+    }
+    if (matchRoute({ to: "/accounts/chart-of-accounts" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Accounts" },
+        { label: "Chart of Accounts" },
+      ];
+    }
+    if (matchRoute({ to: "/accounts/vouchers" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Accounts" },
+        { label: "Vouchers" },
+      ];
+    }
+    if (matchRoute({ to: "/accounts/daybook" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Accounts" },
+        { label: "Daybook" },
+      ];
+    }
+    if (matchRoute({ to: "/accounts/interest" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Accounts" },
+        { label: "Interest" },
+      ];
+    }
     if (matchRoute({ to: "/dashboard" })) {
       return [{ label: "Home" }];
+    }
+    // Bardana routes
+    if (matchRoute({ to: "/bardana/issues" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Bardana", href: "/bardana" },
+        { label: "Issues" },
+      ];
+    }
+    if (matchRoute({ to: "/bardana/receipts" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Bardana", href: "/bardana" },
+        { label: "Returns" },
+      ];
+    }
+    if (matchRoute({ to: "/bardana/outstanding" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Bardana", href: "/bardana" },
+        { label: "Outstanding" },
+      ];
+    }
+    if (matchRoute({ to: "/bardana/types" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Bardana", href: "/bardana" },
+        { label: "Types" },
+      ];
+    }
+    if (matchRoute({ to: "/bardana" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Bardana" },
+      ];
     }
     // Default fallback
     return [{ label: "Home" }];
@@ -158,6 +246,9 @@ function AuthenticatedContent() {
       case "masters":
         navigate({ to: "/masters" });
         break;
+      case "chambers":
+        navigate({ to: "/chambers" });
+        break;
       case "amad":
         navigate({ to: "/inventory/amad" });
         break;
@@ -169,6 +260,37 @@ function AuthenticatedContent() {
         break;
       case "stock-transfer":
         navigate({ to: "/inventory/stock-transfer" });
+        break;
+      case "party-ledger":
+        navigate({ to: "/accounts/party-ledger" });
+        break;
+      case "chart-of-accounts":
+        navigate({ to: "/accounts/chart-of-accounts" });
+        break;
+      case "vouchers":
+        navigate({ to: "/accounts/vouchers" });
+        break;
+      case "daybook":
+        navigate({ to: "/accounts/daybook" });
+        break;
+      case "interest":
+        navigate({ to: "/accounts/interest" });
+        break;
+      // Bardana routes
+      case "bardana-stock":
+        navigate({ to: "/bardana" });
+        break;
+      case "bardana-issues":
+        navigate({ to: "/bardana/issues" });
+        break;
+      case "bardana-receipts":
+        navigate({ to: "/bardana/receipts" });
+        break;
+      case "bardana-outstanding":
+        navigate({ to: "/bardana/outstanding" });
+        break;
+      case "bardana-types":
+        navigate({ to: "/bardana/types" });
         break;
       default:
         // Future routes will be added here

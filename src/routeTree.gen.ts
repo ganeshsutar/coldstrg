@@ -17,10 +17,22 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedChambersRouteImport } from './routes/_authenticated/chambers'
+import { Route as AuthenticatedBardanaIndexRouteImport } from './routes/_authenticated/bardana/index'
+import { Route as AuthenticatedAccountsIndexRouteImport } from './routes/_authenticated/accounts/index'
 import { Route as AuthenticatedInventoryTakpattiRouteImport } from './routes/_authenticated/inventory/takpatti'
 import { Route as AuthenticatedInventoryStockTransferRouteImport } from './routes/_authenticated/inventory/stock-transfer'
 import { Route as AuthenticatedInventoryNikasiRouteImport } from './routes/_authenticated/inventory/nikasi'
 import { Route as AuthenticatedInventoryAmadRouteImport } from './routes/_authenticated/inventory/amad'
+import { Route as AuthenticatedBardanaTypesRouteImport } from './routes/_authenticated/bardana/types'
+import { Route as AuthenticatedBardanaReceiptsRouteImport } from './routes/_authenticated/bardana/receipts'
+import { Route as AuthenticatedBardanaOutstandingRouteImport } from './routes/_authenticated/bardana/outstanding'
+import { Route as AuthenticatedBardanaIssuesRouteImport } from './routes/_authenticated/bardana/issues'
+import { Route as AuthenticatedAccountsVouchersRouteImport } from './routes/_authenticated/accounts/vouchers'
+import { Route as AuthenticatedAccountsPartyLedgerRouteImport } from './routes/_authenticated/accounts/party-ledger'
+import { Route as AuthenticatedAccountsInterestRouteImport } from './routes/_authenticated/accounts/interest'
+import { Route as AuthenticatedAccountsDaybookRouteImport } from './routes/_authenticated/accounts/daybook'
+import { Route as AuthenticatedAccountsChartOfAccountsRouteImport } from './routes/_authenticated/accounts/chart-of-accounts'
 import { Route as AuthenticatedInventoryAmadAmadIdRouteImport } from './routes/_authenticated/inventory/amad.$amadId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -62,6 +74,23 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedChambersRoute = AuthenticatedChambersRouteImport.update({
+  id: '/chambers',
+  path: '/chambers',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBardanaIndexRoute =
+  AuthenticatedBardanaIndexRouteImport.update({
+    id: '/bardana/',
+    path: '/bardana/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsIndexRoute =
+  AuthenticatedAccountsIndexRouteImport.update({
+    id: '/accounts/',
+    path: '/accounts/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedInventoryTakpattiRoute =
   AuthenticatedInventoryTakpattiRouteImport.update({
     id: '/inventory/takpatti',
@@ -86,6 +115,60 @@ const AuthenticatedInventoryAmadRoute =
     path: '/inventory/amad',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBardanaTypesRoute =
+  AuthenticatedBardanaTypesRouteImport.update({
+    id: '/bardana/types',
+    path: '/bardana/types',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBardanaReceiptsRoute =
+  AuthenticatedBardanaReceiptsRouteImport.update({
+    id: '/bardana/receipts',
+    path: '/bardana/receipts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBardanaOutstandingRoute =
+  AuthenticatedBardanaOutstandingRouteImport.update({
+    id: '/bardana/outstanding',
+    path: '/bardana/outstanding',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBardanaIssuesRoute =
+  AuthenticatedBardanaIssuesRouteImport.update({
+    id: '/bardana/issues',
+    path: '/bardana/issues',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsVouchersRoute =
+  AuthenticatedAccountsVouchersRouteImport.update({
+    id: '/accounts/vouchers',
+    path: '/accounts/vouchers',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsPartyLedgerRoute =
+  AuthenticatedAccountsPartyLedgerRouteImport.update({
+    id: '/accounts/party-ledger',
+    path: '/accounts/party-ledger',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsInterestRoute =
+  AuthenticatedAccountsInterestRouteImport.update({
+    id: '/accounts/interest',
+    path: '/accounts/interest',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsDaybookRoute =
+  AuthenticatedAccountsDaybookRouteImport.update({
+    id: '/accounts/daybook',
+    path: '/accounts/daybook',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAccountsChartOfAccountsRoute =
+  AuthenticatedAccountsChartOfAccountsRouteImport.update({
+    id: '/accounts/chart-of-accounts',
+    path: '/accounts/chart-of-accounts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedInventoryAmadAmadIdRoute =
   AuthenticatedInventoryAmadAmadIdRouteImport.update({
     id: '/$amadId',
@@ -98,13 +181,25 @@ export interface FileRoutesByFullPath {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/chambers': typeof AuthenticatedChambersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
+  '/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
+  '/accounts/interest': typeof AuthenticatedAccountsInterestRoute
+  '/accounts/party-ledger': typeof AuthenticatedAccountsPartyLedgerRoute
+  '/accounts/vouchers': typeof AuthenticatedAccountsVouchersRoute
+  '/bardana/issues': typeof AuthenticatedBardanaIssuesRoute
+  '/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
+  '/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
+  '/bardana/types': typeof AuthenticatedBardanaTypesRoute
   '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/accounts/': typeof AuthenticatedAccountsIndexRoute
+  '/bardana/': typeof AuthenticatedBardanaIndexRoute
   '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesByTo {
@@ -112,13 +207,25 @@ export interface FileRoutesByTo {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/chambers': typeof AuthenticatedChambersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
+  '/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
+  '/accounts/interest': typeof AuthenticatedAccountsInterestRoute
+  '/accounts/party-ledger': typeof AuthenticatedAccountsPartyLedgerRoute
+  '/accounts/vouchers': typeof AuthenticatedAccountsVouchersRoute
+  '/bardana/issues': typeof AuthenticatedBardanaIssuesRoute
+  '/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
+  '/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
+  '/bardana/types': typeof AuthenticatedBardanaTypesRoute
   '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/accounts': typeof AuthenticatedAccountsIndexRoute
+  '/bardana': typeof AuthenticatedBardanaIndexRoute
   '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesById {
@@ -128,13 +235,25 @@ export interface FileRoutesById {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/chambers': typeof AuthenticatedChambersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
+  '/_authenticated/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
+  '/_authenticated/accounts/interest': typeof AuthenticatedAccountsInterestRoute
+  '/_authenticated/accounts/party-ledger': typeof AuthenticatedAccountsPartyLedgerRoute
+  '/_authenticated/accounts/vouchers': typeof AuthenticatedAccountsVouchersRoute
+  '/_authenticated/bardana/issues': typeof AuthenticatedBardanaIssuesRoute
+  '/_authenticated/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
+  '/_authenticated/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
+  '/_authenticated/bardana/types': typeof AuthenticatedBardanaTypesRoute
   '/_authenticated/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/_authenticated/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/_authenticated/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/_authenticated/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/_authenticated/accounts/': typeof AuthenticatedAccountsIndexRoute
+  '/_authenticated/bardana/': typeof AuthenticatedBardanaIndexRoute
   '/_authenticated/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRouteTypes {
@@ -144,13 +263,25 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
+    | '/chambers'
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/accounts/chart-of-accounts'
+    | '/accounts/daybook'
+    | '/accounts/interest'
+    | '/accounts/party-ledger'
+    | '/accounts/vouchers'
+    | '/bardana/issues'
+    | '/bardana/outstanding'
+    | '/bardana/receipts'
+    | '/bardana/types'
     | '/inventory/amad'
     | '/inventory/nikasi'
     | '/inventory/stock-transfer'
     | '/inventory/takpatti'
+    | '/accounts/'
+    | '/bardana/'
     | '/inventory/amad/$amadId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -158,13 +289,25 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
+    | '/chambers'
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/accounts/chart-of-accounts'
+    | '/accounts/daybook'
+    | '/accounts/interest'
+    | '/accounts/party-ledger'
+    | '/accounts/vouchers'
+    | '/bardana/issues'
+    | '/bardana/outstanding'
+    | '/bardana/receipts'
+    | '/bardana/types'
     | '/inventory/amad'
     | '/inventory/nikasi'
     | '/inventory/stock-transfer'
     | '/inventory/takpatti'
+    | '/accounts'
+    | '/bardana'
     | '/inventory/amad/$amadId'
   id:
     | '__root__'
@@ -173,13 +316,25 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
+    | '/_authenticated/chambers'
     | '/_authenticated/dashboard'
     | '/_authenticated/masters'
     | '/_authenticated/settings'
+    | '/_authenticated/accounts/chart-of-accounts'
+    | '/_authenticated/accounts/daybook'
+    | '/_authenticated/accounts/interest'
+    | '/_authenticated/accounts/party-ledger'
+    | '/_authenticated/accounts/vouchers'
+    | '/_authenticated/bardana/issues'
+    | '/_authenticated/bardana/outstanding'
+    | '/_authenticated/bardana/receipts'
+    | '/_authenticated/bardana/types'
     | '/_authenticated/inventory/amad'
     | '/_authenticated/inventory/nikasi'
     | '/_authenticated/inventory/stock-transfer'
     | '/_authenticated/inventory/takpatti'
+    | '/_authenticated/accounts/'
+    | '/_authenticated/bardana/'
     | '/_authenticated/inventory/amad/$amadId'
   fileRoutesById: FileRoutesById
 }
@@ -249,6 +404,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/chambers': {
+      id: '/_authenticated/chambers'
+      path: '/chambers'
+      fullPath: '/chambers'
+      preLoaderRoute: typeof AuthenticatedChambersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bardana/': {
+      id: '/_authenticated/bardana/'
+      path: '/bardana'
+      fullPath: '/bardana/'
+      preLoaderRoute: typeof AuthenticatedBardanaIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/': {
+      id: '/_authenticated/accounts/'
+      path: '/accounts'
+      fullPath: '/accounts/'
+      preLoaderRoute: typeof AuthenticatedAccountsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/inventory/takpatti': {
       id: '/_authenticated/inventory/takpatti'
       path: '/inventory/takpatti'
@@ -277,6 +453,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInventoryAmadRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/bardana/types': {
+      id: '/_authenticated/bardana/types'
+      path: '/bardana/types'
+      fullPath: '/bardana/types'
+      preLoaderRoute: typeof AuthenticatedBardanaTypesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bardana/receipts': {
+      id: '/_authenticated/bardana/receipts'
+      path: '/bardana/receipts'
+      fullPath: '/bardana/receipts'
+      preLoaderRoute: typeof AuthenticatedBardanaReceiptsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bardana/outstanding': {
+      id: '/_authenticated/bardana/outstanding'
+      path: '/bardana/outstanding'
+      fullPath: '/bardana/outstanding'
+      preLoaderRoute: typeof AuthenticatedBardanaOutstandingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/bardana/issues': {
+      id: '/_authenticated/bardana/issues'
+      path: '/bardana/issues'
+      fullPath: '/bardana/issues'
+      preLoaderRoute: typeof AuthenticatedBardanaIssuesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/vouchers': {
+      id: '/_authenticated/accounts/vouchers'
+      path: '/accounts/vouchers'
+      fullPath: '/accounts/vouchers'
+      preLoaderRoute: typeof AuthenticatedAccountsVouchersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/party-ledger': {
+      id: '/_authenticated/accounts/party-ledger'
+      path: '/accounts/party-ledger'
+      fullPath: '/accounts/party-ledger'
+      preLoaderRoute: typeof AuthenticatedAccountsPartyLedgerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/interest': {
+      id: '/_authenticated/accounts/interest'
+      path: '/accounts/interest'
+      fullPath: '/accounts/interest'
+      preLoaderRoute: typeof AuthenticatedAccountsInterestRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/daybook': {
+      id: '/_authenticated/accounts/daybook'
+      path: '/accounts/daybook'
+      fullPath: '/accounts/daybook'
+      preLoaderRoute: typeof AuthenticatedAccountsDaybookRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/accounts/chart-of-accounts': {
+      id: '/_authenticated/accounts/chart-of-accounts'
+      path: '/accounts/chart-of-accounts'
+      fullPath: '/accounts/chart-of-accounts'
+      preLoaderRoute: typeof AuthenticatedAccountsChartOfAccountsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/inventory/amad/$amadId': {
       id: '/_authenticated/inventory/amad/$amadId'
       path: '/$amadId'
@@ -303,24 +542,49 @@ const AuthenticatedInventoryAmadRouteWithChildren =
   )
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedChambersRoute: typeof AuthenticatedChambersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedAccountsChartOfAccountsRoute: typeof AuthenticatedAccountsChartOfAccountsRoute
+  AuthenticatedAccountsDaybookRoute: typeof AuthenticatedAccountsDaybookRoute
+  AuthenticatedAccountsInterestRoute: typeof AuthenticatedAccountsInterestRoute
+  AuthenticatedAccountsPartyLedgerRoute: typeof AuthenticatedAccountsPartyLedgerRoute
+  AuthenticatedAccountsVouchersRoute: typeof AuthenticatedAccountsVouchersRoute
+  AuthenticatedBardanaIssuesRoute: typeof AuthenticatedBardanaIssuesRoute
+  AuthenticatedBardanaOutstandingRoute: typeof AuthenticatedBardanaOutstandingRoute
+  AuthenticatedBardanaReceiptsRoute: typeof AuthenticatedBardanaReceiptsRoute
+  AuthenticatedBardanaTypesRoute: typeof AuthenticatedBardanaTypesRoute
   AuthenticatedInventoryAmadRoute: typeof AuthenticatedInventoryAmadRouteWithChildren
   AuthenticatedInventoryNikasiRoute: typeof AuthenticatedInventoryNikasiRoute
   AuthenticatedInventoryStockTransferRoute: typeof AuthenticatedInventoryStockTransferRoute
   AuthenticatedInventoryTakpattiRoute: typeof AuthenticatedInventoryTakpattiRoute
+  AuthenticatedAccountsIndexRoute: typeof AuthenticatedAccountsIndexRoute
+  AuthenticatedBardanaIndexRoute: typeof AuthenticatedBardanaIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedChambersRoute: AuthenticatedChambersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedAccountsChartOfAccountsRoute:
+    AuthenticatedAccountsChartOfAccountsRoute,
+  AuthenticatedAccountsDaybookRoute: AuthenticatedAccountsDaybookRoute,
+  AuthenticatedAccountsInterestRoute: AuthenticatedAccountsInterestRoute,
+  AuthenticatedAccountsPartyLedgerRoute: AuthenticatedAccountsPartyLedgerRoute,
+  AuthenticatedAccountsVouchersRoute: AuthenticatedAccountsVouchersRoute,
+  AuthenticatedBardanaIssuesRoute: AuthenticatedBardanaIssuesRoute,
+  AuthenticatedBardanaOutstandingRoute: AuthenticatedBardanaOutstandingRoute,
+  AuthenticatedBardanaReceiptsRoute: AuthenticatedBardanaReceiptsRoute,
+  AuthenticatedBardanaTypesRoute: AuthenticatedBardanaTypesRoute,
   AuthenticatedInventoryAmadRoute: AuthenticatedInventoryAmadRouteWithChildren,
   AuthenticatedInventoryNikasiRoute: AuthenticatedInventoryNikasiRoute,
   AuthenticatedInventoryStockTransferRoute:
     AuthenticatedInventoryStockTransferRoute,
   AuthenticatedInventoryTakpattiRoute: AuthenticatedInventoryTakpattiRoute,
+  AuthenticatedAccountsIndexRoute: AuthenticatedAccountsIndexRoute,
+  AuthenticatedBardanaIndexRoute: AuthenticatedBardanaIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -32,11 +32,11 @@ export const mainNavItems: NavItem[] = [
     label: "Accounts",
     icon: "indian-rupee",
     children: [
-      { id: "party-ledger", label: "Party Ledger", icon: "book-open" },
-      { id: "chart-of-accounts", label: "Chart of Accounts", icon: "list" },
-      { id: "vouchers", label: "Vouchers", icon: "receipt" },
-      { id: "daybook", label: "Daybook", icon: "calendar" },
-      { id: "interest", label: "Interest", icon: "percent" },
+      { id: "party-ledger", label: "Party Ledger", icon: "book-open", to: "/accounts/party-ledger" },
+      { id: "chart-of-accounts", label: "Chart of Accounts", icon: "list", to: "/accounts/chart-of-accounts" },
+      { id: "vouchers", label: "Vouchers", icon: "receipt", to: "/accounts/vouchers" },
+      { id: "daybook", label: "Daybook", icon: "calendar", to: "/accounts/daybook" },
+      { id: "interest", label: "Interest", icon: "percent", to: "/accounts/interest" },
     ],
   },
   { id: "billing", label: "Billing", icon: "credit-card", to: "/billing" },
@@ -45,7 +45,18 @@ export const mainNavItems: NavItem[] = [
 
 // OPERATIONS section - Secondary workflows
 export const operationsNavItems: NavItem[] = [
-  { id: "bardana", label: "Bardana", icon: "package", to: "/bardana" },
+  {
+    id: "bardana",
+    label: "Bardana",
+    icon: "package",
+    children: [
+      { id: "bardana-stock", label: "Stock Summary", icon: "layout-dashboard", to: "/bardana" },
+      { id: "bardana-issues", label: "Issue Bardana", icon: "arrow-up-right", to: "/bardana/issues" },
+      { id: "bardana-receipts", label: "Return Bardana", icon: "arrow-down-left", to: "/bardana/receipts" },
+      { id: "bardana-outstanding", label: "Outstanding", icon: "users", to: "/bardana/outstanding" },
+      { id: "bardana-types", label: "Bardana Types", icon: "settings", to: "/bardana/types" },
+    ],
+  },
   { id: "loans", label: "Loans", icon: "banknote", to: "/loans" },
   { id: "payroll", label: "Payroll", icon: "users", to: "/payroll" },
 ];

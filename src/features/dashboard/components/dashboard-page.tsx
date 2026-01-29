@@ -25,7 +25,7 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+    <div className="flex flex-col gap-4 md:gap-6">
       {/* Row 1: Key Metrics - 4 column grid */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {data.metrics.map((metric) => (

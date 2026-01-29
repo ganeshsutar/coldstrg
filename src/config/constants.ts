@@ -123,6 +123,22 @@ export const RENT_BASIS = [
   { value: "WEIGHT", label: "Weight" },
 ] as const;
 
+export const RENT_ON = [
+  { value: "QUANTITY", label: "Quantity (bags)" },
+  { value: "WEIGHT", label: "Weight (quintals)" },
+] as const;
+
+export const CHARGE_RENT_TYPE = [
+  { value: "MONTHLY", label: "Monthly" },
+  { value: "SEASONALLY", label: "Seasonally" },
+  { value: "DAILY", label: "Daily" },
+] as const;
+
+export const RENT_CALCULATION_MODE = [
+  { value: "NIKASI_TOTAL", label: "Nikasi Total" },
+  { value: "SAUDA_BOLAN", label: "Sauda Bolan" },
+] as const;
+
 export const LABOR_RATE_TYPES = [
   { value: "LOADING", label: "Loading" },
   { value: "UNLOADING", label: "Unloading" },
@@ -200,3 +216,230 @@ export const SEED_LABOR_RATES = [
   { rateType: "DUMPING" as const, ratePKT1: 2.0 },
   { rateType: "DALA" as const, ratePKT1: 10.0 },
 ];
+
+// ============== WAREHOUSE / CHAMBER CONSTANTS ==============
+
+export const RACK_STATUS = {
+  EMPTY: "EMPTY",
+  PARTIAL: "PARTIAL",
+  FULL: "FULL",
+  RESERVED: "RESERVED",
+  MAINTENANCE: "MAINTENANCE",
+} as const;
+
+export const RACK_STATUS_OPTIONS = [
+  { value: "EMPTY", label: "Empty" },
+  { value: "PARTIAL", label: "Partial" },
+  { value: "FULL", label: "Full" },
+  { value: "RESERVED", label: "Reserved" },
+  { value: "MAINTENANCE", label: "Maintenance" },
+] as const;
+
+export const RACK_STATUS_COLORS: Record<string, string> = {
+  EMPTY: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+  PARTIAL: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  FULL: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  RESERVED: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  MAINTENANCE: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+};
+
+export const RACK_STATUS_BG_COLORS: Record<string, string> = {
+  EMPTY: "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600",
+  PARTIAL: "bg-yellow-200 hover:bg-yellow-300 dark:bg-yellow-700 dark:hover:bg-yellow-600",
+  FULL: "bg-green-200 hover:bg-green-300 dark:bg-green-700 dark:hover:bg-green-600",
+  RESERVED: "bg-blue-200 hover:bg-blue-300 dark:bg-blue-700 dark:hover:bg-blue-600",
+  MAINTENANCE: "bg-red-200 hover:bg-red-300 dark:bg-red-700 dark:hover:bg-red-600",
+};
+
+export const TEMPERATURE_STATUS = {
+  NORMAL: "NORMAL",
+  WARNING: "WARNING",
+  CRITICAL: "CRITICAL",
+  OFFLINE: "OFFLINE",
+} as const;
+
+export const TEMPERATURE_STATUS_OPTIONS = [
+  { value: "NORMAL", label: "Normal" },
+  { value: "WARNING", label: "Warning" },
+  { value: "CRITICAL", label: "Critical" },
+  { value: "OFFLINE", label: "Offline" },
+] as const;
+
+export const TEMPERATURE_STATUS_COLORS: Record<string, string> = {
+  NORMAL: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  WARNING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  CRITICAL: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+  OFFLINE: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+};
+
+export const SHIFTING_STATUS = {
+  PENDING: "PENDING",
+  IN_PROGRESS: "IN_PROGRESS",
+  COMPLETED: "COMPLETED",
+  CANCELLED: "CANCELLED",
+} as const;
+
+export const SHIFTING_STATUS_OPTIONS = [
+  { value: "PENDING", label: "Pending" },
+  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "COMPLETED", label: "Completed" },
+  { value: "CANCELLED", label: "Cancelled" },
+] as const;
+
+export const SHIFTING_STATUS_COLORS: Record<string, string> = {
+  PENDING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  IN_PROGRESS: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  COMPLETED: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+};
+
+export const SHIFTING_REASONS = [
+  { value: "MAINTENANCE", label: "Chamber Maintenance" },
+  { value: "OPTIMIZATION", label: "Space Optimization" },
+  { value: "TEMPERATURE", label: "Temperature Issues" },
+  { value: "DISPATCH", label: "Preparing for Dispatch" },
+  { value: "CONSOLIDATION", label: "Stock Consolidation" },
+  { value: "OTHER", label: "Other" },
+] as const;
+
+export const DEFAULT_CHAMBER_CONFIG = {
+  floors: 1,
+  totalRacks: 100,
+  racksPerRow: 10,
+  rackCapacity: 100,
+  targetTemperature: -18,
+  minTemperature: -25,
+  maxTemperature: -15,
+};
+
+export const TEMPERATURE_THRESHOLDS = {
+  NORMAL_MAX: -15,
+  WARNING_MAX: -10,
+  CRITICAL_MAX: -5,
+};
+
+// ============== ACCOUNTING CONSTANTS ==============
+
+export const ACCOUNT_TYPES = {
+  GROUP: "GROUP",
+  ACCOUNT: "ACCOUNT",
+} as const;
+
+export const ACCOUNT_TYPE_OPTIONS = [
+  { value: "GROUP", label: "Group" },
+  { value: "ACCOUNT", label: "Account" },
+] as const;
+
+export const ACCOUNT_NATURE = {
+  DR: "DR",
+  CR: "CR",
+} as const;
+
+export const ACCOUNT_NATURE_OPTIONS = [
+  { value: "DR", label: "Debit" },
+  { value: "CR", label: "Credit" },
+] as const;
+
+export const VOUCHER_TYPES_ENUM = {
+  CR: "CR",
+  DR: "DR",
+  JV: "JV",
+  CV: "CV",
+  BH: "BH",
+} as const;
+
+export const VOUCHER_TYPE_OPTIONS = [
+  { value: "CR", label: "Cash Receipt", shortLabel: "CR" },
+  { value: "DR", label: "Cash Payment", shortLabel: "DR" },
+  { value: "JV", label: "Journal Voucher", shortLabel: "JV" },
+  { value: "CV", label: "Contra Voucher", shortLabel: "CV" },
+  { value: "BH", label: "Bank", shortLabel: "BH" },
+] as const;
+
+export const VOUCHER_TYPE_COLORS: Record<string, string> = {
+  CR: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  DR: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+  JV: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
+  CV: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  BH: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+};
+
+export const PAYMENT_MODE_ENUM = {
+  CASH: "CASH",
+  CHEQUE: "CHEQUE",
+  BANK: "BANK",
+  UPI: "UPI",
+} as const;
+
+export const PAYMENT_MODE_OPTIONS = [
+  { value: "CASH", label: "Cash" },
+  { value: "CHEQUE", label: "Cheque" },
+  { value: "BANK", label: "Bank Transfer" },
+  { value: "UPI", label: "UPI" },
+] as const;
+
+// Component colors for balance breakdown visualization
+export const COMPONENT_COLORS = {
+  rent: {
+    bg: "bg-blue-100 dark:bg-blue-900/30",
+    text: "text-blue-700 dark:text-blue-300",
+    bar: "bg-blue-500",
+  },
+  loan: {
+    bg: "bg-amber-100 dark:bg-amber-900/30",
+    text: "text-amber-700 dark:text-amber-300",
+    bar: "bg-amber-500",
+  },
+  bardana: {
+    bg: "bg-purple-100 dark:bg-purple-900/30",
+    text: "text-purple-700 dark:text-purple-300",
+    bar: "bg-purple-500",
+  },
+  interest: {
+    bg: "bg-red-100 dark:bg-red-900/30",
+    text: "text-red-700 dark:text-red-300",
+    bar: "bg-red-500",
+  },
+  other: {
+    bg: "bg-gray-100 dark:bg-gray-800",
+    text: "text-gray-700 dark:text-gray-300",
+    bar: "bg-gray-500",
+  },
+} as const;
+
+// Seed chart of accounts hierarchy
+export const SEED_CHART_OF_ACCOUNTS = [
+  // Assets
+  { code: "1000", name: "Assets", accountType: "GROUP", nature: "DR", level: 0 },
+  { code: "1100", name: "Current Assets", accountType: "GROUP", nature: "DR", level: 1, under: "1000" },
+  { code: "1110", name: "Cash", accountType: "ACCOUNT", nature: "DR", level: 2, under: "1100" },
+  { code: "1120", name: "Bank Accounts", accountType: "GROUP", nature: "DR", level: 2, under: "1100" },
+  { code: "1130", name: "Sundry Debtors", accountType: "GROUP", nature: "DR", level: 2, under: "1100" },
+  { code: "1200", name: "Fixed Assets", accountType: "GROUP", nature: "DR", level: 1, under: "1000" },
+
+  // Liabilities
+  { code: "2000", name: "Liabilities", accountType: "GROUP", nature: "CR", level: 0 },
+  { code: "2100", name: "Current Liabilities", accountType: "GROUP", nature: "CR", level: 1, under: "2000" },
+  { code: "2110", name: "Sundry Creditors", accountType: "GROUP", nature: "CR", level: 2, under: "2100" },
+  { code: "2200", name: "Loans (Liability)", accountType: "GROUP", nature: "CR", level: 1, under: "2000" },
+
+  // Capital
+  { code: "3000", name: "Capital Account", accountType: "GROUP", nature: "CR", level: 0 },
+
+  // Income
+  { code: "4000", name: "Income", accountType: "GROUP", nature: "CR", level: 0 },
+  { code: "4100", name: "Direct Income", accountType: "GROUP", nature: "CR", level: 1, under: "4000" },
+  { code: "4110", name: "Rent Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
+  { code: "4120", name: "Labor Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
+  { code: "4130", name: "Interest Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
+  { code: "4200", name: "Indirect Income", accountType: "GROUP", nature: "CR", level: 1, under: "4000" },
+
+  // Expenses
+  { code: "5000", name: "Expenses", accountType: "GROUP", nature: "DR", level: 0 },
+  { code: "5100", name: "Direct Expenses", accountType: "GROUP", nature: "DR", level: 1, under: "5000" },
+  { code: "5110", name: "Labor Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5100" },
+  { code: "5120", name: "Electricity Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5100" },
+  { code: "5200", name: "Indirect Expenses", accountType: "GROUP", nature: "DR", level: 1, under: "5000" },
+  { code: "5210", name: "Salary Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5200" },
+  { code: "5220", name: "Rent Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5200" },
+] as const;
