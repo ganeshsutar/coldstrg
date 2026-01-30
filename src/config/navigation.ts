@@ -39,8 +39,25 @@ export const mainNavItems: NavItem[] = [
       { id: "interest", label: "Interest", icon: "percent", to: "/accounts/interest" },
     ],
   },
-  { id: "billing", label: "Billing", icon: "credit-card", to: "/billing" },
-  { id: "trading", label: "Trading", icon: "handshake", to: "/trading" },
+  {
+    id: "billing",
+    label: "Billing",
+    icon: "credit-card",
+    children: [
+      { id: "rent-bills", label: "Rent Bills", icon: "file-text", to: "/billing/rent-bills" },
+      { id: "receipts", label: "Receipts", icon: "banknote", to: "/billing/receipts" },
+    ],
+  },
+  {
+    id: "trading",
+    label: "Trading",
+    icon: "handshake",
+    children: [
+      { id: "sauda", label: "Deals (Sauda)", icon: "file-text", to: "/trading/sauda" },
+      { id: "gate-pass", label: "Gate Pass", icon: "truck", to: "/trading/gate-pass" },
+      { id: "katai", label: "Grading (Katai)", icon: "layers", to: "/trading/katai" },
+    ],
+  },
 ];
 
 // OPERATIONS section - Secondary workflows
@@ -57,8 +74,33 @@ export const operationsNavItems: NavItem[] = [
       { id: "bardana-types", label: "Bardana Types", icon: "settings", to: "/bardana/types" },
     ],
   },
-  { id: "loans", label: "Loans", icon: "banknote", to: "/loans" },
-  { id: "payroll", label: "Payroll", icon: "users", to: "/payroll" },
+  {
+    id: "loans",
+    label: "Loans",
+    icon: "banknote",
+    children: [
+      { id: "loan-dashboard", label: "Dashboard", icon: "layout-dashboard", to: "/loans" },
+      { id: "advances", label: "Advances", icon: "hand-coins", to: "/loans/advances" },
+      { id: "loan-against-goods", label: "Loans", icon: "landmark", to: "/loans/loans" },
+      { id: "interest-chart", label: "Interest Chart", icon: "percent", to: "/loans/interest-chart" },
+      { id: "loan-ledger", label: "Loan Ledger", icon: "book-open", to: "/loans/ledger" },
+    ],
+  },
+  {
+    id: "payroll",
+    label: "Payroll",
+    icon: "users",
+    children: [
+      { id: "payroll-dashboard", label: "Dashboard", icon: "layout-dashboard", to: "/payroll" },
+      { id: "employees", label: "Employees", icon: "user-check", to: "/payroll/employees" },
+      { id: "attendance", label: "Attendance", icon: "calendar-check", to: "/payroll/attendance" },
+      { id: "salary", label: "Salary Processing", icon: "calculator", to: "/payroll/salary" },
+      { id: "payslip", label: "Pay Slip", icon: "file-text", to: "/payroll/payslip" },
+      { id: "staff-loans", label: "Staff Loans", icon: "hand-coins", to: "/payroll/loans" },
+      { id: "daily-wages", label: "Daily Wages", icon: "clock", to: "/payroll/daily-wages" },
+      { id: "payroll-masters", label: "Masters", icon: "settings", to: "/payroll/masters" },
+    ],
+  },
 ];
 
 // SYSTEM section - Configuration and administration

@@ -18,12 +18,34 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChambersRouteImport } from './routes/_authenticated/chambers'
+import { Route as AuthenticatedTradingIndexRouteImport } from './routes/_authenticated/trading/index'
+import { Route as AuthenticatedPayrollIndexRouteImport } from './routes/_authenticated/payroll/index'
+import { Route as AuthenticatedLoansIndexRouteImport } from './routes/_authenticated/loans/index'
+import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
 import { Route as AuthenticatedBardanaIndexRouteImport } from './routes/_authenticated/bardana/index'
 import { Route as AuthenticatedAccountsIndexRouteImport } from './routes/_authenticated/accounts/index'
+import { Route as AuthenticatedTradingSaudaRouteImport } from './routes/_authenticated/trading/sauda'
+import { Route as AuthenticatedTradingKataiRouteImport } from './routes/_authenticated/trading/katai'
+import { Route as AuthenticatedTradingGatePassRouteImport } from './routes/_authenticated/trading/gate-pass'
+import { Route as AuthenticatedPayrollSalaryRouteImport } from './routes/_authenticated/payroll/salary'
+import { Route as AuthenticatedPayrollPayslipRouteImport } from './routes/_authenticated/payroll/payslip'
+import { Route as AuthenticatedPayrollMastersRouteImport } from './routes/_authenticated/payroll/masters'
+import { Route as AuthenticatedPayrollLoansRouteImport } from './routes/_authenticated/payroll/loans'
+import { Route as AuthenticatedPayrollEmployeesRouteImport } from './routes/_authenticated/payroll/employees'
+import { Route as AuthenticatedPayrollDailyWagesRouteImport } from './routes/_authenticated/payroll/daily-wages'
+import { Route as AuthenticatedPayrollAttendanceRouteImport } from './routes/_authenticated/payroll/attendance'
+import { Route as AuthenticatedLoansLoansRouteImport } from './routes/_authenticated/loans/loans'
+import { Route as AuthenticatedLoansLedgerRouteImport } from './routes/_authenticated/loans/ledger'
+import { Route as AuthenticatedLoansInterestChartRouteImport } from './routes/_authenticated/loans/interest-chart'
+import { Route as AuthenticatedLoansAdvancesRouteImport } from './routes/_authenticated/loans/advances'
 import { Route as AuthenticatedInventoryTakpattiRouteImport } from './routes/_authenticated/inventory/takpatti'
 import { Route as AuthenticatedInventoryStockTransferRouteImport } from './routes/_authenticated/inventory/stock-transfer'
 import { Route as AuthenticatedInventoryNikasiRouteImport } from './routes/_authenticated/inventory/nikasi'
 import { Route as AuthenticatedInventoryAmadRouteImport } from './routes/_authenticated/inventory/amad'
+import { Route as AuthenticatedBillingRentBillsRouteImport } from './routes/_authenticated/billing/rent-bills'
+import { Route as AuthenticatedBillingReceiptsRouteImport } from './routes/_authenticated/billing/receipts'
+import { Route as AuthenticatedBillingNewBillRouteImport } from './routes/_authenticated/billing/new-bill'
+import { Route as AuthenticatedBillingBillIdRouteImport } from './routes/_authenticated/billing/$billId'
 import { Route as AuthenticatedBardanaTypesRouteImport } from './routes/_authenticated/bardana/types'
 import { Route as AuthenticatedBardanaReceiptsRouteImport } from './routes/_authenticated/bardana/receipts'
 import { Route as AuthenticatedBardanaOutstandingRouteImport } from './routes/_authenticated/bardana/outstanding'
@@ -79,6 +101,29 @@ const AuthenticatedChambersRoute = AuthenticatedChambersRouteImport.update({
   path: '/chambers',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTradingIndexRoute =
+  AuthenticatedTradingIndexRouteImport.update({
+    id: '/trading/',
+    path: '/trading/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollIndexRoute =
+  AuthenticatedPayrollIndexRouteImport.update({
+    id: '/payroll/',
+    path: '/payroll/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLoansIndexRoute = AuthenticatedLoansIndexRouteImport.update({
+  id: '/loans/',
+  path: '/loans/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBillingIndexRoute =
+  AuthenticatedBillingIndexRouteImport.update({
+    id: '/billing/',
+    path: '/billing/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedBardanaIndexRoute =
   AuthenticatedBardanaIndexRouteImport.update({
     id: '/bardana/',
@@ -89,6 +134,89 @@ const AuthenticatedAccountsIndexRoute =
   AuthenticatedAccountsIndexRouteImport.update({
     id: '/accounts/',
     path: '/accounts/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTradingSaudaRoute =
+  AuthenticatedTradingSaudaRouteImport.update({
+    id: '/trading/sauda',
+    path: '/trading/sauda',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTradingKataiRoute =
+  AuthenticatedTradingKataiRouteImport.update({
+    id: '/trading/katai',
+    path: '/trading/katai',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTradingGatePassRoute =
+  AuthenticatedTradingGatePassRouteImport.update({
+    id: '/trading/gate-pass',
+    path: '/trading/gate-pass',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollSalaryRoute =
+  AuthenticatedPayrollSalaryRouteImport.update({
+    id: '/payroll/salary',
+    path: '/payroll/salary',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollPayslipRoute =
+  AuthenticatedPayrollPayslipRouteImport.update({
+    id: '/payroll/payslip',
+    path: '/payroll/payslip',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollMastersRoute =
+  AuthenticatedPayrollMastersRouteImport.update({
+    id: '/payroll/masters',
+    path: '/payroll/masters',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollLoansRoute =
+  AuthenticatedPayrollLoansRouteImport.update({
+    id: '/payroll/loans',
+    path: '/payroll/loans',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollEmployeesRoute =
+  AuthenticatedPayrollEmployeesRouteImport.update({
+    id: '/payroll/employees',
+    path: '/payroll/employees',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollDailyWagesRoute =
+  AuthenticatedPayrollDailyWagesRouteImport.update({
+    id: '/payroll/daily-wages',
+    path: '/payroll/daily-wages',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPayrollAttendanceRoute =
+  AuthenticatedPayrollAttendanceRouteImport.update({
+    id: '/payroll/attendance',
+    path: '/payroll/attendance',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLoansLoansRoute = AuthenticatedLoansLoansRouteImport.update({
+  id: '/loans/loans',
+  path: '/loans/loans',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedLoansLedgerRoute =
+  AuthenticatedLoansLedgerRouteImport.update({
+    id: '/loans/ledger',
+    path: '/loans/ledger',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLoansInterestChartRoute =
+  AuthenticatedLoansInterestChartRouteImport.update({
+    id: '/loans/interest-chart',
+    path: '/loans/interest-chart',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLoansAdvancesRoute =
+  AuthenticatedLoansAdvancesRouteImport.update({
+    id: '/loans/advances',
+    path: '/loans/advances',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedInventoryTakpattiRoute =
@@ -113,6 +241,30 @@ const AuthenticatedInventoryAmadRoute =
   AuthenticatedInventoryAmadRouteImport.update({
     id: '/inventory/amad',
     path: '/inventory/amad',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBillingRentBillsRoute =
+  AuthenticatedBillingRentBillsRouteImport.update({
+    id: '/billing/rent-bills',
+    path: '/billing/rent-bills',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBillingReceiptsRoute =
+  AuthenticatedBillingReceiptsRouteImport.update({
+    id: '/billing/receipts',
+    path: '/billing/receipts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBillingNewBillRoute =
+  AuthenticatedBillingNewBillRouteImport.update({
+    id: '/billing/new-bill',
+    path: '/billing/new-bill',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBillingBillIdRoute =
+  AuthenticatedBillingBillIdRouteImport.update({
+    id: '/billing/$billId',
+    path: '/billing/$billId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedBardanaTypesRoute =
@@ -194,12 +346,34 @@ export interface FileRoutesByFullPath {
   '/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
   '/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
   '/bardana/types': typeof AuthenticatedBardanaTypesRoute
+  '/billing/$billId': typeof AuthenticatedBillingBillIdRoute
+  '/billing/new-bill': typeof AuthenticatedBillingNewBillRoute
+  '/billing/receipts': typeof AuthenticatedBillingReceiptsRoute
+  '/billing/rent-bills': typeof AuthenticatedBillingRentBillsRoute
   '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/loans/advances': typeof AuthenticatedLoansAdvancesRoute
+  '/loans/interest-chart': typeof AuthenticatedLoansInterestChartRoute
+  '/loans/ledger': typeof AuthenticatedLoansLedgerRoute
+  '/loans/loans': typeof AuthenticatedLoansLoansRoute
+  '/payroll/attendance': typeof AuthenticatedPayrollAttendanceRoute
+  '/payroll/daily-wages': typeof AuthenticatedPayrollDailyWagesRoute
+  '/payroll/employees': typeof AuthenticatedPayrollEmployeesRoute
+  '/payroll/loans': typeof AuthenticatedPayrollLoansRoute
+  '/payroll/masters': typeof AuthenticatedPayrollMastersRoute
+  '/payroll/payslip': typeof AuthenticatedPayrollPayslipRoute
+  '/payroll/salary': typeof AuthenticatedPayrollSalaryRoute
+  '/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
+  '/trading/katai': typeof AuthenticatedTradingKataiRoute
+  '/trading/sauda': typeof AuthenticatedTradingSaudaRoute
   '/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/bardana/': typeof AuthenticatedBardanaIndexRoute
+  '/billing/': typeof AuthenticatedBillingIndexRoute
+  '/loans/': typeof AuthenticatedLoansIndexRoute
+  '/payroll/': typeof AuthenticatedPayrollIndexRoute
+  '/trading/': typeof AuthenticatedTradingIndexRoute
   '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesByTo {
@@ -220,12 +394,34 @@ export interface FileRoutesByTo {
   '/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
   '/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
   '/bardana/types': typeof AuthenticatedBardanaTypesRoute
+  '/billing/$billId': typeof AuthenticatedBillingBillIdRoute
+  '/billing/new-bill': typeof AuthenticatedBillingNewBillRoute
+  '/billing/receipts': typeof AuthenticatedBillingReceiptsRoute
+  '/billing/rent-bills': typeof AuthenticatedBillingRentBillsRoute
   '/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/loans/advances': typeof AuthenticatedLoansAdvancesRoute
+  '/loans/interest-chart': typeof AuthenticatedLoansInterestChartRoute
+  '/loans/ledger': typeof AuthenticatedLoansLedgerRoute
+  '/loans/loans': typeof AuthenticatedLoansLoansRoute
+  '/payroll/attendance': typeof AuthenticatedPayrollAttendanceRoute
+  '/payroll/daily-wages': typeof AuthenticatedPayrollDailyWagesRoute
+  '/payroll/employees': typeof AuthenticatedPayrollEmployeesRoute
+  '/payroll/loans': typeof AuthenticatedPayrollLoansRoute
+  '/payroll/masters': typeof AuthenticatedPayrollMastersRoute
+  '/payroll/payslip': typeof AuthenticatedPayrollPayslipRoute
+  '/payroll/salary': typeof AuthenticatedPayrollSalaryRoute
+  '/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
+  '/trading/katai': typeof AuthenticatedTradingKataiRoute
+  '/trading/sauda': typeof AuthenticatedTradingSaudaRoute
   '/accounts': typeof AuthenticatedAccountsIndexRoute
   '/bardana': typeof AuthenticatedBardanaIndexRoute
+  '/billing': typeof AuthenticatedBillingIndexRoute
+  '/loans': typeof AuthenticatedLoansIndexRoute
+  '/payroll': typeof AuthenticatedPayrollIndexRoute
+  '/trading': typeof AuthenticatedTradingIndexRoute
   '/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRoutesById {
@@ -248,12 +444,34 @@ export interface FileRoutesById {
   '/_authenticated/bardana/outstanding': typeof AuthenticatedBardanaOutstandingRoute
   '/_authenticated/bardana/receipts': typeof AuthenticatedBardanaReceiptsRoute
   '/_authenticated/bardana/types': typeof AuthenticatedBardanaTypesRoute
+  '/_authenticated/billing/$billId': typeof AuthenticatedBillingBillIdRoute
+  '/_authenticated/billing/new-bill': typeof AuthenticatedBillingNewBillRoute
+  '/_authenticated/billing/receipts': typeof AuthenticatedBillingReceiptsRoute
+  '/_authenticated/billing/rent-bills': typeof AuthenticatedBillingRentBillsRoute
   '/_authenticated/inventory/amad': typeof AuthenticatedInventoryAmadRouteWithChildren
   '/_authenticated/inventory/nikasi': typeof AuthenticatedInventoryNikasiRoute
   '/_authenticated/inventory/stock-transfer': typeof AuthenticatedInventoryStockTransferRoute
   '/_authenticated/inventory/takpatti': typeof AuthenticatedInventoryTakpattiRoute
+  '/_authenticated/loans/advances': typeof AuthenticatedLoansAdvancesRoute
+  '/_authenticated/loans/interest-chart': typeof AuthenticatedLoansInterestChartRoute
+  '/_authenticated/loans/ledger': typeof AuthenticatedLoansLedgerRoute
+  '/_authenticated/loans/loans': typeof AuthenticatedLoansLoansRoute
+  '/_authenticated/payroll/attendance': typeof AuthenticatedPayrollAttendanceRoute
+  '/_authenticated/payroll/daily-wages': typeof AuthenticatedPayrollDailyWagesRoute
+  '/_authenticated/payroll/employees': typeof AuthenticatedPayrollEmployeesRoute
+  '/_authenticated/payroll/loans': typeof AuthenticatedPayrollLoansRoute
+  '/_authenticated/payroll/masters': typeof AuthenticatedPayrollMastersRoute
+  '/_authenticated/payroll/payslip': typeof AuthenticatedPayrollPayslipRoute
+  '/_authenticated/payroll/salary': typeof AuthenticatedPayrollSalaryRoute
+  '/_authenticated/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
+  '/_authenticated/trading/katai': typeof AuthenticatedTradingKataiRoute
+  '/_authenticated/trading/sauda': typeof AuthenticatedTradingSaudaRoute
   '/_authenticated/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/_authenticated/bardana/': typeof AuthenticatedBardanaIndexRoute
+  '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
+  '/_authenticated/loans/': typeof AuthenticatedLoansIndexRoute
+  '/_authenticated/payroll/': typeof AuthenticatedPayrollIndexRoute
+  '/_authenticated/trading/': typeof AuthenticatedTradingIndexRoute
   '/_authenticated/inventory/amad/$amadId': typeof AuthenticatedInventoryAmadAmadIdRoute
 }
 export interface FileRouteTypes {
@@ -276,12 +494,34 @@ export interface FileRouteTypes {
     | '/bardana/outstanding'
     | '/bardana/receipts'
     | '/bardana/types'
+    | '/billing/$billId'
+    | '/billing/new-bill'
+    | '/billing/receipts'
+    | '/billing/rent-bills'
     | '/inventory/amad'
     | '/inventory/nikasi'
     | '/inventory/stock-transfer'
     | '/inventory/takpatti'
+    | '/loans/advances'
+    | '/loans/interest-chart'
+    | '/loans/ledger'
+    | '/loans/loans'
+    | '/payroll/attendance'
+    | '/payroll/daily-wages'
+    | '/payroll/employees'
+    | '/payroll/loans'
+    | '/payroll/masters'
+    | '/payroll/payslip'
+    | '/payroll/salary'
+    | '/trading/gate-pass'
+    | '/trading/katai'
+    | '/trading/sauda'
     | '/accounts/'
     | '/bardana/'
+    | '/billing/'
+    | '/loans/'
+    | '/payroll/'
+    | '/trading/'
     | '/inventory/amad/$amadId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -302,12 +542,34 @@ export interface FileRouteTypes {
     | '/bardana/outstanding'
     | '/bardana/receipts'
     | '/bardana/types'
+    | '/billing/$billId'
+    | '/billing/new-bill'
+    | '/billing/receipts'
+    | '/billing/rent-bills'
     | '/inventory/amad'
     | '/inventory/nikasi'
     | '/inventory/stock-transfer'
     | '/inventory/takpatti'
+    | '/loans/advances'
+    | '/loans/interest-chart'
+    | '/loans/ledger'
+    | '/loans/loans'
+    | '/payroll/attendance'
+    | '/payroll/daily-wages'
+    | '/payroll/employees'
+    | '/payroll/loans'
+    | '/payroll/masters'
+    | '/payroll/payslip'
+    | '/payroll/salary'
+    | '/trading/gate-pass'
+    | '/trading/katai'
+    | '/trading/sauda'
     | '/accounts'
     | '/bardana'
+    | '/billing'
+    | '/loans'
+    | '/payroll'
+    | '/trading'
     | '/inventory/amad/$amadId'
   id:
     | '__root__'
@@ -329,12 +591,34 @@ export interface FileRouteTypes {
     | '/_authenticated/bardana/outstanding'
     | '/_authenticated/bardana/receipts'
     | '/_authenticated/bardana/types'
+    | '/_authenticated/billing/$billId'
+    | '/_authenticated/billing/new-bill'
+    | '/_authenticated/billing/receipts'
+    | '/_authenticated/billing/rent-bills'
     | '/_authenticated/inventory/amad'
     | '/_authenticated/inventory/nikasi'
     | '/_authenticated/inventory/stock-transfer'
     | '/_authenticated/inventory/takpatti'
+    | '/_authenticated/loans/advances'
+    | '/_authenticated/loans/interest-chart'
+    | '/_authenticated/loans/ledger'
+    | '/_authenticated/loans/loans'
+    | '/_authenticated/payroll/attendance'
+    | '/_authenticated/payroll/daily-wages'
+    | '/_authenticated/payroll/employees'
+    | '/_authenticated/payroll/loans'
+    | '/_authenticated/payroll/masters'
+    | '/_authenticated/payroll/payslip'
+    | '/_authenticated/payroll/salary'
+    | '/_authenticated/trading/gate-pass'
+    | '/_authenticated/trading/katai'
+    | '/_authenticated/trading/sauda'
     | '/_authenticated/accounts/'
     | '/_authenticated/bardana/'
+    | '/_authenticated/billing/'
+    | '/_authenticated/loans/'
+    | '/_authenticated/payroll/'
+    | '/_authenticated/trading/'
     | '/_authenticated/inventory/amad/$amadId'
   fileRoutesById: FileRoutesById
 }
@@ -411,6 +695,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChambersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/trading/': {
+      id: '/_authenticated/trading/'
+      path: '/trading'
+      fullPath: '/trading/'
+      preLoaderRoute: typeof AuthenticatedTradingIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/': {
+      id: '/_authenticated/payroll/'
+      path: '/payroll'
+      fullPath: '/payroll/'
+      preLoaderRoute: typeof AuthenticatedPayrollIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/loans/': {
+      id: '/_authenticated/loans/'
+      path: '/loans'
+      fullPath: '/loans/'
+      preLoaderRoute: typeof AuthenticatedLoansIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/': {
+      id: '/_authenticated/billing/'
+      path: '/billing'
+      fullPath: '/billing/'
+      preLoaderRoute: typeof AuthenticatedBillingIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/bardana/': {
       id: '/_authenticated/bardana/'
       path: '/bardana'
@@ -423,6 +735,104 @@ declare module '@tanstack/react-router' {
       path: '/accounts'
       fullPath: '/accounts/'
       preLoaderRoute: typeof AuthenticatedAccountsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/trading/sauda': {
+      id: '/_authenticated/trading/sauda'
+      path: '/trading/sauda'
+      fullPath: '/trading/sauda'
+      preLoaderRoute: typeof AuthenticatedTradingSaudaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/trading/katai': {
+      id: '/_authenticated/trading/katai'
+      path: '/trading/katai'
+      fullPath: '/trading/katai'
+      preLoaderRoute: typeof AuthenticatedTradingKataiRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/trading/gate-pass': {
+      id: '/_authenticated/trading/gate-pass'
+      path: '/trading/gate-pass'
+      fullPath: '/trading/gate-pass'
+      preLoaderRoute: typeof AuthenticatedTradingGatePassRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/salary': {
+      id: '/_authenticated/payroll/salary'
+      path: '/payroll/salary'
+      fullPath: '/payroll/salary'
+      preLoaderRoute: typeof AuthenticatedPayrollSalaryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/payslip': {
+      id: '/_authenticated/payroll/payslip'
+      path: '/payroll/payslip'
+      fullPath: '/payroll/payslip'
+      preLoaderRoute: typeof AuthenticatedPayrollPayslipRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/masters': {
+      id: '/_authenticated/payroll/masters'
+      path: '/payroll/masters'
+      fullPath: '/payroll/masters'
+      preLoaderRoute: typeof AuthenticatedPayrollMastersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/loans': {
+      id: '/_authenticated/payroll/loans'
+      path: '/payroll/loans'
+      fullPath: '/payroll/loans'
+      preLoaderRoute: typeof AuthenticatedPayrollLoansRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/employees': {
+      id: '/_authenticated/payroll/employees'
+      path: '/payroll/employees'
+      fullPath: '/payroll/employees'
+      preLoaderRoute: typeof AuthenticatedPayrollEmployeesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/daily-wages': {
+      id: '/_authenticated/payroll/daily-wages'
+      path: '/payroll/daily-wages'
+      fullPath: '/payroll/daily-wages'
+      preLoaderRoute: typeof AuthenticatedPayrollDailyWagesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payroll/attendance': {
+      id: '/_authenticated/payroll/attendance'
+      path: '/payroll/attendance'
+      fullPath: '/payroll/attendance'
+      preLoaderRoute: typeof AuthenticatedPayrollAttendanceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/loans/loans': {
+      id: '/_authenticated/loans/loans'
+      path: '/loans/loans'
+      fullPath: '/loans/loans'
+      preLoaderRoute: typeof AuthenticatedLoansLoansRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/loans/ledger': {
+      id: '/_authenticated/loans/ledger'
+      path: '/loans/ledger'
+      fullPath: '/loans/ledger'
+      preLoaderRoute: typeof AuthenticatedLoansLedgerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/loans/interest-chart': {
+      id: '/_authenticated/loans/interest-chart'
+      path: '/loans/interest-chart'
+      fullPath: '/loans/interest-chart'
+      preLoaderRoute: typeof AuthenticatedLoansInterestChartRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/loans/advances': {
+      id: '/_authenticated/loans/advances'
+      path: '/loans/advances'
+      fullPath: '/loans/advances'
+      preLoaderRoute: typeof AuthenticatedLoansAdvancesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/inventory/takpatti': {
@@ -451,6 +861,34 @@ declare module '@tanstack/react-router' {
       path: '/inventory/amad'
       fullPath: '/inventory/amad'
       preLoaderRoute: typeof AuthenticatedInventoryAmadRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/rent-bills': {
+      id: '/_authenticated/billing/rent-bills'
+      path: '/billing/rent-bills'
+      fullPath: '/billing/rent-bills'
+      preLoaderRoute: typeof AuthenticatedBillingRentBillsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/receipts': {
+      id: '/_authenticated/billing/receipts'
+      path: '/billing/receipts'
+      fullPath: '/billing/receipts'
+      preLoaderRoute: typeof AuthenticatedBillingReceiptsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/new-bill': {
+      id: '/_authenticated/billing/new-bill'
+      path: '/billing/new-bill'
+      fullPath: '/billing/new-bill'
+      preLoaderRoute: typeof AuthenticatedBillingNewBillRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/$billId': {
+      id: '/_authenticated/billing/$billId'
+      path: '/billing/$billId'
+      fullPath: '/billing/$billId'
+      preLoaderRoute: typeof AuthenticatedBillingBillIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/bardana/types': {
@@ -555,12 +993,34 @@ interface AuthenticatedRouteChildren {
   AuthenticatedBardanaOutstandingRoute: typeof AuthenticatedBardanaOutstandingRoute
   AuthenticatedBardanaReceiptsRoute: typeof AuthenticatedBardanaReceiptsRoute
   AuthenticatedBardanaTypesRoute: typeof AuthenticatedBardanaTypesRoute
+  AuthenticatedBillingBillIdRoute: typeof AuthenticatedBillingBillIdRoute
+  AuthenticatedBillingNewBillRoute: typeof AuthenticatedBillingNewBillRoute
+  AuthenticatedBillingReceiptsRoute: typeof AuthenticatedBillingReceiptsRoute
+  AuthenticatedBillingRentBillsRoute: typeof AuthenticatedBillingRentBillsRoute
   AuthenticatedInventoryAmadRoute: typeof AuthenticatedInventoryAmadRouteWithChildren
   AuthenticatedInventoryNikasiRoute: typeof AuthenticatedInventoryNikasiRoute
   AuthenticatedInventoryStockTransferRoute: typeof AuthenticatedInventoryStockTransferRoute
   AuthenticatedInventoryTakpattiRoute: typeof AuthenticatedInventoryTakpattiRoute
+  AuthenticatedLoansAdvancesRoute: typeof AuthenticatedLoansAdvancesRoute
+  AuthenticatedLoansInterestChartRoute: typeof AuthenticatedLoansInterestChartRoute
+  AuthenticatedLoansLedgerRoute: typeof AuthenticatedLoansLedgerRoute
+  AuthenticatedLoansLoansRoute: typeof AuthenticatedLoansLoansRoute
+  AuthenticatedPayrollAttendanceRoute: typeof AuthenticatedPayrollAttendanceRoute
+  AuthenticatedPayrollDailyWagesRoute: typeof AuthenticatedPayrollDailyWagesRoute
+  AuthenticatedPayrollEmployeesRoute: typeof AuthenticatedPayrollEmployeesRoute
+  AuthenticatedPayrollLoansRoute: typeof AuthenticatedPayrollLoansRoute
+  AuthenticatedPayrollMastersRoute: typeof AuthenticatedPayrollMastersRoute
+  AuthenticatedPayrollPayslipRoute: typeof AuthenticatedPayrollPayslipRoute
+  AuthenticatedPayrollSalaryRoute: typeof AuthenticatedPayrollSalaryRoute
+  AuthenticatedTradingGatePassRoute: typeof AuthenticatedTradingGatePassRoute
+  AuthenticatedTradingKataiRoute: typeof AuthenticatedTradingKataiRoute
+  AuthenticatedTradingSaudaRoute: typeof AuthenticatedTradingSaudaRoute
   AuthenticatedAccountsIndexRoute: typeof AuthenticatedAccountsIndexRoute
   AuthenticatedBardanaIndexRoute: typeof AuthenticatedBardanaIndexRoute
+  AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
+  AuthenticatedLoansIndexRoute: typeof AuthenticatedLoansIndexRoute
+  AuthenticatedPayrollIndexRoute: typeof AuthenticatedPayrollIndexRoute
+  AuthenticatedTradingIndexRoute: typeof AuthenticatedTradingIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -578,13 +1038,35 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBardanaOutstandingRoute: AuthenticatedBardanaOutstandingRoute,
   AuthenticatedBardanaReceiptsRoute: AuthenticatedBardanaReceiptsRoute,
   AuthenticatedBardanaTypesRoute: AuthenticatedBardanaTypesRoute,
+  AuthenticatedBillingBillIdRoute: AuthenticatedBillingBillIdRoute,
+  AuthenticatedBillingNewBillRoute: AuthenticatedBillingNewBillRoute,
+  AuthenticatedBillingReceiptsRoute: AuthenticatedBillingReceiptsRoute,
+  AuthenticatedBillingRentBillsRoute: AuthenticatedBillingRentBillsRoute,
   AuthenticatedInventoryAmadRoute: AuthenticatedInventoryAmadRouteWithChildren,
   AuthenticatedInventoryNikasiRoute: AuthenticatedInventoryNikasiRoute,
   AuthenticatedInventoryStockTransferRoute:
     AuthenticatedInventoryStockTransferRoute,
   AuthenticatedInventoryTakpattiRoute: AuthenticatedInventoryTakpattiRoute,
+  AuthenticatedLoansAdvancesRoute: AuthenticatedLoansAdvancesRoute,
+  AuthenticatedLoansInterestChartRoute: AuthenticatedLoansInterestChartRoute,
+  AuthenticatedLoansLedgerRoute: AuthenticatedLoansLedgerRoute,
+  AuthenticatedLoansLoansRoute: AuthenticatedLoansLoansRoute,
+  AuthenticatedPayrollAttendanceRoute: AuthenticatedPayrollAttendanceRoute,
+  AuthenticatedPayrollDailyWagesRoute: AuthenticatedPayrollDailyWagesRoute,
+  AuthenticatedPayrollEmployeesRoute: AuthenticatedPayrollEmployeesRoute,
+  AuthenticatedPayrollLoansRoute: AuthenticatedPayrollLoansRoute,
+  AuthenticatedPayrollMastersRoute: AuthenticatedPayrollMastersRoute,
+  AuthenticatedPayrollPayslipRoute: AuthenticatedPayrollPayslipRoute,
+  AuthenticatedPayrollSalaryRoute: AuthenticatedPayrollSalaryRoute,
+  AuthenticatedTradingGatePassRoute: AuthenticatedTradingGatePassRoute,
+  AuthenticatedTradingKataiRoute: AuthenticatedTradingKataiRoute,
+  AuthenticatedTradingSaudaRoute: AuthenticatedTradingSaudaRoute,
   AuthenticatedAccountsIndexRoute: AuthenticatedAccountsIndexRoute,
   AuthenticatedBardanaIndexRoute: AuthenticatedBardanaIndexRoute,
+  AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
+  AuthenticatedLoansIndexRoute: AuthenticatedLoansIndexRoute,
+  AuthenticatedPayrollIndexRoute: AuthenticatedPayrollIndexRoute,
+  AuthenticatedTradingIndexRoute: AuthenticatedTradingIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
