@@ -44,7 +44,7 @@ export function LocationPicker({
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Label>Chamber</Label>
         <Select
           value={selectedChamberId}
@@ -67,7 +67,7 @@ export function LocationPicker({
         </Select>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Label>Floor</Label>
         <Select
           value={selectedFloorNumber?.toString()}
@@ -93,7 +93,7 @@ export function LocationPicker({
         </Select>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         <Label>Rack</Label>
         <Select
           value={selectedRackNumber?.toString()}

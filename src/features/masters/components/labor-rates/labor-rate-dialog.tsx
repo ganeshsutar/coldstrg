@@ -99,7 +99,7 @@ function LaborRateForm({
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="lType">Rate Type</Label>
           <Select value={rateType} onValueChange={setRateType}>
             <SelectTrigger className="w-full">
@@ -116,7 +116,7 @@ function LaborRateForm({
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="lPKT1">Rate PKT1</Label>
             <Input
               id="lPKT1"
@@ -127,7 +127,7 @@ function LaborRateForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="lPKT2">Rate PKT2</Label>
             <Input
               id="lPKT2"
@@ -137,7 +137,7 @@ function LaborRateForm({
               onChange={(e) => setRatePKT2(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="lPKT3">Rate PKT3</Label>
             <Input
               id="lPKT3"
@@ -149,7 +149,7 @@ function LaborRateForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="lDate">Effective Date</Label>
           <Input
             id="lDate"
@@ -160,7 +160,7 @@ function LaborRateForm({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="lReason">Reason</Label>
           <Input
             id="lReason"

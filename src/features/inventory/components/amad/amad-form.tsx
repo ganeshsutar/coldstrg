@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCommodities } from "@/features/masters";
+import { useAccountList } from "@/features/accounting/hooks/use-accounts";
 import type { Amad, CreateAmadInput } from "../../types";
 
 interface AmadFormProps {
@@ -44,6 +45,13 @@ export function AmadForm({
 }: AmadFormProps) {
   const isEdit = !!amad;
   const { data: commodities = [] } = useCommodities(organizationId);
+  const { data: accounts = [] } = useAccountList(organizationId);
+
+  // Filter to party accounts only (type ACCOUNT)
+  const partyAccounts = useMemo(
+    () => accounts.filter((a) => a.accountType === "ACCOUNT"),
+    [accounts]
+  );
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -52,6 +60,7 @@ export function AmadForm({
   const [date, setDate] = useState(
     amad?.date ?? new Date().toISOString().split("T")[0]
   );
+  const [partyId, setPartyId] = useState(amad?.partyId ?? "");
   const [partyName, setPartyName] = useState(amad?.partyName ?? "");
   const [villageName, setVillageName] = useState(amad?.villageName ?? "");
   const [post, setPost] = useState(amad?.post ?? "");
@@ -105,6 +114,18 @@ export function AmadForm({
     );
   }, [pwt1, pwt2, pwt3]);
 
+  function handlePartyChange(id: string) {
+    setPartyId(id);
+    const party = partyAccounts.find((a) => a.id === id);
+    if (party) {
+      setPartyName(party.name);
+      // Auto-fill village from party's city field
+      if (party.city) {
+        setVillageName(party.city);
+      }
+    }
+  }
+
   function handleCommodityChange(id: string) {
     setCommodityId(id);
     const commodity = commodities.find((c) => c.id === id);
@@ -119,7 +140,8 @@ export function AmadForm({
     }
   }
 
-  function handleSubmit() {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     const input: CreateAmadInput & { id?: string } = {
       organizationId,
       amadNo,
@@ -128,6 +150,7 @@ export function AmadForm({
       totalPackets,
       totalWeight,
       ...(isEdit && { id: amad!.id }),
+      ...(partyId && { partyId }),
       ...(villageName && { villageName }),
       ...(post && { post }),
       ...(district && { district }),
@@ -155,7 +178,7 @@ export function AmadForm({
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <DialogHeader>
         <DialogTitle>{isEdit ? "Edit Amad" : "New Amad"}</DialogTitle>
         <DialogDescription>
@@ -178,7 +201,7 @@ export function AmadForm({
       {currentStep === 1 && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="amadNo">Amad No</Label>
               <Input
                 id="amadNo"
@@ -187,7 +210,7 @@ export function AmadForm({
                 disabled
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -199,16 +222,22 @@ export function AmadForm({
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="partyName">Party Name</Label>
-              <Input
-                id="partyName"
-                value={partyName}
-                onChange={(e) => setPartyName(e.target.value)}
-                required
-              />
+              <Select value={partyId} onValueChange={handlePartyChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select party" />
+                </SelectTrigger>
+                <SelectContent>
+                  {partyAccounts.map((account) => (
+                    <SelectItem key={account.id} value={account.id}>
+                      {account.name} ({account.code})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="villageName">Village</Label>
               <Input
                 id="villageName"
@@ -218,7 +247,7 @@ export function AmadForm({
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="post">Post</Label>
               <Input
                 id="post"
@@ -226,7 +255,7 @@ export function AmadForm({
                 onChange={(e) => setPost(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="district">District</Label>
               <Input
                 id="district"
@@ -234,7 +263,7 @@ export function AmadForm({
                 onChange={(e) => setDistrict(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="road">Road</Label>
               <Input
                 id="road"
@@ -250,7 +279,7 @@ export function AmadForm({
       {currentStep === 2 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="commodity">Commodity</Label>
               <Select value={commodityId} onValueChange={handleCommodityChange}>
                 <SelectTrigger className="w-full">
@@ -265,7 +294,7 @@ export function AmadForm({
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="variety">Variety</Label>
               <Input
                 id="variety"
@@ -273,7 +302,7 @@ export function AmadForm({
                 onChange={(e) => setVariety(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="room">Room</Label>
               <Input
                 id="room"
@@ -283,7 +312,7 @@ export function AmadForm({
             </div>
           </div>
           <div className="grid grid-cols-4 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="floor">Floor</Label>
               <Input
                 id="floor"
@@ -291,7 +320,7 @@ export function AmadForm({
                 onChange={(e) => setFloor(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="rentRate">Rent Rate</Label>
               <Input
                 id="rentRate"
@@ -301,7 +330,7 @@ export function AmadForm({
                 onChange={(e) => setRentRate(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="graceDays">Grace Days</Label>
               <Input
                 id="graceDays"
@@ -310,7 +339,7 @@ export function AmadForm({
                 onChange={(e) => setGraceDays(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="eWayBillNo">E-Way Bill No</Label>
               <Input
                 id="eWayBillNo"
@@ -321,7 +350,7 @@ export function AmadForm({
           </div>
           {eWayBillNo && (
             <div className="grid grid-cols-4 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="eWayBillDate">E-Way Bill Date</Label>
                 <Input
                   id="eWayBillDate"
@@ -339,7 +368,7 @@ export function AmadForm({
       {currentStep === 3 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT1 (80kg)</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -361,7 +390,7 @@ export function AmadForm({
                 </div>
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT2 (70kg)</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -383,7 +412,7 @@ export function AmadForm({
                 </div>
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT3 (50kg)</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -425,7 +454,7 @@ export function AmadForm({
       {currentStep === 4 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="mark1">Mark 1</Label>
               <Input
                 id="mark1"
@@ -433,7 +462,7 @@ export function AmadForm({
                 onChange={(e) => setMark1(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="mark2">Mark 2</Label>
               <Input
                 id="mark2"
@@ -441,7 +470,7 @@ export function AmadForm({
                 onChange={(e) => setMark2(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="partyMark">Party Mark</Label>
               <Input
                 id="partyMark"
@@ -473,21 +502,20 @@ export function AmadForm({
             <Button
               type="button"
               onClick={() => setCurrentStep(currentStep + 1)}
-              disabled={!partyName || !date}
+              disabled={!partyId || !date}
             >
               Next
             </Button>
           ) : (
             <Button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isPending || !partyName || !date}
+              type="submit"
+              disabled={isPending || !partyId || !date}
             >
               {isPending ? "Saving..." : isEdit ? "Update" : "Create"}
             </Button>
           )}
         </div>
       </DialogFooter>
-    </>
+    </form>
   );
 }

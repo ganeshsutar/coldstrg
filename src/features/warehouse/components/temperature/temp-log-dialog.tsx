@@ -111,7 +111,7 @@ export function TempLogDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="chamber">Chamber</Label>
             <Select value={chamberId} onValueChange={setChamberId}>
               <SelectTrigger>
@@ -128,7 +128,7 @@ export function TempLogDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -137,7 +137,7 @@ export function TempLogDialog({
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="time">Time</Label>
               <Input
                 id="time"
@@ -149,7 +149,7 @@ export function TempLogDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="lowTemp">Low Temp (°C)</Label>
               <Input
                 id="lowTemp"
@@ -160,7 +160,7 @@ export function TempLogDialog({
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="highTemp">High Temp (°C)</Label>
               <Input
                 id="highTemp"
@@ -174,7 +174,7 @@ export function TempLogDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="humidity">Humidity (%)</Label>
               <Input
                 id="humidity"
@@ -184,7 +184,7 @@ export function TempLogDialog({
                 onChange={(e) => setHumidity(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="recordedBy">Recorded By</Label>
               <Input
                 id="recordedBy"
@@ -194,7 +194,7 @@ export function TempLogDialog({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"

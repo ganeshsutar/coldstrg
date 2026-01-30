@@ -83,7 +83,8 @@ export function ShiftingWizard({
     }
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     if (!selectedAmad || !state.sourceChamberId || !state.destinationChamberId) return;
 
     const shiftNo = await getNextShiftNo(organizationId);
@@ -113,6 +114,7 @@ export function ShiftingWizard({
       shiftingHeaderId: header.id,
       amadId: selectedAmad.id,
       amadNo: selectedAmad.amadNo,
+      partyId: selectedAmad.partyId || undefined,
       partyName: selectedAmad.partyName,
       commodityName: selectedAmad.commodityName || undefined,
       fromChamberId: state.sourceChamberId,
@@ -161,12 +163,13 @@ export function ShiftingWizard({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Shift Goods Between Racks</DialogTitle>
-        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <DialogHeader>
+            <DialogTitle>Shift Goods Between Racks</DialogTitle>
+          </DialogHeader>
 
         {/* Progress */}
-        <div className="space-y-2">
+        <div className="space-y-4">
           <Progress value={progress} className="h-2" />
           <div className="flex justify-between text-xs text-muted-foreground">
             {STEPS.map((step) => (
@@ -230,18 +233,19 @@ export function ShiftingWizard({
               Cancel
             </Button>
             {state.step < 4 ? (
-              <Button onClick={handleNext} disabled={!canProceed()}>
+              <Button type="button" onClick={handleNext} disabled={!canProceed()}>
                 Next
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={isPending}>
+              <Button type="submit" disabled={isPending}>
                 <Check className="h-4 w-4 mr-1" />
                 {isPending ? "Processing..." : "Confirm Shift"}
               </Button>
             )}
           </div>
         </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

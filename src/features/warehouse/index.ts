@@ -1,5 +1,13 @@
-// Components
-export { WarehousePage } from "./components";
+// Page Components
+export {
+  RoomMapStandalonePage,
+  ChambersPage,
+  LoadingPage,
+  UnloadingPage,
+  ShiftingPage,
+  TemperaturePage,
+  MeterReadingPage,
+} from "./components";
 
 // Hooks - Chambers
 export {

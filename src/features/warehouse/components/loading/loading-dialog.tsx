@@ -90,6 +90,7 @@ export function LoadingDialog({
       date,
       amadId: selectedAmad.id,
       amadNo: selectedAmad.amadNo,
+      partyId: selectedAmad.partyId || undefined,
       partyName: selectedAmad.partyName,
       commodityName: selectedAmad.commodityName || undefined,
       chamberId,
@@ -126,11 +127,11 @@ export function LoadingDialog({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="loadingNo">Loading #</Label>
               <Input id="loadingNo" value={loadingNo} disabled />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -172,7 +173,7 @@ export function LoadingDialog({
           <Separator />
 
           <div className="grid grid-cols-4 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt1">PKT1</Label>
               <Input
                 id="pkt1"
@@ -182,7 +183,7 @@ export function LoadingDialog({
                 onChange={(e) => setPkt1(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt2">PKT2</Label>
               <Input
                 id="pkt2"
@@ -192,7 +193,7 @@ export function LoadingDialog({
                 onChange={(e) => setPkt2(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt3">PKT3</Label>
               <Input
                 id="pkt3"
@@ -202,7 +203,7 @@ export function LoadingDialog({
                 onChange={(e) => setPkt3(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Total</Label>
               <div className="h-10 flex items-center font-medium">
                 {totalQuantity} bags
@@ -210,7 +211,7 @@ export function LoadingDialog({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"

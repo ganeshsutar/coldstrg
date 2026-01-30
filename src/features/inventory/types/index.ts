@@ -13,6 +13,7 @@ export interface Amad {
   organizationId: string;
   amadNo: number;
   date: string;
+  partyId?: string | null;
   partyName: string;
   villageName?: string | null;
   post?: string | null;
@@ -55,6 +56,7 @@ export interface CreateAmadInput {
   organizationId: string;
   amadNo: number;
   date: string;
+  partyId?: string;
   partyName: string;
   villageName?: string;
   post?: string;
@@ -101,6 +103,7 @@ export interface Rent {
   organizationId: string;
   serialNo: number;
   date: string;
+  partyId?: string | null;
   partyName: string;
   amadId?: string | null;
   amadNo?: number | null;
@@ -131,6 +134,7 @@ export interface CreateRentInput {
   organizationId: string;
   serialNo: number;
   date: string;
+  partyId?: string;
   partyName: string;
   amadId?: string;
   amadNo?: number;
@@ -203,7 +207,9 @@ export interface StockTransfer {
   date: string;
   amadId?: string | null;
   amadNo?: number | null;
+  fromPartyId?: string | null;
   fromPartyName?: string | null;
+  toPartyId?: string | null;
   toPartyName?: string | null;
   commodityName?: string | null;
   pkt1?: number | null;
@@ -226,7 +232,9 @@ export interface CreateStockTransferInput {
   date: string;
   amadId?: string;
   amadNo?: number;
+  fromPartyId?: string;
   fromPartyName?: string;
+  toPartyId?: string;
   toPartyName?: string;
   commodityName?: string;
   pkt1?: number;

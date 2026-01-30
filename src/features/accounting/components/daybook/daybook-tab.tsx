@@ -179,7 +179,7 @@ export function DaybookTab() {
               <p>No transactions for this date</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-4">
               {vouchers.map((voucher) => (
                 <div
                   key={voucher.id}

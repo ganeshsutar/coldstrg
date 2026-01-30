@@ -226,7 +226,7 @@ function ReceiptFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Voucher Number</Label>
                 <Input
                   value={formatReceiptVoucherNo(nextVoucherNo)}
@@ -234,7 +234,7 @@ function ReceiptFormContent({
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="receiptDate">Date *</Label>
                 <Input
                   id="receiptDate"
@@ -245,7 +245,7 @@ function ReceiptFormContent({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Party *</Label>
               <Select value={partyId} onValueChange={setPartyId}>
                 <SelectTrigger>
@@ -452,7 +452,7 @@ function ReceiptFormContent({
         </Card>
 
         {/* Narration */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="narration">Narration</Label>
           <Textarea
             id="narration"

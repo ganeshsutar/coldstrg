@@ -227,7 +227,7 @@ function CommodityForm({
           {/* Tab 1: Basic Info */}
           <TabsContent value="basic" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="code">Code</Label>
                 <Input
                   id="code"
@@ -237,7 +237,7 @@ function CommodityForm({
                   disabled={isEdit}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="commodityType">Type</Label>
                 <Select value={commodityType} onValueChange={setCommodityType}>
                   <SelectTrigger className="w-full">
@@ -255,7 +255,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="name">Name (English)</Label>
                 <Input
                   id="name"
@@ -264,7 +264,7 @@ function CommodityForm({
                   required
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="nameHindi">Name (Hindi)</Label>
                 <Input
                   id="nameHindi"
@@ -275,7 +275,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="hsnCode">HSN Code</Label>
                 <Input
                   id="hsnCode"
@@ -283,7 +283,7 @@ function CommodityForm({
                   onChange={(e) => setHsnCode(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="barcode">Barcode</Label>
                 <Input
                   id="barcode"
@@ -291,7 +291,7 @@ function CommodityForm({
                   onChange={(e) => setBarcode(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="isActive">Status</Label>
                 <Select
                   value={isActive ? "active" : "inactive"}
@@ -312,7 +312,7 @@ function CommodityForm({
           {/* Tab 2: Rent Settings */}
           <TabsContent value="rent" className="space-y-4 mt-4">
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentRatePKT1">Rent Rate PKT1</Label>
                 <Input
                   id="rentRatePKT1"
@@ -322,7 +322,7 @@ function CommodityForm({
                   onChange={(e) => setRentRatePKT1(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentRatePKT2">Rent Rate PKT2</Label>
                 <Input
                   id="rentRatePKT2"
@@ -332,7 +332,7 @@ function CommodityForm({
                   onChange={(e) => setRentRatePKT2(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentRatePKT3">Rent Rate PKT3</Label>
                 <Input
                   id="rentRatePKT3"
@@ -345,7 +345,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rateWT">Rate (Weight)</Label>
                 <Input
                   id="rateWT"
@@ -355,7 +355,7 @@ function CommodityForm({
                   onChange={(e) => setRateWT(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentBasis">Rent Basis</Label>
                 <Select value={rentBasis} onValueChange={setRentBasis}>
                   <SelectTrigger className="w-full">
@@ -370,7 +370,7 @@ function CommodityForm({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentOn">Rent On</Label>
                 <Select value={rentOn} onValueChange={setRentOn}>
                   <SelectTrigger className="w-full">
@@ -388,7 +388,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="gracePeriod">Grace Period (Days)</Label>
                 <Input
                   id="gracePeriod"
@@ -397,7 +397,7 @@ function CommodityForm({
                   onChange={(e) => setGracePeriod(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="zeroRentDays">Zero Rent Days</Label>
                 <Input
                   id="zeroRentDays"
@@ -406,7 +406,7 @@ function CommodityForm({
                   onChange={(e) => setZeroRentDays(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="halfRentDays">Half Rent Days</Label>
                 <Input
                   id="halfRentDays"
@@ -418,7 +418,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="chargeRentType">Charge Rent Type</Label>
                 <Select
                   value={chargeRentType}
@@ -436,7 +436,7 @@ function CommodityForm({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rentCalculationMode">
                   Rent Calculation Mode
                 </Label>
@@ -462,7 +462,7 @@ function CommodityForm({
           {/* Tab 3: Pricing */}
           <TabsContent value="pricing" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="loanRate">Loan Rate</Label>
                 <Input
                   id="loanRate"
@@ -472,7 +472,7 @@ function CommodityForm({
                   onChange={(e) => setLoanRate(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="ratePerUnitField">Rate per Unit (Field)</Label>
                 <Input
                   id="ratePerUnitField"
@@ -485,7 +485,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="ratePerUnitMandi">Rate per Unit (Mandi)</Label>
                 <Input
                   id="ratePerUnitMandi"
@@ -495,7 +495,7 @@ function CommodityForm({
                   onChange={(e) => setRatePerUnitMandi(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="purchasePrice">Purchase Price</Label>
                 <Input
                   id="purchasePrice"
@@ -508,7 +508,7 @@ function CommodityForm({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="salePrice">Sale Price</Label>
                 <Input
                   id="salePrice"
@@ -518,7 +518,7 @@ function CommodityForm({
                   onChange={(e) => setSalePrice(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="mrp">MRP</Label>
                 <Input
                   id="mrp"
@@ -534,7 +534,7 @@ function CommodityForm({
           {/* Tab 4: Stock */}
           <TabsContent value="stock" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="openingStock">Opening Stock</Label>
                 <Input
                   id="openingStock"

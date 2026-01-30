@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useOrganization } from "@/features/organizations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +43,103 @@ import {
 import { formatCurrency } from "../../utils";
 import type { PayDeduction, PayComponentTypeValue } from "../../types";
 
+interface DeductionFormProps {
+  deduction: PayDeduction | null;
+  onSubmit: (data: { code: string; name: string; componentType: PayComponentTypeValue; defaultValue: number; isStatutory: boolean }) => void;
+  onCancel: () => void;
+  isPending: boolean;
+}
+
+function DeductionForm({ deduction, onSubmit, onCancel, isPending }: DeductionFormProps) {
+  const [code, setCode] = useState(deduction?.code ?? "");
+  const [name, setName] = useState(deduction?.name ?? "");
+  const [componentType, setComponentType] = useState<PayComponentTypeValue>(deduction?.componentType ?? "FIXED");
+  const [defaultValue, setDefaultValue] = useState(deduction?.defaultValue ?? 0);
+  const [isStatutory, setIsStatutory] = useState(deduction?.isStatutory ?? false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !code) return;
+    onSubmit({ code, name, componentType, defaultValue, isStatutory });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="code">Code</Label>
+          <Input
+            id="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="e.g., PF"
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">Deduction Name</Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g., Provident Fund"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="componentType">Type</Label>
+          <Select
+            value={componentType}
+            onValueChange={(value) => setComponentType(value as PayComponentTypeValue)}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="FIXED">Fixed Amount</SelectItem>
+              <SelectItem value="PERCENTAGE">Percentage</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="defaultValue">
+            Default {componentType === "PERCENTAGE" ? "%" : "Amount"}
+          </Label>
+          <Input
+            id="defaultValue"
+            type="number"
+            value={defaultValue}
+            onChange={(e) => setDefaultValue(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="isStatutory"
+          checked={isStatutory}
+          onCheckedChange={(checked) => setIsStatutory(checked === true)}
+        />
+        <Label htmlFor="isStatutory" className="text-sm font-normal">
+          This is a statutory deduction (PF, ESI, etc.)
+        </Label>
+      </div>
+
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Saving..." : deduction ? "Update" : "Create"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
 export function DeductionsTab() {
   const { currentOrganization } = useOrganization();
   const organizationId = currentOrganization?.id;
@@ -51,13 +148,6 @@ export function DeductionsTab() {
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedDeduction, setSelectedDeduction] = useState<PayDeduction | null>(null);
-
-  // Form state
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [componentType, setComponentType] = useState<PayComponentTypeValue>("FIXED");
-  const [defaultValue, setDefaultValue] = useState(0);
-  const [isStatutory, setIsStatutory] = useState(false);
 
   const { data: deductions = [] } = usePayDeductionList(organizationId);
   const createMutation = useCreatePayDeduction();
@@ -74,28 +164,6 @@ export function DeductionsTab() {
     );
   }, [deductions, searchQuery]);
 
-  const resetForm = () => {
-    setCode("");
-    setName("");
-    setComponentType("FIXED");
-    setDefaultValue(0);
-    setIsStatutory(false);
-  };
-
-  useEffect(() => {
-    if (formDialogOpen) {
-      if (selectedDeduction) {
-        setCode(selectedDeduction.code);
-        setName(selectedDeduction.name);
-        setComponentType(selectedDeduction.componentType);
-        setDefaultValue(selectedDeduction.defaultValue);
-        setIsStatutory(selectedDeduction.isStatutory);
-      } else {
-        resetForm();
-      }
-    }
-  }, [formDialogOpen, selectedDeduction]);
-
   const handleAdd = () => {
     setSelectedDeduction(null);
     setFormDialogOpen(true);
@@ -111,29 +179,20 @@ export function DeductionsTab() {
     setDeleteDialogOpen(true);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!organizationId || !name || !code) return;
+  const handleFormSubmit = async (data: { code: string; name: string; componentType: PayComponentTypeValue; defaultValue: number; isStatutory: boolean }) => {
+    if (!organizationId) return;
 
     try {
       if (selectedDeduction) {
         await updateMutation.mutateAsync({
           id: selectedDeduction.id,
-          code,
-          name,
-          componentType,
-          defaultValue,
-          isStatutory,
+          ...data,
         });
         console.log("Deduction updated successfully");
       } else {
         await createMutation.mutateAsync({
           organizationId,
-          code,
-          name,
-          componentType,
-          defaultValue,
-          isStatutory,
+          ...data,
         });
         console.log("Deduction created successfully");
       }
@@ -255,90 +314,14 @@ export function DeductionsTab() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="code">Code</Label>
-                <Input
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="e.g., PF"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name">Deduction Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Provident Fund"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="componentType">Type</Label>
-                <Select
-                  value={componentType}
-                  onValueChange={(value) => setComponentType(value as PayComponentTypeValue)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="FIXED">Fixed Amount</SelectItem>
-                    <SelectItem value="PERCENTAGE">Percentage</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="defaultValue">
-                  Default {componentType === "PERCENTAGE" ? "%" : "Amount"}
-                </Label>
-                <Input
-                  id="defaultValue"
-                  type="number"
-                  value={defaultValue}
-                  onChange={(e) => setDefaultValue(Number(e.target.value))}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="isStatutory"
-                checked={isStatutory}
-                onCheckedChange={(checked) => setIsStatutory(checked === true)}
-              />
-              <Label htmlFor="isStatutory" className="text-sm font-normal">
-                This is a statutory deduction (PF, ESI, etc.)
-              </Label>
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setFormDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={createMutation.isPending || updateMutation.isPending}
-              >
-                {createMutation.isPending || updateMutation.isPending
-                  ? "Saving..."
-                  : selectedDeduction
-                    ? "Update"
-                    : "Create"}
-              </Button>
-            </DialogFooter>
-          </form>
+          {formDialogOpen && (
+            <DeductionForm
+              deduction={selectedDeduction}
+              onSubmit={handleFormSubmit}
+              onCancel={() => setFormDialogOpen(false)}
+              isPending={createMutation.isPending || updateMutation.isPending}
+            />
+          )}
         </DialogContent>
       </Dialog>
 

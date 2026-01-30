@@ -140,7 +140,7 @@ export function InterestChartPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap items-end gap-4">
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="fromDate">From Date</Label>
               <Input
                 id="fromDate"
@@ -152,7 +152,7 @@ export function InterestChartPage() {
                 }}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="toDate">To Date</Label>
               <Input
                 id="toDate"
@@ -164,7 +164,7 @@ export function InterestChartPage() {
                 }}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="interestRate">Interest Rate (% p.m.)</Label>
               <Input
                 id="interestRate"

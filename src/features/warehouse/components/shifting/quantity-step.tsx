@@ -45,7 +45,7 @@ export function QuantityStep({
           )}
 
           <div className="grid grid-cols-4 gap-4">
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="pkt1">PKT1</Label>
               <Input
                 id="pkt1"
@@ -56,7 +56,7 @@ export function QuantityStep({
                 onChange={(e) => onStateChange({ pkt1: parseInt(e.target.value, 10) || 0 })}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="pkt2">PKT2</Label>
               <Input
                 id="pkt2"
@@ -67,7 +67,7 @@ export function QuantityStep({
                 onChange={(e) => onStateChange({ pkt2: parseInt(e.target.value, 10) || 0 })}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="pkt3">PKT3</Label>
               <Input
                 id="pkt3"
@@ -78,7 +78,7 @@ export function QuantityStep({
                 onChange={(e) => onStateChange({ pkt3: parseInt(e.target.value, 10) || 0 })}
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label>Total</Label>
               <div className="h-10 flex items-center font-medium">
                 {totalQuantity} bags
@@ -93,7 +93,7 @@ export function QuantityStep({
           <CardTitle className="text-lg">Reason for Shifting</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Label htmlFor="reason">Reason</Label>
             <Select
               value={state.reason}
@@ -112,7 +112,7 @@ export function QuantityStep({
             </Select>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"

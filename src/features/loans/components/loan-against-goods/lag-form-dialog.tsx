@@ -204,14 +204,14 @@ function LagFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Loan Number</Label>
                 <Input
                   value={formatLoanNo(loan?.loanNo ?? nextLoanNo)}
                   disabled
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="date">Date *</Label>
                 <Input
                   id="date"
@@ -222,7 +222,7 @@ function LagFormContent({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Party *</Label>
               <Select value={partyId} onValueChange={setPartyId}>
                 <SelectTrigger>
@@ -265,7 +265,7 @@ function LagFormContent({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   <Label htmlFor="loanAmount">Amount *</Label>
                   <Input
                     id="loanAmount"
@@ -282,7 +282,7 @@ function LagFormContent({
                     Max available: {formatCurrency(loanLimits.available)}
                   </p>
                 </div>
-                <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                   <Label htmlFor="interestRate">Interest Rate (% p.m.)</Label>
                   <Input
                     id="interestRate"
@@ -307,7 +307,7 @@ function LagFormContent({
                 </div>
               )}
 
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Payment Mode</Label>
                 <ToggleGroup
                   type="single"
@@ -328,7 +328,7 @@ function LagFormContent({
         )}
 
         {/* Narration */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="narration">Narration</Label>
           <Textarea
             id="narration"

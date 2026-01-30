@@ -103,7 +103,7 @@ function UserForm({ member, organizationId, onSave, onCancel, isPending }: UserF
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="role">Role</Label>
             <Select value={role} onValueChange={(v) => setRole(v as typeof role)}>
               <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
@@ -114,7 +114,7 @@ function UserForm({ member, organizationId, onSave, onCancel, isPending }: UserF
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="status">Status</Label>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
@@ -154,11 +154,11 @@ function UserForm({ member, organizationId, onSave, onCancel, isPending }: UserF
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="loanLimit">Loan Per Bag Limit</Label>
             <Input id="loanLimit" type="number" step="0.01" value={loanPerBagLimit} onChange={(e) => setLoanPerBagLimit(e.target.value)} placeholder="No limit" />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="backdateDays">Backdate Entry Days</Label>
             <Input id="backdateDays" type="number" value={backdateEntryDays} onChange={(e) => setBackdateEntryDays(e.target.value)} placeholder="0" />
           </div>

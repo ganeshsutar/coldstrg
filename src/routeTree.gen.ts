@@ -17,13 +17,19 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedChambersRouteImport } from './routes/_authenticated/chambers'
 import { Route as AuthenticatedTradingIndexRouteImport } from './routes/_authenticated/trading/index'
 import { Route as AuthenticatedPayrollIndexRouteImport } from './routes/_authenticated/payroll/index'
 import { Route as AuthenticatedLoansIndexRouteImport } from './routes/_authenticated/loans/index'
 import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
 import { Route as AuthenticatedBardanaIndexRouteImport } from './routes/_authenticated/bardana/index'
 import { Route as AuthenticatedAccountsIndexRouteImport } from './routes/_authenticated/accounts/index'
+import { Route as AuthenticatedWarehouseUnloadingRouteImport } from './routes/_authenticated/warehouse/unloading'
+import { Route as AuthenticatedWarehouseTemperatureRouteImport } from './routes/_authenticated/warehouse/temperature'
+import { Route as AuthenticatedWarehouseShiftingRouteImport } from './routes/_authenticated/warehouse/shifting'
+import { Route as AuthenticatedWarehouseRoomMapRouteImport } from './routes/_authenticated/warehouse/room-map'
+import { Route as AuthenticatedWarehouseMeterReadingRouteImport } from './routes/_authenticated/warehouse/meter-reading'
+import { Route as AuthenticatedWarehouseLoadingRouteImport } from './routes/_authenticated/warehouse/loading'
+import { Route as AuthenticatedWarehouseChambersRouteImport } from './routes/_authenticated/warehouse/chambers'
 import { Route as AuthenticatedTradingSaudaRouteImport } from './routes/_authenticated/trading/sauda'
 import { Route as AuthenticatedTradingKataiRouteImport } from './routes/_authenticated/trading/katai'
 import { Route as AuthenticatedTradingGatePassRouteImport } from './routes/_authenticated/trading/gate-pass'
@@ -96,11 +102,6 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedChambersRoute = AuthenticatedChambersRouteImport.update({
-  id: '/chambers',
-  path: '/chambers',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedTradingIndexRoute =
   AuthenticatedTradingIndexRouteImport.update({
     id: '/trading/',
@@ -134,6 +135,48 @@ const AuthenticatedAccountsIndexRoute =
   AuthenticatedAccountsIndexRouteImport.update({
     id: '/accounts/',
     path: '/accounts/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseUnloadingRoute =
+  AuthenticatedWarehouseUnloadingRouteImport.update({
+    id: '/warehouse/unloading',
+    path: '/warehouse/unloading',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseTemperatureRoute =
+  AuthenticatedWarehouseTemperatureRouteImport.update({
+    id: '/warehouse/temperature',
+    path: '/warehouse/temperature',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseShiftingRoute =
+  AuthenticatedWarehouseShiftingRouteImport.update({
+    id: '/warehouse/shifting',
+    path: '/warehouse/shifting',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseRoomMapRoute =
+  AuthenticatedWarehouseRoomMapRouteImport.update({
+    id: '/warehouse/room-map',
+    path: '/warehouse/room-map',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseMeterReadingRoute =
+  AuthenticatedWarehouseMeterReadingRouteImport.update({
+    id: '/warehouse/meter-reading',
+    path: '/warehouse/meter-reading',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseLoadingRoute =
+  AuthenticatedWarehouseLoadingRouteImport.update({
+    id: '/warehouse/loading',
+    path: '/warehouse/loading',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedWarehouseChambersRoute =
+  AuthenticatedWarehouseChambersRouteImport.update({
+    id: '/warehouse/chambers',
+    path: '/warehouse/chambers',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedTradingSaudaRoute =
@@ -333,7 +376,6 @@ export interface FileRoutesByFullPath {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/chambers': typeof AuthenticatedChambersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -368,6 +410,13 @@ export interface FileRoutesByFullPath {
   '/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
   '/trading/katai': typeof AuthenticatedTradingKataiRoute
   '/trading/sauda': typeof AuthenticatedTradingSaudaRoute
+  '/warehouse/chambers': typeof AuthenticatedWarehouseChambersRoute
+  '/warehouse/loading': typeof AuthenticatedWarehouseLoadingRoute
+  '/warehouse/meter-reading': typeof AuthenticatedWarehouseMeterReadingRoute
+  '/warehouse/room-map': typeof AuthenticatedWarehouseRoomMapRoute
+  '/warehouse/shifting': typeof AuthenticatedWarehouseShiftingRoute
+  '/warehouse/temperature': typeof AuthenticatedWarehouseTemperatureRoute
+  '/warehouse/unloading': typeof AuthenticatedWarehouseUnloadingRoute
   '/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/bardana/': typeof AuthenticatedBardanaIndexRoute
   '/billing/': typeof AuthenticatedBillingIndexRoute
@@ -381,7 +430,6 @@ export interface FileRoutesByTo {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/chambers': typeof AuthenticatedChambersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -416,6 +464,13 @@ export interface FileRoutesByTo {
   '/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
   '/trading/katai': typeof AuthenticatedTradingKataiRoute
   '/trading/sauda': typeof AuthenticatedTradingSaudaRoute
+  '/warehouse/chambers': typeof AuthenticatedWarehouseChambersRoute
+  '/warehouse/loading': typeof AuthenticatedWarehouseLoadingRoute
+  '/warehouse/meter-reading': typeof AuthenticatedWarehouseMeterReadingRoute
+  '/warehouse/room-map': typeof AuthenticatedWarehouseRoomMapRoute
+  '/warehouse/shifting': typeof AuthenticatedWarehouseShiftingRoute
+  '/warehouse/temperature': typeof AuthenticatedWarehouseTemperatureRoute
+  '/warehouse/unloading': typeof AuthenticatedWarehouseUnloadingRoute
   '/accounts': typeof AuthenticatedAccountsIndexRoute
   '/bardana': typeof AuthenticatedBardanaIndexRoute
   '/billing': typeof AuthenticatedBillingIndexRoute
@@ -431,7 +486,6 @@ export interface FileRoutesById {
   '/confirm-signup': typeof ConfirmSignupRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/_authenticated/chambers': typeof AuthenticatedChambersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -466,6 +520,13 @@ export interface FileRoutesById {
   '/_authenticated/trading/gate-pass': typeof AuthenticatedTradingGatePassRoute
   '/_authenticated/trading/katai': typeof AuthenticatedTradingKataiRoute
   '/_authenticated/trading/sauda': typeof AuthenticatedTradingSaudaRoute
+  '/_authenticated/warehouse/chambers': typeof AuthenticatedWarehouseChambersRoute
+  '/_authenticated/warehouse/loading': typeof AuthenticatedWarehouseLoadingRoute
+  '/_authenticated/warehouse/meter-reading': typeof AuthenticatedWarehouseMeterReadingRoute
+  '/_authenticated/warehouse/room-map': typeof AuthenticatedWarehouseRoomMapRoute
+  '/_authenticated/warehouse/shifting': typeof AuthenticatedWarehouseShiftingRoute
+  '/_authenticated/warehouse/temperature': typeof AuthenticatedWarehouseTemperatureRoute
+  '/_authenticated/warehouse/unloading': typeof AuthenticatedWarehouseUnloadingRoute
   '/_authenticated/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/_authenticated/bardana/': typeof AuthenticatedBardanaIndexRoute
   '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
@@ -481,7 +542,6 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
-    | '/chambers'
     | '/dashboard'
     | '/masters'
     | '/settings'
@@ -516,6 +576,13 @@ export interface FileRouteTypes {
     | '/trading/gate-pass'
     | '/trading/katai'
     | '/trading/sauda'
+    | '/warehouse/chambers'
+    | '/warehouse/loading'
+    | '/warehouse/meter-reading'
+    | '/warehouse/room-map'
+    | '/warehouse/shifting'
+    | '/warehouse/temperature'
+    | '/warehouse/unloading'
     | '/accounts/'
     | '/bardana/'
     | '/billing/'
@@ -529,7 +596,6 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
-    | '/chambers'
     | '/dashboard'
     | '/masters'
     | '/settings'
@@ -564,6 +630,13 @@ export interface FileRouteTypes {
     | '/trading/gate-pass'
     | '/trading/katai'
     | '/trading/sauda'
+    | '/warehouse/chambers'
+    | '/warehouse/loading'
+    | '/warehouse/meter-reading'
+    | '/warehouse/room-map'
+    | '/warehouse/shifting'
+    | '/warehouse/temperature'
+    | '/warehouse/unloading'
     | '/accounts'
     | '/bardana'
     | '/billing'
@@ -578,7 +651,6 @@ export interface FileRouteTypes {
     | '/confirm-signup'
     | '/login'
     | '/signup'
-    | '/_authenticated/chambers'
     | '/_authenticated/dashboard'
     | '/_authenticated/masters'
     | '/_authenticated/settings'
@@ -613,6 +685,13 @@ export interface FileRouteTypes {
     | '/_authenticated/trading/gate-pass'
     | '/_authenticated/trading/katai'
     | '/_authenticated/trading/sauda'
+    | '/_authenticated/warehouse/chambers'
+    | '/_authenticated/warehouse/loading'
+    | '/_authenticated/warehouse/meter-reading'
+    | '/_authenticated/warehouse/room-map'
+    | '/_authenticated/warehouse/shifting'
+    | '/_authenticated/warehouse/temperature'
+    | '/_authenticated/warehouse/unloading'
     | '/_authenticated/accounts/'
     | '/_authenticated/bardana/'
     | '/_authenticated/billing/'
@@ -688,13 +767,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/chambers': {
-      id: '/_authenticated/chambers'
-      path: '/chambers'
-      fullPath: '/chambers'
-      preLoaderRoute: typeof AuthenticatedChambersRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/trading/': {
       id: '/_authenticated/trading/'
       path: '/trading'
@@ -735,6 +807,55 @@ declare module '@tanstack/react-router' {
       path: '/accounts'
       fullPath: '/accounts/'
       preLoaderRoute: typeof AuthenticatedAccountsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/unloading': {
+      id: '/_authenticated/warehouse/unloading'
+      path: '/warehouse/unloading'
+      fullPath: '/warehouse/unloading'
+      preLoaderRoute: typeof AuthenticatedWarehouseUnloadingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/temperature': {
+      id: '/_authenticated/warehouse/temperature'
+      path: '/warehouse/temperature'
+      fullPath: '/warehouse/temperature'
+      preLoaderRoute: typeof AuthenticatedWarehouseTemperatureRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/shifting': {
+      id: '/_authenticated/warehouse/shifting'
+      path: '/warehouse/shifting'
+      fullPath: '/warehouse/shifting'
+      preLoaderRoute: typeof AuthenticatedWarehouseShiftingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/room-map': {
+      id: '/_authenticated/warehouse/room-map'
+      path: '/warehouse/room-map'
+      fullPath: '/warehouse/room-map'
+      preLoaderRoute: typeof AuthenticatedWarehouseRoomMapRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/meter-reading': {
+      id: '/_authenticated/warehouse/meter-reading'
+      path: '/warehouse/meter-reading'
+      fullPath: '/warehouse/meter-reading'
+      preLoaderRoute: typeof AuthenticatedWarehouseMeterReadingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/loading': {
+      id: '/_authenticated/warehouse/loading'
+      path: '/warehouse/loading'
+      fullPath: '/warehouse/loading'
+      preLoaderRoute: typeof AuthenticatedWarehouseLoadingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/warehouse/chambers': {
+      id: '/_authenticated/warehouse/chambers'
+      path: '/warehouse/chambers'
+      fullPath: '/warehouse/chambers'
+      preLoaderRoute: typeof AuthenticatedWarehouseChambersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/trading/sauda': {
@@ -980,7 +1101,6 @@ const AuthenticatedInventoryAmadRouteWithChildren =
   )
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedChambersRoute: typeof AuthenticatedChambersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -1015,6 +1135,13 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTradingGatePassRoute: typeof AuthenticatedTradingGatePassRoute
   AuthenticatedTradingKataiRoute: typeof AuthenticatedTradingKataiRoute
   AuthenticatedTradingSaudaRoute: typeof AuthenticatedTradingSaudaRoute
+  AuthenticatedWarehouseChambersRoute: typeof AuthenticatedWarehouseChambersRoute
+  AuthenticatedWarehouseLoadingRoute: typeof AuthenticatedWarehouseLoadingRoute
+  AuthenticatedWarehouseMeterReadingRoute: typeof AuthenticatedWarehouseMeterReadingRoute
+  AuthenticatedWarehouseRoomMapRoute: typeof AuthenticatedWarehouseRoomMapRoute
+  AuthenticatedWarehouseShiftingRoute: typeof AuthenticatedWarehouseShiftingRoute
+  AuthenticatedWarehouseTemperatureRoute: typeof AuthenticatedWarehouseTemperatureRoute
+  AuthenticatedWarehouseUnloadingRoute: typeof AuthenticatedWarehouseUnloadingRoute
   AuthenticatedAccountsIndexRoute: typeof AuthenticatedAccountsIndexRoute
   AuthenticatedBardanaIndexRoute: typeof AuthenticatedBardanaIndexRoute
   AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
@@ -1024,7 +1151,6 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedChambersRoute: AuthenticatedChambersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
@@ -1061,6 +1187,15 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTradingGatePassRoute: AuthenticatedTradingGatePassRoute,
   AuthenticatedTradingKataiRoute: AuthenticatedTradingKataiRoute,
   AuthenticatedTradingSaudaRoute: AuthenticatedTradingSaudaRoute,
+  AuthenticatedWarehouseChambersRoute: AuthenticatedWarehouseChambersRoute,
+  AuthenticatedWarehouseLoadingRoute: AuthenticatedWarehouseLoadingRoute,
+  AuthenticatedWarehouseMeterReadingRoute:
+    AuthenticatedWarehouseMeterReadingRoute,
+  AuthenticatedWarehouseRoomMapRoute: AuthenticatedWarehouseRoomMapRoute,
+  AuthenticatedWarehouseShiftingRoute: AuthenticatedWarehouseShiftingRoute,
+  AuthenticatedWarehouseTemperatureRoute:
+    AuthenticatedWarehouseTemperatureRoute,
+  AuthenticatedWarehouseUnloadingRoute: AuthenticatedWarehouseUnloadingRoute,
   AuthenticatedAccountsIndexRoute: AuthenticatedAccountsIndexRoute,
   AuthenticatedBardanaIndexRoute: AuthenticatedBardanaIndexRoute,
   AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,

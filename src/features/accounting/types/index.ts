@@ -3,6 +3,10 @@ export type AccountTypeValue = "GROUP" | "ACCOUNT";
 export type AccountNatureValue = "DR" | "CR";
 export type VoucherTypeValue = "CR" | "DR" | "JV" | "CV" | "BH";
 export type PaymentModeValue = "CASH" | "CHEQUE" | "BANK" | "UPI";
+export type PartyTypeValue =
+  | "KISAN" | "KISAN_D" | "AARTI" | "STAFF"
+  | "LOADING_CONTRACTOR" | "CHATAI_CONTRACTOR"
+  | "MANDI" | "FINANCER" | "GUARANTOR" | "OTHERS";
 
 // Party filter tab type
 export type PartyFilterTab = "all" | "debtors" | "creditors";
@@ -19,6 +23,7 @@ export interface Account {
   parentId?: string | null;
   level?: number | null;
   under?: string | null;
+  partyType?: PartyTypeValue | null;
   // Address
   address1?: string | null;
   address2?: string | null;
@@ -70,6 +75,7 @@ export interface CreateAccountInput {
   parentId?: string;
   level?: number;
   under?: string;
+  partyType?: PartyTypeValue;
   address1?: string;
   address2?: string;
   city?: string;

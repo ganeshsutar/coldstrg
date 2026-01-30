@@ -199,7 +199,7 @@ function IssueFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Voucher Number</Label>
                 <Input
                   value={
@@ -211,7 +211,7 @@ function IssueFormContent({
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="issueDate">Date *</Label>
                 <Input
                   id="issueDate"
@@ -222,7 +222,7 @@ function IssueFormContent({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Party *</Label>
               <Select value={partyId} onValueChange={setPartyId}>
                 <SelectTrigger>
@@ -244,7 +244,7 @@ function IssueFormContent({
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Issue Type</Label>
               <ToggleGroup
                 type="single"
@@ -390,7 +390,7 @@ function IssueFormContent({
         </Card>
 
         {/* Narration */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="narration">Narration</Label>
           <Textarea
             id="narration"

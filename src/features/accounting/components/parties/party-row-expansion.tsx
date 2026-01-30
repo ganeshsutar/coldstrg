@@ -87,7 +87,7 @@ export function PartyRowExpansion({ account }: PartyRowExpansionProps) {
       )}
 
       {/* Component balance breakdown */}
-      <div className="space-y-2">
+      <div className="space-y-4">
         <h4 className="text-sm font-medium text-muted-foreground">
           Balance Breakdown
         </h4>

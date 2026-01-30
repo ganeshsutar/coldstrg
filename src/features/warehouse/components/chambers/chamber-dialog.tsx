@@ -147,7 +147,7 @@ function ChamberForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="code">Code</Label>
             <Input
               id="code"
@@ -157,7 +157,7 @@ function ChamberForm({
               disabled={isEdit}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="roomNumber">Room Number</Label>
             <Input
               id="roomNumber"
@@ -167,7 +167,7 @@ function ChamberForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="isActive">Status</Label>
             <Select
               value={isActive ? "active" : "inactive"}
@@ -185,7 +185,7 @@ function ChamberForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="name">Name (English)</Label>
             <Input
               id="name"
@@ -194,7 +194,7 @@ function ChamberForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="nameHindi">Name (Hindi)</Label>
             <Input
               id="nameHindi"
@@ -205,7 +205,7 @@ function ChamberForm({
         </div>
 
         <div className="grid grid-cols-4 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="floors">Floors</Label>
             <Input
               id="floors"
@@ -215,7 +215,7 @@ function ChamberForm({
               onChange={(e) => setFloors(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="totalRacks">Total Racks</Label>
             <Input
               id="totalRacks"
@@ -225,7 +225,7 @@ function ChamberForm({
               onChange={(e) => setTotalRacks(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="racksPerRow">Racks/Row</Label>
             <Input
               id="racksPerRow"
@@ -235,7 +235,7 @@ function ChamberForm({
               onChange={(e) => setRacksPerRow(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="rackCapacity">Rack Capacity</Label>
             <Input
               id="rackCapacity"
@@ -248,7 +248,7 @@ function ChamberForm({
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="targetTemperature">Target Temp (°C)</Label>
             <Input
               id="targetTemperature"
@@ -258,7 +258,7 @@ function ChamberForm({
               onChange={(e) => setTargetTemperature(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="minTemperature">Min Temp (°C)</Label>
             <Input
               id="minTemperature"
@@ -268,7 +268,7 @@ function ChamberForm({
               onChange={(e) => setMinTemperature(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="maxTemperature">Max Temp (°C)</Label>
             <Input
               id="maxTemperature"
@@ -280,7 +280,7 @@ function ChamberForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="description">Description</Label>
           <Textarea
             id="description"

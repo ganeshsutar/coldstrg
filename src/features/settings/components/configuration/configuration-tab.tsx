@@ -170,7 +170,7 @@ function ConfigurationForm({ config, organizationId }: ConfigurationFormProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-2">
       {success && (
         <div className="text-sm text-green-600 bg-green-500/10 p-3 rounded-md">
           Configuration saved successfully.
@@ -235,7 +235,7 @@ function GeneralSubTab({ formData, onChange }: SubTabProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Software Mode</Label>
             <Select value={formData.softwareMode} onValueChange={(v) => onChange("softwareMode", v)}>
               <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
@@ -267,7 +267,7 @@ function RentSubTab({ formData, onChange, onNumberChange }: SubTabProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Rent Calculation Basis</Label>
             <Select value={formData.rentCalculationBasis} onValueChange={(v) => onChange("rentCalculationBasis", v)}>
               <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
@@ -278,7 +278,7 @@ function RentSubTab({ formData, onChange, onNumberChange }: SubTabProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Rent Processing Mode</Label>
             <Select value={formData.rentProcessingMode} onValueChange={(v) => onChange("rentProcessingMode", v)}>
               <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
@@ -289,7 +289,7 @@ function RentSubTab({ formData, onChange, onNumberChange }: SubTabProps) {
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Additional Rent Days</Label>
             <Input type="number" value={formData.additionalRentDays} onChange={(e) => onNumberChange?.("additionalRentDays", e.target.value)} />
           </div>
@@ -308,11 +308,11 @@ function InterestSubTab({ formData, onChange, onNumberChange }: SubTabProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Interest Rate (%)</Label>
             <Input type="number" step="0.01" value={formData.interestRate} onChange={(e) => onNumberChange?.("interestRate", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Days in Year</Label>
             <Input type="number" value={formData.interestDaysInYear} onChange={(e) => onNumberChange?.("interestDaysInYear", e.target.value)} />
           </div>
@@ -337,27 +337,27 @@ function PacketsSubTab({ formData, onChange, onNumberChange }: SubTabProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT1 Name</Label>
             <Input value={formData.pkt1Name} onChange={(e) => onChange("pkt1Name", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT1 Weight (kg)</Label>
             <Input type="number" step="0.01" value={formData.pkt1Weight} onChange={(e) => onNumberChange?.("pkt1Weight", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT2 Name</Label>
             <Input value={formData.pkt2Name} onChange={(e) => onChange("pkt2Name", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT2 Weight (kg)</Label>
             <Input type="number" step="0.01" value={formData.pkt2Weight} onChange={(e) => onNumberChange?.("pkt2Weight", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT3 Name</Label>
             <Input value={formData.pkt3Name} onChange={(e) => onChange("pkt3Name", e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT3 Weight (kg)</Label>
             <Input type="number" step="0.01" value={formData.pkt3Weight} onChange={(e) => onNumberChange?.("pkt3Weight", e.target.value)} />
           </div>

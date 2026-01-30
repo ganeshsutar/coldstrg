@@ -81,7 +81,14 @@ function AuthenticatedContent() {
   function getActiveNavItem(): string {
     if (matchRoute({ to: "/settings" })) return "settings";
     if (matchRoute({ to: "/masters" })) return "masters";
-    if (matchRoute({ to: "/chambers" })) return "chambers";
+    // Warehouse routes
+    if (matchRoute({ to: "/warehouse/room-map" })) return "room-map";
+    if (matchRoute({ to: "/warehouse/chambers" })) return "chambers";
+    if (matchRoute({ to: "/warehouse/loading" })) return "loading";
+    if (matchRoute({ to: "/warehouse/unloading" })) return "unloading";
+    if (matchRoute({ to: "/warehouse/shifting" })) return "shifting";
+    if (matchRoute({ to: "/warehouse/temperature" })) return "temperature";
+    if (matchRoute({ to: "/warehouse/meter-reading" })) return "meter-reading";
     if (matchRoute({ to: "/inventory/amad", fuzzy: true })) return "amad";
     if (matchRoute({ to: "/inventory/nikasi" })) return "nikasi";
     if (matchRoute({ to: "/inventory/takpatti" })) return "takpatti";
@@ -97,6 +104,28 @@ function AuthenticatedContent() {
     if (matchRoute({ to: "/bardana/outstanding" })) return "bardana-outstanding";
     if (matchRoute({ to: "/bardana/types" })) return "bardana-types";
     if (matchRoute({ to: "/bardana" })) return "bardana-stock";
+    // Billing routes
+    if (matchRoute({ to: "/billing/rent-bills" })) return "rent-bills";
+    if (matchRoute({ to: "/billing/receipts" })) return "receipts";
+    // Trading routes
+    if (matchRoute({ to: "/trading/sauda" })) return "sauda";
+    if (matchRoute({ to: "/trading/gate-pass" })) return "gate-pass";
+    if (matchRoute({ to: "/trading/katai" })) return "katai";
+    // Loans routes
+    if (matchRoute({ to: "/loans/advances" })) return "advances";
+    if (matchRoute({ to: "/loans/loans" })) return "loan-against-goods";
+    if (matchRoute({ to: "/loans/interest-chart" })) return "interest-chart";
+    if (matchRoute({ to: "/loans/ledger" })) return "loan-ledger";
+    if (matchRoute({ to: "/loans" })) return "loan-dashboard";
+    // Payroll routes
+    if (matchRoute({ to: "/payroll/employees" })) return "employees";
+    if (matchRoute({ to: "/payroll/attendance" })) return "attendance";
+    if (matchRoute({ to: "/payroll/salary" })) return "salary";
+    if (matchRoute({ to: "/payroll/payslip" })) return "payslip";
+    if (matchRoute({ to: "/payroll/loans" })) return "staff-loans";
+    if (matchRoute({ to: "/payroll/daily-wages" })) return "daily-wages";
+    if (matchRoute({ to: "/payroll/masters" })) return "payroll-masters";
+    if (matchRoute({ to: "/payroll" })) return "payroll-dashboard";
     if (matchRoute({ to: "/dashboard" })) return "dashboard";
     return "dashboard";
   }
@@ -115,10 +144,54 @@ function AuthenticatedContent() {
         { label: "Masters" },
       ];
     }
-    if (matchRoute({ to: "/chambers" })) {
+    // Warehouse routes
+    if (matchRoute({ to: "/warehouse/room-map" })) {
       return [
         { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Room Map" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/chambers" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
         { label: "Chambers" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/loading" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Loading" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/unloading" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Unloading" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/shifting" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Shifting" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/temperature" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Temperature" },
+      ];
+    }
+    if (matchRoute({ to: "/warehouse/meter-reading" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Warehouse" },
+        { label: "Meter Reading" },
       ];
     }
     if (matchRoute({ to: "/inventory/amad/$amadId" })) {
@@ -230,6 +303,134 @@ function AuthenticatedContent() {
         { label: "Bardana" },
       ];
     }
+    // Billing routes
+    if (matchRoute({ to: "/billing/rent-bills" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Billing" },
+        { label: "Rent Bills" },
+      ];
+    }
+    if (matchRoute({ to: "/billing/receipts" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Billing" },
+        { label: "Receipts" },
+      ];
+    }
+    // Trading routes
+    if (matchRoute({ to: "/trading/sauda" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Trading" },
+        { label: "Deals (Sauda)" },
+      ];
+    }
+    if (matchRoute({ to: "/trading/gate-pass" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Trading" },
+        { label: "Gate Pass" },
+      ];
+    }
+    if (matchRoute({ to: "/trading/katai" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Trading" },
+        { label: "Grading (Katai)" },
+      ];
+    }
+    // Loans routes
+    if (matchRoute({ to: "/loans/advances" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Loans", href: "/loans" },
+        { label: "Advances" },
+      ];
+    }
+    if (matchRoute({ to: "/loans/loans" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Loans", href: "/loans" },
+        { label: "Loans Against Goods" },
+      ];
+    }
+    if (matchRoute({ to: "/loans/interest-chart" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Loans", href: "/loans" },
+        { label: "Interest Chart" },
+      ];
+    }
+    if (matchRoute({ to: "/loans/ledger" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Loans", href: "/loans" },
+        { label: "Loan Ledger" },
+      ];
+    }
+    if (matchRoute({ to: "/loans" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Loans" },
+      ];
+    }
+    // Payroll routes
+    if (matchRoute({ to: "/payroll/employees" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Employees" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/attendance" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Attendance" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/salary" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Salary Processing" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/payslip" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Pay Slip" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/loans" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Staff Loans" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/daily-wages" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Daily Wages" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll/masters" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll", href: "/payroll" },
+        { label: "Masters" },
+      ];
+    }
+    if (matchRoute({ to: "/payroll" })) {
+      return [
+        { label: "Home", href: "/dashboard" },
+        { label: "Payroll" },
+      ];
+    }
     // Default fallback
     return [{ label: "Home" }];
   }
@@ -246,8 +447,27 @@ function AuthenticatedContent() {
       case "masters":
         navigate({ to: "/masters" });
         break;
+      // Warehouse routes
+      case "room-map":
+        navigate({ to: "/warehouse/room-map" });
+        break;
       case "chambers":
-        navigate({ to: "/chambers" });
+        navigate({ to: "/warehouse/chambers" });
+        break;
+      case "loading":
+        navigate({ to: "/warehouse/loading" });
+        break;
+      case "unloading":
+        navigate({ to: "/warehouse/unloading" });
+        break;
+      case "shifting":
+        navigate({ to: "/warehouse/shifting" });
+        break;
+      case "temperature":
+        navigate({ to: "/warehouse/temperature" });
+        break;
+      case "meter-reading":
+        navigate({ to: "/warehouse/meter-reading" });
         break;
       case "amad":
         navigate({ to: "/inventory/amad" });
@@ -291,6 +511,64 @@ function AuthenticatedContent() {
         break;
       case "bardana-types":
         navigate({ to: "/bardana/types" });
+        break;
+      // Billing routes
+      case "rent-bills":
+        navigate({ to: "/billing/rent-bills" });
+        break;
+      case "receipts":
+        navigate({ to: "/billing/receipts" });
+        break;
+      // Trading routes
+      case "sauda":
+        navigate({ to: "/trading/sauda" });
+        break;
+      case "gate-pass":
+        navigate({ to: "/trading/gate-pass" });
+        break;
+      case "katai":
+        navigate({ to: "/trading/katai" });
+        break;
+      // Loans routes
+      case "loan-dashboard":
+        navigate({ to: "/loans" });
+        break;
+      case "advances":
+        navigate({ to: "/loans/advances" });
+        break;
+      case "loan-against-goods":
+        navigate({ to: "/loans/loans" });
+        break;
+      case "interest-chart":
+        navigate({ to: "/loans/interest-chart" });
+        break;
+      case "loan-ledger":
+        navigate({ to: "/loans/ledger" });
+        break;
+      // Payroll routes
+      case "payroll-dashboard":
+        navigate({ to: "/payroll" });
+        break;
+      case "employees":
+        navigate({ to: "/payroll/employees" });
+        break;
+      case "attendance":
+        navigate({ to: "/payroll/attendance" });
+        break;
+      case "salary":
+        navigate({ to: "/payroll/salary" });
+        break;
+      case "payslip":
+        navigate({ to: "/payroll/payslip" });
+        break;
+      case "staff-loans":
+        navigate({ to: "/payroll/loans" });
+        break;
+      case "daily-wages":
+        navigate({ to: "/payroll/daily-wages" });
+        break;
+      case "payroll-masters":
+        navigate({ to: "/payroll/masters" });
         break;
       default:
         // Future routes will be added here

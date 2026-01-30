@@ -92,6 +92,7 @@ export function UnloadingDialog({
       date,
       amadId: selectedAmad.id,
       amadNo: selectedAmad.amadNo,
+      partyId: selectedAmad.partyId || undefined,
       partyName: selectedAmad.partyName,
       commodityName: selectedAmad.commodityName || undefined,
       chamberId,
@@ -128,11 +129,11 @@ export function UnloadingDialog({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="unloadingNo">Unloading #</Label>
               <Input id="unloadingNo" value={unloadingNo} disabled />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -175,7 +176,7 @@ export function UnloadingDialog({
           <Separator />
 
           <div className="grid grid-cols-4 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt1">PKT1</Label>
               <Input
                 id="pkt1"
@@ -185,7 +186,7 @@ export function UnloadingDialog({
                 onChange={(e) => setPkt1(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt2">PKT2</Label>
               <Input
                 id="pkt2"
@@ -195,7 +196,7 @@ export function UnloadingDialog({
                 onChange={(e) => setPkt2(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="pkt3">PKT3</Label>
               <Input
                 id="pkt3"
@@ -205,7 +206,7 @@ export function UnloadingDialog({
                 onChange={(e) => setPkt3(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Total</Label>
               <div className="h-10 flex items-center font-medium">
                 {totalQuantity} bags
@@ -213,7 +214,7 @@ export function UnloadingDialog({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vehicleNo">Vehicle Number</Label>
             <Input
               id="vehicleNo"
@@ -223,7 +224,7 @@ export function UnloadingDialog({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"

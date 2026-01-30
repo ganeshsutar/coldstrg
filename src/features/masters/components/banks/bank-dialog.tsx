@@ -106,7 +106,7 @@ function BankForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="bCode">Code</Label>
             <Input
               id="bCode"
@@ -116,7 +116,7 @@ function BankForm({
               disabled={isEdit}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="bStatus">Status</Label>
             <Select
               value={isActive ? "active" : "inactive"}
@@ -133,7 +133,7 @@ function BankForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="bName">Bank Name</Label>
           <Input
             id="bName"
@@ -143,7 +143,7 @@ function BankForm({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="bIfsc">IFSC Pattern</Label>
           <Input
             id="bIfsc"

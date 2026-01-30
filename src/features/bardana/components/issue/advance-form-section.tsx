@@ -40,7 +40,7 @@ export function AdvanceFormSection({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="interestRatePm">Interest Rate (% per month)</Label>
             <Input
               id="interestRatePm"
@@ -52,7 +52,7 @@ export function AdvanceFormSection({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="expectedArrivalDate">Expected Arrival Date</Label>
             <Input
               id="expectedArrivalDate"
@@ -64,7 +64,7 @@ export function AdvanceFormSection({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="expectedBags">Expected Bags</Label>
             <Input
               id="expectedBags"
@@ -75,7 +75,7 @@ export function AdvanceFormSection({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="referenceNo">Reference Number (Agreement)</Label>
             <Input
               id="referenceNo"

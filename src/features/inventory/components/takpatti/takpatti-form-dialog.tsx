@@ -125,11 +125,11 @@ function TakpattiForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="takpattiNo">Takpatti No</Label>
             <Input id="takpattiNo" type="number" value={takpattiNo} disabled />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="date">Date</Label>
             <Input
               id="date"
@@ -139,7 +139,7 @@ function TakpattiForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="amad">Select Amad</Label>
             <Select value={amadId} onValueChange={handleAmadSelect}>
               <SelectTrigger className="w-full">
@@ -157,11 +157,11 @@ function TakpattiForm({
         </div>
 
         <div className="grid grid-cols-4 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Room</Label>
             <Input value={room} onChange={(e) => setRoom(e.target.value)} />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT1</Label>
             <Input
               type="number"
@@ -169,7 +169,7 @@ function TakpattiForm({
               onChange={(e) => setPkt1(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT2</Label>
             <Input
               type="number"
@@ -177,7 +177,7 @@ function TakpattiForm({
               onChange={(e) => setPkt2(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>PKT3</Label>
             <Input
               type="number"

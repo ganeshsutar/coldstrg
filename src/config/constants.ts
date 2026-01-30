@@ -340,6 +340,32 @@ export const ACCOUNT_NATURE_OPTIONS = [
   { value: "CR", label: "Credit" },
 ] as const;
 
+export const PARTY_TYPE_OPTIONS = [
+  { value: "KISAN", label: "Kisan (Farmer)" },
+  { value: "KISAN_D", label: "Kisan D (Farmer-Dealer)" },
+  { value: "AARTI", label: "Aarti (Commission Agent)" },
+  { value: "STAFF", label: "Staff (Employee)" },
+  { value: "LOADING_CONTRACTOR", label: "Loading Contractor" },
+  { value: "CHATAI_CONTRACTOR", label: "Chatai Contractor" },
+  { value: "MANDI", label: "Mandi (Market)" },
+  { value: "FINANCER", label: "Financer" },
+  { value: "GUARANTOR", label: "Guarantor" },
+  { value: "OTHERS", label: "Others" },
+] as const;
+
+export const PARTY_TYPE_PARENT_MAP: Record<string, string> = {
+  KISAN: "36",              // FARMER
+  KISAN_D: "36",            // FARMER
+  AARTI: "52",              // AARTI
+  STAFF: "21",              // STAFF
+  LOADING_CONTRACTOR: "53", // LOADING CONTRACTORS
+  CHATAI_CONTRACTOR: "54",  // CHATAI CONTRACTORS
+  MANDI: "55",              // MANDI
+  FINANCER: "56",           // FINANCERS
+  GUARANTOR: "57",          // GUARANTORS
+  OTHERS: "58",             // OTHERS
+};
+
 export const VOUCHER_TYPES_ENUM = {
   CR: "CR",
   DR: "DR",
@@ -407,39 +433,93 @@ export const COMPONENT_COLORS = {
   },
 } as const;
 
-// Seed chart of accounts hierarchy
+// Seed chart of accounts hierarchy (from legacy system)
+// Structure: Level 0 (Main Groups) -> Level 1 (Sub Groups) -> Level 2+ (Accounts)
 export const SEED_CHART_OF_ACCOUNTS = [
-  // Assets
-  { code: "1000", name: "Assets", accountType: "GROUP", nature: "DR", level: 0 },
-  { code: "1100", name: "Current Assets", accountType: "GROUP", nature: "DR", level: 1, under: "1000" },
-  { code: "1110", name: "Cash", accountType: "ACCOUNT", nature: "DR", level: 2, under: "1100" },
-  { code: "1120", name: "Bank Accounts", accountType: "GROUP", nature: "DR", level: 2, under: "1100" },
-  { code: "1130", name: "Sundry Debtors", accountType: "GROUP", nature: "DR", level: 2, under: "1100" },
-  { code: "1200", name: "Fixed Assets", accountType: "GROUP", nature: "DR", level: 1, under: "1000" },
+  // ============== Level 0 - Main Groups ==============
+  { code: "1", name: "CURRENT ASSETS", accountType: "GROUP", nature: "DR", level: 0 },
+  { code: "2", name: "LOAN LIABILITIES", accountType: "GROUP", nature: "CR", level: 0 },
+  { code: "3", name: "FIXED ASSETS", accountType: "GROUP", nature: "DR", level: 0 },
+  { code: "4", name: "CURRENT LIABILITIES", accountType: "GROUP", nature: "CR", level: 0 },
+  { code: "5", name: "REVENUE ACCOUNT", accountType: "GROUP", nature: "CR", level: 0 },
+  { code: "6", name: "CAPITAL ACCOUNT", accountType: "GROUP", nature: "CR", level: 0 },
 
-  // Liabilities
-  { code: "2000", name: "Liabilities", accountType: "GROUP", nature: "CR", level: 0 },
-  { code: "2100", name: "Current Liabilities", accountType: "GROUP", nature: "CR", level: 1, under: "2000" },
-  { code: "2110", name: "Sundry Creditors", accountType: "GROUP", nature: "CR", level: 2, under: "2100" },
-  { code: "2200", name: "Loans (Liability)", accountType: "GROUP", nature: "CR", level: 1, under: "2000" },
+  // ============== Level 1 - Sub Groups under CURRENT ASSETS (1) ==============
+  { code: "8", name: "CASH & BANK ACCOUNTS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "9", name: "SUNDRY DEBTORS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "10", name: "STOCK IN HAND", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "30", name: "MOVABLE ASSETS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "35", name: "ICE DEALERS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "36", name: "FARMER", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "52", name: "AARTI", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "55", name: "MANDI", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "57", name: "GUARANTORS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
+  { code: "58", name: "OTHERS", accountType: "GROUP", nature: "DR", level: 1, under: "1" },
 
-  // Capital
-  { code: "3000", name: "Capital Account", accountType: "GROUP", nature: "CR", level: 0 },
+  // ============== Level 1 - Sub Groups under CURRENT LIABILITIES (4) ==============
+  { code: "12", name: "SECURED LOAN", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "13", name: "UNSECURED LOAN", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "19", name: "DUTIES AND TAXES", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "20", name: "SUNDRY CREDITORS", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "21", name: "STAFF", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "53", name: "LOADING CONTRACTORS", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "54", name: "CHATAI CONTRACTORS", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
+  { code: "56", name: "FINANCERS", accountType: "GROUP", nature: "CR", level: 1, under: "4" },
 
-  // Income
-  { code: "4000", name: "Income", accountType: "GROUP", nature: "CR", level: 0 },
-  { code: "4100", name: "Direct Income", accountType: "GROUP", nature: "CR", level: 1, under: "4000" },
-  { code: "4110", name: "Rent Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
-  { code: "4120", name: "Labor Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
-  { code: "4130", name: "Interest Income", accountType: "ACCOUNT", nature: "CR", level: 2, under: "4100" },
-  { code: "4200", name: "Indirect Income", accountType: "GROUP", nature: "CR", level: 1, under: "4000" },
+  // ============== Level 1 - Sub Groups under FIXED ASSETS (3) ==============
+  { code: "15", name: "PLANT AND MACHINERY ACCOUNT", accountType: "GROUP", nature: "DR", level: 1, under: "3" },
+  { code: "16", name: "FURNITURE ACCOUNT", accountType: "GROUP", nature: "DR", level: 1, under: "3" },
+  { code: "18", name: "OFFICE EQUIPMENT", accountType: "GROUP", nature: "DR", level: 1, under: "3" },
 
-  // Expenses
-  { code: "5000", name: "Expenses", accountType: "GROUP", nature: "DR", level: 0 },
-  { code: "5100", name: "Direct Expenses", accountType: "GROUP", nature: "DR", level: 1, under: "5000" },
-  { code: "5110", name: "Labor Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5100" },
-  { code: "5120", name: "Electricity Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5100" },
-  { code: "5200", name: "Indirect Expenses", accountType: "GROUP", nature: "DR", level: 1, under: "5000" },
-  { code: "5210", name: "Salary Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5200" },
-  { code: "5220", name: "Rent Expense", accountType: "ACCOUNT", nature: "DR", level: 2, under: "5200" },
+  // ============== Level 2 - Sub Groups under MOVABLE ASSETS (30) ==============
+  { code: "17", name: "VEHICLES", accountType: "GROUP", nature: "DR", level: 2, under: "30" },
+
+  // ============== Level 1 - Sub Groups under REVENUE ACCOUNT (5) ==============
+  { code: "22", name: "PURCHASE A/C", accountType: "GROUP", nature: "DR", level: 1, under: "5" },
+  { code: "23", name: "INDIRECT EXPENSES", accountType: "GROUP", nature: "DR", level: 1, under: "5" },
+  { code: "24", name: "DIRECT EXPENSES", accountType: "GROUP", nature: "DR", level: 1, under: "5" },
+  { code: "25", name: "SALE A/C", accountType: "GROUP", nature: "CR", level: 1, under: "5" },
+  { code: "26", name: "INCOME FROM OTHER RESOURCES", accountType: "GROUP", nature: "CR", level: 1, under: "5" },
+
+  // ============== Pre-defined Accounts ==============
+
+  // Asset Accounts (under CASH & BANK ACCOUNTS - 8)
+  { code: "29", name: "CASH A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "8" },
+
+  // Stock Accounts (under STOCK IN HAND - 10)
+  { code: "32", name: "CLOSING STOCK", accountType: "ACCOUNT", nature: "DR", level: 2, under: "10" },
+  { code: "34", name: "OPENING STOCK", accountType: "ACCOUNT", nature: "DR", level: 2, under: "10" },
+
+  // Liability Accounts (under STAFF - 21)
+  { code: "33", name: "STAFF SALARY PAYABLE", accountType: "ACCOUNT", nature: "CR", level: 2, under: "21" },
+
+  // Liability Accounts (under SUNDRY CREDITORS - 20)
+  { code: "49", name: "ADVANCE FROM FARMERS", accountType: "ACCOUNT", nature: "CR", level: 2, under: "20" },
+
+  // Income/Sale Accounts (under SALE A/C - 25)
+  { code: "37", name: "RENT A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "25" },
+  { code: "38", name: "BARDANA A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "25" },
+  { code: "41", name: "INTEREST A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "25" },
+  { code: "46", name: "ICE SALE A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "25" },
+  { code: "48", name: "MILK SALE A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "25" },
+  { code: "11", name: "RENT WAPSI A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "25" },
+
+  // Direct Expense Accounts (under DIRECT EXPENSES - 24)
+  { code: "27", name: "LOADING CHARGES A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "28", name: "UNLOADING CHARGES A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "31", name: "DUMP CHARGES A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "42", name: "DALA/PALLEDARI A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "43", name: "KATAI A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "44", name: "KANTA/KATAI/RENT A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "50", name: "PALTAI/SHIFTING A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+  { code: "51", name: "COLD STORAGE EXPENSES (MISC)", accountType: "ACCOUNT", nature: "DR", level: 2, under: "24" },
+
+  // Indirect Expense Accounts (under INDIRECT EXPENSES - 23)
+  { code: "14", name: "INSURANCE A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "23" },
+
+  // Special Accounts (under INCOME FROM OTHER RESOURCES - 26)
+  { code: "39", name: "PAYMENT REALISATION A/C", accountType: "ACCOUNT", nature: "CR", level: 2, under: "26" },
+  { code: "40", name: "DUE A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "26" },
+  { code: "45", name: "DISCOUNT A/C", accountType: "ACCOUNT", nature: "DR", level: 2, under: "26" },
+  { code: "47", name: "REBATE AND SHORT REALISATION", accountType: "ACCOUNT", nature: "DR", level: 2, under: "26" },
 ] as const;

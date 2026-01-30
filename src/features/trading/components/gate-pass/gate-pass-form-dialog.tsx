@@ -215,14 +215,14 @@ function GatePassFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>GP Number</Label>
                 <Input
                   value={formatGpNo(gatePass?.gpNo ?? nextGpNo)}
                   disabled
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="gpDate">Date *</Label>
                 <Input
                   id="gpDate"
@@ -231,7 +231,7 @@ function GatePassFormContent({
                   onChange={(e) => setGpDate(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="gpTime">Time</Label>
                 <Input
                   id="gpTime"
@@ -251,7 +251,7 @@ function GatePassFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Link to Deal (Optional)</Label>
                 <Select value={saudaId} onValueChange={handleSaudaChange}>
                   <SelectTrigger>
@@ -272,7 +272,7 @@ function GatePassFormContent({
                   </p>
                 )}
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rate">Rate (₹/Qtl)</Label>
                 <Input
                   id="rate"
@@ -286,7 +286,7 @@ function GatePassFormContent({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Seller (From) *</Label>
                 <Select value={sellerPartyId} onValueChange={setSellerPartyId}>
                   <SelectTrigger>
@@ -301,7 +301,7 @@ function GatePassFormContent({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Buyer (To)</Label>
                 <Select value={buyerPartyId} onValueChange={setBuyerPartyId}>
                   <SelectTrigger>
@@ -319,7 +319,7 @@ function GatePassFormContent({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="buyerLocation">Delivery Location</Label>
               <Input
                 id="buyerLocation"
@@ -355,7 +355,7 @@ function GatePassFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="transport">Transport Name</Label>
                 <Input
                   id="transport"
@@ -364,7 +364,7 @@ function GatePassFormContent({
                   placeholder="Transport company"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="vehicleNo">Vehicle Number *</Label>
                 <Input
                   id="vehicleNo"
@@ -375,7 +375,7 @@ function GatePassFormContent({
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="driverName">Driver Name</Label>
                 <Input
                   id="driverName"
@@ -383,7 +383,7 @@ function GatePassFormContent({
                   onChange={(e) => setDriverName(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="driverContact">Driver Contact</Label>
                 <Input
                   id="driverContact"
@@ -392,7 +392,7 @@ function GatePassFormContent({
                   placeholder="Phone number"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="biltiNo">Bilti/LR Number</Label>
                 <Input
                   id="biltiNo"
@@ -405,7 +405,7 @@ function GatePassFormContent({
         </Card>
 
         {/* Remarks */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="remarks">Remarks</Label>
           <Textarea
             id="remarks"

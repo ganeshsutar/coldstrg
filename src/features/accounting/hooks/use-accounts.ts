@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import {
   fetchAccountList,
   fetchAccountById,
@@ -6,15 +7,39 @@ import {
   createAccount,
   updateAccount,
   deleteAccount,
+  seedAccounts,
 } from "../api/accounts";
 import type { CreateAccountInput, UpdateAccountInput } from "../types";
 
 export function useAccountList(organizationId: string | undefined) {
-  return useQuery({
+  const queryClient = useQueryClient();
+  const hasSeeded = useRef(false);
+
+  const query = useQuery({
     queryKey: ["accounts", organizationId],
     queryFn: () => fetchAccountList(organizationId!),
     enabled: !!organizationId,
   });
+
+  // Auto-seed accounts if none exist
+  useEffect(() => {
+    if (
+      !hasSeeded.current &&
+      organizationId &&
+      query.data &&
+      query.data.length === 0 &&
+      !query.isLoading
+    ) {
+      hasSeeded.current = true;
+      seedAccounts(organizationId).then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["accounts", organizationId],
+        });
+      });
+    }
+  }, [organizationId, query.data, query.isLoading, queryClient]);
+
+  return query;
 }
 
 export function usePartyAccounts(organizationId: string | undefined) {

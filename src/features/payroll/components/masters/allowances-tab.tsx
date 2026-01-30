@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useOrganization } from "@/features/organizations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +43,103 @@ import {
 import { formatCurrency } from "../../utils";
 import type { PayAllowance, PayComponentTypeValue } from "../../types";
 
+interface AllowanceFormProps {
+  allowance: PayAllowance | null;
+  onSubmit: (data: { code: string; name: string; componentType: PayComponentTypeValue; defaultValue: number; isTaxable: boolean }) => void;
+  onCancel: () => void;
+  isPending: boolean;
+}
+
+function AllowanceForm({ allowance, onSubmit, onCancel, isPending }: AllowanceFormProps) {
+  const [code, setCode] = useState(allowance?.code ?? "");
+  const [name, setName] = useState(allowance?.name ?? "");
+  const [componentType, setComponentType] = useState<PayComponentTypeValue>(allowance?.componentType ?? "FIXED");
+  const [defaultValue, setDefaultValue] = useState(allowance?.defaultValue ?? 0);
+  const [isTaxable, setIsTaxable] = useState(allowance?.isTaxable ?? true);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !code) return;
+    onSubmit({ code, name, componentType, defaultValue, isTaxable });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="code">Code</Label>
+          <Input
+            id="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="e.g., HRA"
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">Allowance Name</Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g., House Rent Allowance"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="componentType">Type</Label>
+          <Select
+            value={componentType}
+            onValueChange={(value) => setComponentType(value as PayComponentTypeValue)}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="FIXED">Fixed Amount</SelectItem>
+              <SelectItem value="PERCENTAGE">Percentage</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="defaultValue">
+            Default {componentType === "PERCENTAGE" ? "%" : "Amount"}
+          </Label>
+          <Input
+            id="defaultValue"
+            type="number"
+            value={defaultValue}
+            onChange={(e) => setDefaultValue(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="isTaxable"
+          checked={isTaxable}
+          onCheckedChange={(checked) => setIsTaxable(checked === true)}
+        />
+        <Label htmlFor="isTaxable" className="text-sm font-normal">
+          This allowance is taxable
+        </Label>
+      </div>
+
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Saving..." : allowance ? "Update" : "Create"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
 export function AllowancesTab() {
   const { currentOrganization } = useOrganization();
   const organizationId = currentOrganization?.id;
@@ -51,13 +148,6 @@ export function AllowancesTab() {
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedAllowance, setSelectedAllowance] = useState<PayAllowance | null>(null);
-
-  // Form state
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [componentType, setComponentType] = useState<PayComponentTypeValue>("FIXED");
-  const [defaultValue, setDefaultValue] = useState(0);
-  const [isTaxable, setIsTaxable] = useState(true);
 
   const { data: allowances = [] } = usePayAllowanceList(organizationId);
   const createMutation = useCreatePayAllowance();
@@ -74,28 +164,6 @@ export function AllowancesTab() {
     );
   }, [allowances, searchQuery]);
 
-  const resetForm = () => {
-    setCode("");
-    setName("");
-    setComponentType("FIXED");
-    setDefaultValue(0);
-    setIsTaxable(true);
-  };
-
-  useEffect(() => {
-    if (formDialogOpen) {
-      if (selectedAllowance) {
-        setCode(selectedAllowance.code);
-        setName(selectedAllowance.name);
-        setComponentType(selectedAllowance.componentType);
-        setDefaultValue(selectedAllowance.defaultValue);
-        setIsTaxable(selectedAllowance.isTaxable);
-      } else {
-        resetForm();
-      }
-    }
-  }, [formDialogOpen, selectedAllowance]);
-
   const handleAdd = () => {
     setSelectedAllowance(null);
     setFormDialogOpen(true);
@@ -111,29 +179,20 @@ export function AllowancesTab() {
     setDeleteDialogOpen(true);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!organizationId || !name || !code) return;
+  const handleFormSubmit = async (data: { code: string; name: string; componentType: PayComponentTypeValue; defaultValue: number; isTaxable: boolean }) => {
+    if (!organizationId) return;
 
     try {
       if (selectedAllowance) {
         await updateMutation.mutateAsync({
           id: selectedAllowance.id,
-          code,
-          name,
-          componentType,
-          defaultValue,
-          isTaxable,
+          ...data,
         });
         console.log("Allowance updated successfully");
       } else {
         await createMutation.mutateAsync({
           organizationId,
-          code,
-          name,
-          componentType,
-          defaultValue,
-          isTaxable,
+          ...data,
         });
         console.log("Allowance created successfully");
       }
@@ -255,90 +314,14 @@ export function AllowancesTab() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="code">Code</Label>
-                <Input
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="e.g., HRA"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name">Allowance Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., House Rent Allowance"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="componentType">Type</Label>
-                <Select
-                  value={componentType}
-                  onValueChange={(value) => setComponentType(value as PayComponentTypeValue)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="FIXED">Fixed Amount</SelectItem>
-                    <SelectItem value="PERCENTAGE">Percentage</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="defaultValue">
-                  Default {componentType === "PERCENTAGE" ? "%" : "Amount"}
-                </Label>
-                <Input
-                  id="defaultValue"
-                  type="number"
-                  value={defaultValue}
-                  onChange={(e) => setDefaultValue(Number(e.target.value))}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="isTaxable"
-                checked={isTaxable}
-                onCheckedChange={(checked) => setIsTaxable(checked === true)}
-              />
-              <Label htmlFor="isTaxable" className="text-sm font-normal">
-                This allowance is taxable
-              </Label>
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setFormDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={createMutation.isPending || updateMutation.isPending}
-              >
-                {createMutation.isPending || updateMutation.isPending
-                  ? "Saving..."
-                  : selectedAllowance
-                    ? "Update"
-                    : "Create"}
-              </Button>
-            </DialogFooter>
-          </form>
+          {formDialogOpen && (
+            <AllowanceForm
+              allowance={selectedAllowance}
+              onSubmit={handleFormSubmit}
+              onCancel={() => setFormDialogOpen(false)}
+              isPending={createMutation.isPending || updateMutation.isPending}
+            />
+          )}
         </DialogContent>
       </Dialog>
 

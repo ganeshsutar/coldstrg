@@ -75,6 +75,7 @@ export function LoanFormDialog({
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- react-hook-form's watch is intentionally used for reactive values
   const watchedValues = form.watch(["loanAmount", "interestRate", "tenure"]);
 
   const emiAmount = useMemo(() => {

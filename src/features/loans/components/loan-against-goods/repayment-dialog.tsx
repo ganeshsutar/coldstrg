@@ -76,7 +76,7 @@ export function RepaymentDialog({
             </CardContent>
           </Card>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="repaymentAmount">Repayment Amount *</Label>
             <Input
               id="repaymentAmount"

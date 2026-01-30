@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAmadList } from "../../hooks/use-amad";
+import { useAccountList } from "@/features/accounting/hooks/use-accounts";
 import type { CreateStockTransferInput, Amad } from "../../types";
 
 interface StockTransferWizardProps {
@@ -70,7 +71,14 @@ function WizardContent({
   isPending,
 }: WizardContentProps) {
   const { data: amadList = [] } = useAmadList(organizationId);
+  const { data: accounts = [] } = useAccountList(organizationId);
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Filter to party accounts only (type ACCOUNT)
+  const partyAccounts = useMemo(
+    () => accounts.filter((a) => a.accountType === "ACCOUNT"),
+    [accounts]
+  );
 
   // Step 1: Source
   const [amadId, setAmadId] = useState("");
@@ -80,6 +88,7 @@ function WizardContent({
   const [pkt3, setPkt3] = useState("");
 
   // Step 2: Destination
+  const [toPartyId, setToPartyId] = useState("");
   const [toPartyName, setToPartyName] = useState("");
   const [destRoom, setDestRoom] = useState("");
 
@@ -108,7 +117,16 @@ function WizardContent({
     setSelectedAmad(amad || null);
   }
 
-  function handleSubmit() {
+  function handleToPartyChange(id: string) {
+    setToPartyId(id);
+    const party = partyAccounts.find((a) => a.id === id);
+    if (party) {
+      setToPartyName(party.name);
+    }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     const input: CreateStockTransferInput = {
       organizationId,
       transferNo: nextTransferNo,
@@ -118,10 +136,12 @@ function WizardContent({
       ...(amadId && { amadId }),
       ...(selectedAmad && {
         amadNo: selectedAmad.amadNo,
+        fromPartyId: selectedAmad.partyId || undefined,
         fromPartyName: selectedAmad.partyName,
         commodityName: selectedAmad.commodityName || undefined,
         sourceRoom: selectedAmad.room || undefined,
       }),
+      ...(toPartyId && { toPartyId }),
       ...(toPartyName && { toPartyName }),
       ...(destRoom && { destRoom }),
       ...(pkt1 && { pkt1: parseInt(pkt1, 10) }),
@@ -135,7 +155,7 @@ function WizardContent({
   const stepTitles = ["Source", "Destination", "Confirm"];
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <DialogHeader>
         <DialogTitle>New Stock Transfer</DialogTitle>
         <DialogDescription>
@@ -158,7 +178,7 @@ function WizardContent({
       {/* Step 1: Source */}
       {currentStep === 1 && (
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Select Amad</Label>
             <Select value={amadId} onValueChange={handleAmadSelect}>
               <SelectTrigger className="w-full">
@@ -198,7 +218,7 @@ function WizardContent({
           )}
 
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT1</Label>
               <Input
                 type="number"
@@ -206,7 +226,7 @@ function WizardContent({
                 onChange={(e) => setPkt1(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT2</Label>
               <Input
                 type="number"
@@ -214,7 +234,7 @@ function WizardContent({
                 onChange={(e) => setPkt2(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT3</Label>
               <Input
                 type="number"
@@ -233,15 +253,22 @@ function WizardContent({
       {/* Step 2: Destination */}
       {currentStep === 2 && (
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Destination Party Name</Label>
-            <Input
-              value={toPartyName}
-              onChange={(e) => setToPartyName(e.target.value)}
-              placeholder="Enter destination party name"
-            />
+          <div className="flex flex-col gap-2">
+            <Label>Destination Party</Label>
+            <Select value={toPartyId} onValueChange={handleToPartyChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select destination party" />
+              </SelectTrigger>
+              <SelectContent>
+                {partyAccounts.map((account) => (
+                  <SelectItem key={account.id} value={account.id}>
+                    {account.name} ({account.code})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Destination Room</Label>
             <Input
               value={destRoom}
@@ -284,7 +311,7 @@ function WizardContent({
               </div>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label>Remarks</Label>
             <Input
               value={remarks}
@@ -321,8 +348,7 @@ function WizardContent({
             </Button>
           ) : (
             <Button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               disabled={isPending}
             >
               {isPending ? "Transferring..." : "Confirm Transfer"}
@@ -330,6 +356,6 @@ function WizardContent({
           )}
         </div>
       </DialogFooter>
-    </>
+    </form>
   );
 }

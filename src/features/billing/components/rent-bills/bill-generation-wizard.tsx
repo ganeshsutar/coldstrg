@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ChevronLeft,
@@ -84,6 +84,7 @@ export function BillGenerationWizard() {
   const [gstType, setGstType] = useState<GstTypeValue>("INTRA_STATE");
   const [gstRate, setGstRate] = useState(DEFAULT_GST_RATE);
   const [discountAmount, setDiscountAmount] = useState(0);
+  const chargeIdCounter = useRef(0);
 
   // Step 3: Notes
   const [notes, setNotes] = useState("");
@@ -180,10 +181,11 @@ export function BillGenerationWizard() {
   }
 
   function addCharge(component: PriceComponentValue) {
+    chargeIdCounter.current += 1;
     setCharges([
       ...charges,
       {
-        id: `charge-${Date.now()}`,
+        id: `charge-${chargeIdCounter.current}`,
         component,
         description: component,
         rate: 0,

@@ -141,14 +141,14 @@ function SaudaFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Deal Number</Label>
                 <Input
                   value={formatSaudaNo(sauda?.saudaNo ?? nextSaudaNo)}
                   disabled
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="saudaDate">Date *</Label>
                 <Input
                   id="saudaDate"
@@ -157,7 +157,7 @@ function SaudaFormContent({
                   onChange={(e) => setSaudaDate(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="dueDays">Due Days</Label>
                 <Input
                   id="dueDays"
@@ -182,7 +182,7 @@ function SaudaFormContent({
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               {/* Seller */}
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Seller (Party with stock) *</Label>
                 <Select value={sellerPartyId} onValueChange={setSellerPartyId}>
                   <SelectTrigger>
@@ -204,7 +204,7 @@ function SaudaFormContent({
               </div>
 
               {/* Buyer */}
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Buyer (Trader/Vyapari) *</Label>
                 <Select value={buyerPartyId} onValueChange={setBuyerPartyId}>
                   <SelectTrigger>
@@ -227,7 +227,7 @@ function SaudaFormContent({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="buyerContact">Buyer Contact</Label>
                 <Input
                   id="buyerContact"
@@ -236,7 +236,7 @@ function SaudaFormContent({
                   placeholder="Phone number"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="buyerLocation">Buyer Location</Label>
                 <Input
                   id="buyerLocation"
@@ -256,7 +256,7 @@ function SaudaFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="commodityName">Commodity</Label>
                 <Input
                   id="commodityName"
@@ -265,7 +265,7 @@ function SaudaFormContent({
                   placeholder="e.g., Potato"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="variety">Variety (Kism)</Label>
                 <Input
                   id="variety"
@@ -277,7 +277,7 @@ function SaudaFormContent({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="quantity">Quantity (Bags) *</Label>
                 <Input
                   id="quantity"
@@ -287,7 +287,7 @@ function SaudaFormContent({
                   onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="rate">Rate (₹/Quintal) *</Label>
                 <Input
                   id="rate"
@@ -298,7 +298,7 @@ function SaudaFormContent({
                   onChange={(e) => setRate(parseFloat(e.target.value) || 0)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Amount</Label>
                 <Input
                   value={formatCurrency(amount)}
@@ -317,7 +317,7 @@ function SaudaFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="paymentTerms">Payment Terms</Label>
                 <Input
                   id="paymentTerms"
@@ -326,7 +326,7 @@ function SaudaFormContent({
                   placeholder="e.g., Advance 50%, Balance on delivery"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="deliveryLocation">Delivery Location</Label>
                 <Input
                   id="deliveryLocation"
@@ -337,7 +337,7 @@ function SaudaFormContent({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="remarks">Remarks</Label>
               <Textarea
                 id="remarks"

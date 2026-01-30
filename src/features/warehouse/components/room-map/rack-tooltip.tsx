@@ -11,7 +11,7 @@ export function RackTooltip({ rack }: RackTooltipProps) {
 
   return (
     <div className="z-50 p-3 bg-popover border rounded-lg shadow-lg min-w-[200px]">
-      <div className="space-y-2">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="font-medium">Rack {rack.rackNumber}</span>
           <Badge

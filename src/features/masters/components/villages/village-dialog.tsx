@@ -116,7 +116,7 @@ function VillageForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vCode">Code</Label>
             <Input
               id="vCode"
@@ -126,7 +126,7 @@ function VillageForm({
               disabled={isEdit}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vStatus">Status</Label>
             <Select
               value={isActive ? "active" : "inactive"}
@@ -144,7 +144,7 @@ function VillageForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vName">Name (English)</Label>
             <Input
               id="vName"
@@ -153,7 +153,7 @@ function VillageForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vNameHindi">Name (Hindi)</Label>
             <Input
               id="vNameHindi"
@@ -164,7 +164,7 @@ function VillageForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vState">State</Label>
             <Input
               id="vState"
@@ -173,7 +173,7 @@ function VillageForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vDistrict">District</Label>
             <Input
               id="vDistrict"
@@ -185,7 +185,7 @@ function VillageForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vPincode">Pincode</Label>
             <Input
               id="vPincode"
@@ -193,7 +193,7 @@ function VillageForm({
               onChange={(e) => setPincode(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="vRoad">Road</Label>
             <Input
               id="vRoad"

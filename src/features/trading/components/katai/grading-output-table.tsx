@@ -130,7 +130,7 @@ export function GradingOutputTable({
       </div>
 
       {/* Visual Breakdown */}
-      <div className="space-y-2">
+      <div className="space-y-4">
         <div className="flex h-4 rounded-full overflow-hidden bg-muted">
           {grades.map((grade) => {
             const percentage =

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,25 +22,31 @@ interface DailyWageFormDialogProps {
   isSubmitting?: boolean;
 }
 
-export function DailyWageFormDialog({
-  open,
-  onOpenChange,
+interface InnerFormProps {
+  wage: DWage | null | undefined;
+  onSubmit: (data: DWageFormInput) => void;
+  onCancel: () => void;
+  isSubmitting?: boolean;
+  isEditing: boolean;
+}
+
+function DailyWageFormInner({
   wage,
   onSubmit,
+  onCancel,
   isSubmitting,
-}: DailyWageFormDialogProps) {
-  const isEditing = !!wage;
-
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [workerName, setWorkerName] = useState("");
-  const [workerContact, setWorkerContact] = useState("");
-  const [workType, setWorkType] = useState("");
-  const [hoursWorked, setHoursWorked] = useState(8);
-  const [ratePerHour, setRatePerHour] = useState(50);
-  const [unitsCompleted, setUnitsCompleted] = useState(0);
-  const [ratePerUnit, setRatePerUnit] = useState(0);
-  const [deductions, setDeductions] = useState(0);
-  const [remarks, setRemarks] = useState("");
+  isEditing,
+}: InnerFormProps) {
+  const [date, setDate] = useState(wage?.date ?? new Date().toISOString().split("T")[0]);
+  const [workerName, setWorkerName] = useState(wage?.workerName ?? "");
+  const [workerContact, setWorkerContact] = useState(wage?.workerContact ?? "");
+  const [workType, setWorkType] = useState(wage?.workType ?? "");
+  const [hoursWorked, setHoursWorked] = useState(wage?.hoursWorked ?? 8);
+  const [ratePerHour, setRatePerHour] = useState(wage?.ratePerHour ?? 50);
+  const [unitsCompleted, setUnitsCompleted] = useState(wage?.unitsCompleted ?? 0);
+  const [ratePerUnit, setRatePerUnit] = useState(wage?.ratePerUnit ?? 0);
+  const [deductions, setDeductions] = useState(wage?.deductions ?? 0);
+  const [remarks, setRemarks] = useState(wage?.remarks ?? "");
 
   const { grossAmount, netAmount } = useMemo(() => {
     const hourlyEarning = hoursWorked * ratePerHour;
@@ -49,34 +55,6 @@ export function DailyWageFormDialog({
     const net = gross - deductions;
     return { grossAmount: gross, netAmount: net };
   }, [hoursWorked, ratePerHour, unitsCompleted, ratePerUnit, deductions]);
-
-  useEffect(() => {
-    if (open) {
-      if (wage) {
-        setDate(wage.date);
-        setWorkerName(wage.workerName);
-        setWorkerContact(wage.workerContact || "");
-        setWorkType(wage.workType || "");
-        setHoursWorked(wage.hoursWorked || 8);
-        setRatePerHour(wage.ratePerHour || 0);
-        setUnitsCompleted(wage.unitsCompleted || 0);
-        setRatePerUnit(wage.ratePerUnit || 0);
-        setDeductions(wage.deductions || 0);
-        setRemarks(wage.remarks || "");
-      } else {
-        setDate(new Date().toISOString().split("T")[0]);
-        setWorkerName("");
-        setWorkerContact("");
-        setWorkType("");
-        setHoursWorked(8);
-        setRatePerHour(50);
-        setUnitsCompleted(0);
-        setRatePerUnit(0);
-        setDeductions(0);
-        setRemarks("");
-      }
-    }
-  }, [open, wage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,22 +75,9 @@ export function DailyWageFormDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Edit Daily Wage" : "Add Daily Wage"}
-          </DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Update daily wage entry"
-              : "Record daily wage for a worker"}
-          </DialogDescription>
-        </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Work Date</Label>
               <Input
                 id="date"
@@ -122,7 +87,7 @@ export function DailyWageFormDialog({
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="workerName">Worker Name</Label>
               <Input
                 id="workerName"
@@ -135,7 +100,7 @@ export function DailyWageFormDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="workType">Work Type</Label>
               <Input
                 id="workType"
@@ -144,7 +109,7 @@ export function DailyWageFormDialog({
                 placeholder="e.g., Loading, Unloading"
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="workerContact">Contact</Label>
               <Input
                 id="workerContact"
@@ -156,7 +121,7 @@ export function DailyWageFormDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="hoursWorked">Hours Worked</Label>
               <Input
                 id="hoursWorked"
@@ -165,7 +130,7 @@ export function DailyWageFormDialog({
                 onChange={(e) => setHoursWorked(Number(e.target.value))}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="ratePerHour">Rate Per Hour (₹)</Label>
               <Input
                 id="ratePerHour"
@@ -177,7 +142,7 @@ export function DailyWageFormDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="unitsCompleted">Units Completed</Label>
               <Input
                 id="unitsCompleted"
@@ -186,7 +151,7 @@ export function DailyWageFormDialog({
                 onChange={(e) => setUnitsCompleted(Number(e.target.value))}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="ratePerUnit">Rate Per Unit (₹)</Label>
               <Input
                 id="ratePerUnit"
@@ -197,7 +162,7 @@ export function DailyWageFormDialog({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="deductions">Deductions (₹)</Label>
             <Input
               id="deductions"
@@ -225,7 +190,7 @@ export function DailyWageFormDialog({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"
@@ -236,19 +201,54 @@ export function DailyWageFormDialog({
             />
           </div>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : isEditing ? "Update" : "Create"}
-            </Button>
-          </DialogFooter>
-        </form>
+      <DialogFooter>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Saving..." : isEditing ? "Update" : "Create"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
+export function DailyWageFormDialog({
+  open,
+  onOpenChange,
+  wage,
+  onSubmit,
+  isSubmitting,
+}: DailyWageFormDialogProps) {
+  const isEditing = !!wage;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            {isEditing ? "Edit Daily Wage" : "Add Daily Wage"}
+          </DialogTitle>
+          <DialogDescription>
+            {isEditing
+              ? "Update daily wage entry"
+              : "Record daily wage for a worker"}
+          </DialogDescription>
+        </DialogHeader>
+
+        {open && (
+          <DailyWageFormInner
+            wage={wage}
+            onSubmit={onSubmit}
+            onCancel={() => onOpenChange(false)}
+            isSubmitting={isSubmitting}
+            isEditing={isEditing}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

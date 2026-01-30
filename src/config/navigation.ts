@@ -18,7 +18,7 @@ export const mainNavItems: NavItem[] = [
   {
     id: "inventory",
     label: "Inventory",
-    icon: "warehouse",
+    icon: "boxes",
     children: [
       { id: "amad", label: "Amad (Receipts)", icon: "truck", to: "/inventory/amad" },
       { id: "nikasi", label: "Nikasi (Dispatch)", icon: "package-open", to: "/inventory/nikasi" },
@@ -26,7 +26,20 @@ export const mainNavItems: NavItem[] = [
       { id: "stock-transfer", label: "Stock Transfer", icon: "arrow-right-left", to: "/inventory/stock-transfer" },
     ],
   },
-  { id: "chambers", label: "Chambers", icon: "door-open", to: "/chambers" },
+  {
+    id: "warehouse",
+    label: "Warehouse",
+    icon: "warehouse",
+    children: [
+      { id: "room-map", label: "Room Map", icon: "map", to: "/warehouse/room-map" },
+      { id: "chambers", label: "Chambers", icon: "door-open", to: "/warehouse/chambers" },
+      { id: "loading", label: "Loading", icon: "package-plus", to: "/warehouse/loading" },
+      { id: "unloading", label: "Unloading", icon: "package-minus", to: "/warehouse/unloading" },
+      { id: "shifting", label: "Shifting", icon: "move", to: "/warehouse/shifting" },
+      { id: "temperature", label: "Temperature", icon: "thermometer", to: "/warehouse/temperature" },
+      { id: "meter-reading", label: "Meter Reading", icon: "gauge", to: "/warehouse/meter-reading" },
+    ],
+  },
   {
     id: "accounts",
     label: "Accounts",

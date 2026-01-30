@@ -39,7 +39,7 @@ export function LimitCheckCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="space-y-2">
+        <div className="space-y-4">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">
               Expected Bags: {expectedBags}

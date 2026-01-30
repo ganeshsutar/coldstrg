@@ -163,6 +163,13 @@ const AccountType = a.enum(["GROUP", "ACCOUNT"]);
 // Account nature enum (Debit or Credit)
 const AccountNature = a.enum(["DR", "CR"]);
 
+// Party type enum (classification for party accounts)
+const PartyType = a.enum([
+  "KISAN", "KISAN_D", "AARTI", "STAFF",
+  "LOADING_CONTRACTOR", "CHATAI_CONTRACTOR",
+  "MANDI", "FINANCER", "GUARANTOR", "OTHERS",
+]);
+
 // Voucher type enum
 const VoucherType = a.enum(["CR", "DR", "JV", "CV", "BH"]);
 
@@ -190,6 +197,7 @@ const schema = a.schema({
   ShiftingStatus,
   AccountType,
   AccountNature,
+  PartyType,
   VoucherType,
   PaymentMode,
   BardanaIssueType,
@@ -477,6 +485,7 @@ const schema = a.schema({
       organizationId: a.id().required(),
       amadNo: a.integer().required(),
       date: a.date().required(),
+      partyId: a.string(),
       partyName: a.string().required(),
       villageName: a.string(),
       post: a.string(),
@@ -521,6 +530,7 @@ const schema = a.schema({
       organizationId: a.id().required(),
       serialNo: a.integer().required(),
       date: a.date().required(),
+      partyId: a.string(),
       partyName: a.string().required(),
       amadId: a.string(),
       amadNo: a.integer(),
@@ -575,7 +585,9 @@ const schema = a.schema({
       date: a.date().required(),
       amadId: a.string(),
       amadNo: a.integer(),
+      fromPartyId: a.string(),
       fromPartyName: a.string(),
+      toPartyId: a.string(),
       toPartyName: a.string(),
       commodityName: a.string(),
       pkt1: a.integer().default(0),
@@ -642,6 +654,7 @@ const schema = a.schema({
       date: a.date().required(),
       amadId: a.id().required(),
       amadNo: a.integer(),
+      partyId: a.string(),
       partyName: a.string(),
       commodityName: a.string(),
       chamberId: a.id().required(),
@@ -674,6 +687,7 @@ const schema = a.schema({
       amadNo: a.integer(),
       rentId: a.id(),
       rentSerialNo: a.integer(),
+      partyId: a.string(),
       partyName: a.string(),
       commodityName: a.string(),
       chamberId: a.id().required(),
@@ -724,6 +738,7 @@ const schema = a.schema({
       shiftingHeaderId: a.id().required(),
       amadId: a.id().required(),
       amadNo: a.integer(),
+      partyId: a.string(),
       partyName: a.string(),
       commodityName: a.string(),
       fromChamberId: a.id().required(),
@@ -808,6 +823,7 @@ const schema = a.schema({
       parentId: a.string(),
       level: a.integer().default(0),
       under: a.string(),
+      partyType: a.ref("PartyType"),
       // Address fields
       address1: a.string(),
       address2: a.string(),

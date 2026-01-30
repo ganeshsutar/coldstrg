@@ -1,6 +1,7 @@
 import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../../../../amplify/data/resource";
 import type { Account, CreateAccountInput, UpdateAccountInput } from "../types";
+import { SEED_CHART_OF_ACCOUNTS } from "@/config/constants";
 
 const client = generateClient<Schema>();
 
@@ -94,4 +95,41 @@ export async function fetchChildAccounts(organizationId: string, parentId: strin
   return accounts.filter((a) =>
     parentId ? a.parentId === parentId : !a.parentId
   );
+}
+
+// Seed chart of accounts with hierarchical parent-child relationships
+export async function seedAccounts(organizationId: string): Promise<Account[]> {
+  const results: Account[] = [];
+  const codeToIdMap: Record<string, string> = {};
+
+  // Create accounts in order - the SEED_CHART_OF_ACCOUNTS array is ordered
+  // so that parent groups come before their children
+  for (const account of SEED_CHART_OF_ACCOUNTS) {
+    const under = "under" in account ? account.under : undefined;
+    const parentId = under ? codeToIdMap[under] : undefined;
+
+    const { data, errors } = await client.models.Account.create({
+      organizationId,
+      code: account.code,
+      name: account.name,
+      accountType: account.accountType,
+      nature: account.nature,
+      level: account.level,
+      under,
+      parentId,
+      isActive: true,
+    });
+
+    if (errors && errors.length > 0) {
+      console.error(`Failed to seed account ${account.name}:`, errors[0].message);
+      continue;
+    }
+
+    if (data) {
+      codeToIdMap[account.code] = data.id;
+      results.push(data as unknown as Account);
+    }
+  }
+
+  return results;
 }

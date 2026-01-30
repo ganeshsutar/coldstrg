@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useOrganization } from "@/features/organizations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,104 @@ import {
 import { formatCurrency } from "../../utils";
 import type { PayPost } from "../../types";
 
+interface PositionFormProps {
+  position: PayPost | null;
+  onSubmit: (data: { name: string; code: string; basicSalary: number; casualLeave: number; sickLeave: number; earnedLeave: number }) => void;
+  onCancel: () => void;
+  isPending: boolean;
+}
+
+function PositionForm({ position, onSubmit, onCancel, isPending }: PositionFormProps) {
+  const [name, setName] = useState(position?.name ?? "");
+  const [code, setCode] = useState(position?.code ?? "");
+  const [basicSalary, setBasicSalary] = useState(position?.basicSalary ?? 0);
+  const [casualLeave, setCasualLeave] = useState(position?.casualLeave ?? 12);
+  const [sickLeave, setSickLeave] = useState(position?.sickLeave ?? 6);
+  const [earnedLeave, setEarnedLeave] = useState(position?.earnedLeave ?? 15);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !code) return;
+    onSubmit({ name, code, basicSalary, casualLeave, sickLeave, earnedLeave });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="code">Code</Label>
+          <Input
+            id="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="e.g., MGR"
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">Position Name</Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g., Manager"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="basicSalary">Basic Salary</Label>
+        <Input
+          id="basicSalary"
+          type="number"
+          value={basicSalary}
+          onChange={(e) => setBasicSalary(Number(e.target.value))}
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="casualLeave">Casual Leave</Label>
+          <Input
+            id="casualLeave"
+            type="number"
+            value={casualLeave}
+            onChange={(e) => setCasualLeave(Number(e.target.value))}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="sickLeave">Sick Leave</Label>
+          <Input
+            id="sickLeave"
+            type="number"
+            value={sickLeave}
+            onChange={(e) => setSickLeave(Number(e.target.value))}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="earnedLeave">Earned Leave</Label>
+          <Input
+            id="earnedLeave"
+            type="number"
+            value={earnedLeave}
+            onChange={(e) => setEarnedLeave(Number(e.target.value))}
+          />
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Saving..." : position ? "Update" : "Create"}
+        </Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
 export function PositionsTab() {
   const { currentOrganization } = useOrganization();
   const organizationId = currentOrganization?.id;
@@ -42,14 +140,6 @@ export function PositionsTab() {
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<PayPost | null>(null);
-
-  // Form state
-  const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const [basicSalary, setBasicSalary] = useState(0);
-  const [casualLeave, setCasualLeave] = useState(12);
-  const [sickLeave, setSickLeave] = useState(6);
-  const [earnedLeave, setEarnedLeave] = useState(15);
 
   const { data: positions = [] } = usePayPostList(organizationId);
   const createMutation = useCreatePayPost();
@@ -66,30 +156,6 @@ export function PositionsTab() {
     );
   }, [positions, searchQuery]);
 
-  const resetForm = () => {
-    setName("");
-    setCode("");
-    setBasicSalary(0);
-    setCasualLeave(12);
-    setSickLeave(6);
-    setEarnedLeave(15);
-  };
-
-  useEffect(() => {
-    if (formDialogOpen) {
-      if (selectedPosition) {
-        setName(selectedPosition.name);
-        setCode(selectedPosition.code);
-        setBasicSalary(selectedPosition.basicSalary);
-        setCasualLeave(selectedPosition.casualLeave || 12);
-        setSickLeave(selectedPosition.sickLeave || 6);
-        setEarnedLeave(selectedPosition.earnedLeave || 15);
-      } else {
-        resetForm();
-      }
-    }
-  }, [formDialogOpen, selectedPosition]);
-
   const handleAdd = () => {
     setSelectedPosition(null);
     setFormDialogOpen(true);
@@ -105,31 +171,20 @@ export function PositionsTab() {
     setDeleteDialogOpen(true);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!organizationId || !name || !code) return;
+  const handleFormSubmit = async (data: { name: string; code: string; basicSalary: number; casualLeave: number; sickLeave: number; earnedLeave: number }) => {
+    if (!organizationId) return;
 
     try {
       if (selectedPosition) {
         await updateMutation.mutateAsync({
           id: selectedPosition.id,
-          name,
-          code,
-          basicSalary,
-          casualLeave,
-          sickLeave,
-          earnedLeave,
+          ...data,
         });
         console.log("Position updated successfully");
       } else {
         await createMutation.mutateAsync({
           organizationId,
-          name,
-          code,
-          basicSalary,
-          casualLeave,
-          sickLeave,
-          earnedLeave,
+          ...data,
         });
         console.log("Position created successfully");
       }
@@ -245,90 +300,14 @@ export function PositionsTab() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="code">Code</Label>
-                <Input
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="e.g., MGR"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name">Position Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Manager"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="basicSalary">Basic Salary</Label>
-              <Input
-                id="basicSalary"
-                type="number"
-                value={basicSalary}
-                onChange={(e) => setBasicSalary(Number(e.target.value))}
-              />
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="casualLeave">Casual Leave</Label>
-                <Input
-                  id="casualLeave"
-                  type="number"
-                  value={casualLeave}
-                  onChange={(e) => setCasualLeave(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="sickLeave">Sick Leave</Label>
-                <Input
-                  id="sickLeave"
-                  type="number"
-                  value={sickLeave}
-                  onChange={(e) => setSickLeave(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="earnedLeave">Earned Leave</Label>
-                <Input
-                  id="earnedLeave"
-                  type="number"
-                  value={earnedLeave}
-                  onChange={(e) => setEarnedLeave(Number(e.target.value))}
-                />
-              </div>
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setFormDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={createMutation.isPending || updateMutation.isPending}
-              >
-                {createMutation.isPending || updateMutation.isPending
-                  ? "Saving..."
-                  : selectedPosition
-                    ? "Update"
-                    : "Create"}
-              </Button>
-            </DialogFooter>
-          </form>
+          {formDialogOpen && (
+            <PositionForm
+              position={selectedPosition}
+              onSubmit={handleFormSubmit}
+              onCancel={() => setFormDialogOpen(false)}
+              isPending={createMutation.isPending || updateMutation.isPending}
+            />
+          )}
         </DialogContent>
       </Dialog>
 

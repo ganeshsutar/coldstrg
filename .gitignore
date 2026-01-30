@@ -2,6 +2,7 @@
 site/
 docs/_site/
 docs/
+.playwright-mcp/
 
 
 # Python

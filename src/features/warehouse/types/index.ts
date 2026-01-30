@@ -93,6 +93,7 @@ export interface Loading {
   date: string;
   amadId: string;
   amadNo?: number | null;
+  partyId?: string | null;
   partyName?: string | null;
   commodityName?: string | null;
   chamberId: string;
@@ -117,6 +118,7 @@ export interface CreateLoadingInput {
   date: string;
   amadId: string;
   amadNo?: number;
+  partyId?: string;
   partyName?: string;
   commodityName?: string;
   chamberId: string;
@@ -147,6 +149,7 @@ export interface Unloading {
   amadNo?: number | null;
   rentId?: string | null;
   rentSerialNo?: number | null;
+  partyId?: string | null;
   partyName?: string | null;
   commodityName?: string | null;
   chamberId: string;
@@ -173,6 +176,7 @@ export interface CreateUnloadingInput {
   amadNo?: number;
   rentId?: string;
   rentSerialNo?: number;
+  partyId?: string;
   partyName?: string;
   commodityName?: string;
   chamberId: string;
@@ -242,6 +246,7 @@ export interface Shifting {
   shiftingHeaderId: string;
   amadId: string;
   amadNo?: number | null;
+  partyId?: string | null;
   partyName?: string | null;
   commodityName?: string | null;
   fromChamberId: string;
@@ -266,6 +271,7 @@ export interface CreateShiftingInput {
   shiftingHeaderId: string;
   amadId: string;
   amadNo?: number;
+  partyId?: string;
   partyName?: string;
   commodityName?: string;
   fromChamberId: string;

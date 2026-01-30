@@ -112,7 +112,7 @@ export function MeterReadingDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="chamber">Chamber (Optional)</Label>
             <Select value={chamberId} onValueChange={setChamberId}>
               <SelectTrigger>
@@ -129,7 +129,7 @@ export function MeterReadingDialog({
             </Select>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="meterNumber">Meter Number</Label>
             <Input
               id="meterNumber"
@@ -140,7 +140,7 @@ export function MeterReadingDialog({
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -149,7 +149,7 @@ export function MeterReadingDialog({
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="time">Time</Label>
               <Input
                 id="time"
@@ -165,7 +165,7 @@ export function MeterReadingDialog({
             <div className="text-lg font-medium">{previousReading.toFixed(2)} kWh</div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="currentReading">Current Reading (kWh)</Label>
             <Input
               id="currentReading"
@@ -186,7 +186,7 @@ export function MeterReadingDialog({
             </div>
           )}
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="recordedBy">Recorded By</Label>
             <Input
               id="recordedBy"
@@ -195,7 +195,7 @@ export function MeterReadingDialog({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
               id="remarks"

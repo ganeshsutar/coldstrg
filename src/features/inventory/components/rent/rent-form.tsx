@@ -59,6 +59,7 @@ export function RentForm({
   const [date, setDate] = useState(
     rent?.date ?? new Date().toISOString().split("T")[0]
   );
+  const [partyId, setPartyId] = useState(rent?.partyId ?? "");
   const [partyName, setPartyName] = useState(rent?.partyName ?? "");
   const [amadId, setAmadId] = useState(rent?.amadId ?? "");
   const [amadNo, setAmadNo] = useState(rent?.amadNo?.toString() ?? "");
@@ -119,6 +120,10 @@ export function RentForm({
     setAmadId(id);
     const selectedAmad = amadList.find((a) => a.id === id);
     if (selectedAmad) {
+      // Capture partyId from selected Amad if available
+      if (selectedAmad.partyId) {
+        setPartyId(selectedAmad.partyId);
+      }
       setPartyName(selectedAmad.partyName);
       setAmadNo(String(selectedAmad.amadNo));
       if (selectedAmad.rentRate) {
@@ -133,7 +138,8 @@ export function RentForm({
     }
   }
 
-  function handleSubmit() {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
     const input: CreateRentInput & { id?: string } = {
       organizationId,
       serialNo,
@@ -143,6 +149,7 @@ export function RentForm({
       rent: rentAmount,
       billAmount,
       ...(isEdit && { id: rent!.id }),
+      ...(partyId && { partyId }),
       ...(amadId && { amadId }),
       ...(amadNo && { amadNo: parseInt(amadNo, 10) }),
       ...(receiverName && { receiverName }),
@@ -164,7 +171,7 @@ export function RentForm({
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <DialogHeader>
         <DialogTitle>
           {isEdit ? "Edit Dispatch" : "New Dispatch (Nikasi)"}
@@ -189,11 +196,11 @@ export function RentForm({
       {currentStep === 1 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="serialNo">Serial No</Label>
               <Input id="serialNo" type="number" value={serialNo} disabled />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
               <Input
                 id="date"
@@ -203,7 +210,7 @@ export function RentForm({
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="amad">Select Amad</Label>
               <Select value={amadId} onValueChange={handleAmadSelect}>
                 <SelectTrigger className="w-full">
@@ -220,7 +227,7 @@ export function RentForm({
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="partyName">Party Name</Label>
               <Input
                 id="partyName"
@@ -229,7 +236,7 @@ export function RentForm({
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="receiverName">Receiver Name</Label>
               <Input
                 id="receiverName"
@@ -237,7 +244,7 @@ export function RentForm({
                 onChange={(e) => setReceiverName(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="vehicleNo">Vehicle No</Label>
               <Input
                 id="vehicleNo"
@@ -253,7 +260,7 @@ export function RentForm({
       {currentStep === 2 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT1</Label>
               <Input
                 type="number"
@@ -261,7 +268,7 @@ export function RentForm({
                 onChange={(e) => setPkt1(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT2</Label>
               <Input
                 type="number"
@@ -269,7 +276,7 @@ export function RentForm({
                 onChange={(e) => setPkt2(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>PKT3</Label>
               <Input
                 type="number"
@@ -289,7 +296,7 @@ export function RentForm({
       {currentStep === 3 && (
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Storage Days</Label>
               <Input
                 type="number"
@@ -297,7 +304,7 @@ export function RentForm({
                 onChange={(e) => setStorageDays(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Rate</Label>
               <Input
                 type="number"
@@ -306,7 +313,7 @@ export function RentForm({
                 onChange={(e) => setRate(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Rent Amount</Label>
               <Input
                 type="number"
@@ -317,7 +324,7 @@ export function RentForm({
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Loading Amt</Label>
               <Input
                 type="number"
@@ -326,7 +333,7 @@ export function RentForm({
                 onChange={(e) => setLoadingAmt(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Unloading Amt</Label>
               <Input
                 type="number"
@@ -335,7 +342,7 @@ export function RentForm({
                 onChange={(e) => setUnloadingAmt(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>Dumping Amt</Label>
               <Input
                 type="number"
@@ -346,7 +353,7 @@ export function RentForm({
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>CGST</Label>
               <Input
                 type="number"
@@ -355,7 +362,7 @@ export function RentForm({
                 onChange={(e) => setCgst(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>SGST</Label>
               <Input
                 type="number"
@@ -364,7 +371,7 @@ export function RentForm({
                 onChange={(e) => setSgst(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label>IGST</Label>
               <Input
                 type="number"
@@ -412,8 +419,7 @@ export function RentForm({
             </Button>
           ) : (
             <Button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               disabled={isPending || !partyName || !date}
             >
               {isPending ? "Saving..." : isEdit ? "Update" : "Create"}
@@ -421,6 +427,6 @@ export function RentForm({
           )}
         </div>
       </DialogFooter>
-    </>
+    </form>
   );
 }

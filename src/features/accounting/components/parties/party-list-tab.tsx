@@ -198,6 +198,7 @@ export function PartyListTab() {
           account={editingAccount}
           nextCode={nextCode}
           organizationId={organizationId}
+          accounts={accounts}
           onSave={handleSave}
           isPending={createMutation.isPending || updateMutation.isPending}
         />

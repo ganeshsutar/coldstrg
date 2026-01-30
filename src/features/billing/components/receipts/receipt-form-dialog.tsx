@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,7 +39,6 @@ interface ReceiptFormDialogProps {
   organizationId: string;
   nextReceiptNo: string;
   preselectedPartyId?: string;
-  preselectedBillId?: string; // Reserved for future use
   onSave: (formInput: ReceiptFormInput) => void;
   isPending?: boolean;
 }
@@ -50,7 +49,6 @@ export function ReceiptFormDialog({
   organizationId,
   nextReceiptNo,
   preselectedPartyId,
-  preselectedBillId: _preselectedBillId,
   onSave,
   isPending,
 }: ReceiptFormDialogProps) {
@@ -87,17 +85,10 @@ export function ReceiptFormDialog({
   const { data: unpaidBills = [] } = useUnpaidBillsByParty(organizationId, partyId);
   const { data: outstanding = 0 } = usePartyOutstanding(organizationId, partyId);
 
-  // Reset form when party changes
-  useEffect(() => {
-    if (preselectedPartyId) {
-      setPartyId(preselectedPartyId);
-    }
-  }, [preselectedPartyId]);
-
-  // Auto-allocate when amount changes
-  useEffect(() => {
-    if (!autoAdjust || amount <= 0 || unpaidBills.length === 0) {
-      return;
+  // Compute auto allocations based on amount and unpaidBills
+  const autoAllocations = useMemo(() => {
+    if (amount <= 0 || unpaidBills.length === 0) {
+      return new Map<string, { billNo: string; allocated: number; balance: number }>();
     }
 
     let remaining = amount;
@@ -125,8 +116,11 @@ export function ReceiptFormDialog({
       }
     }
 
-    setAllocations(newAllocations);
-  }, [amount, unpaidBills, autoAdjust]);
+    return newAllocations;
+  }, [amount, unpaidBills]);
+
+  // Use auto allocations for auto-adjust mode, otherwise use manual allocations
+  const effectiveAllocations = autoAdjust ? autoAllocations : allocations;
 
   // Filter parties (accounts with type ACCOUNT)
   const parties = useMemo(
@@ -139,11 +133,11 @@ export function ReceiptFormDialog({
   // Total allocated
   const totalAllocated = useMemo(() => {
     let total = 0;
-    allocations.forEach((a) => {
+    effectiveAllocations.forEach((a) => {
       total += a.allocated;
     });
     return total;
-  }, [allocations]);
+  }, [effectiveAllocations]);
 
   function updateAllocation(billId: string, bill: RentBillHeader, allocated: number) {
     const newAllocations = new Map(allocations);
@@ -176,7 +170,7 @@ export function ReceiptFormDialog({
       upiRef: paymentMode === "UPI" ? upiRef : undefined,
       bankRef: paymentMode === "BANK" ? bankRef : undefined,
       narration,
-      allocations: Array.from(allocations.entries()).map(([rentBillId, a]) => ({
+      allocations: Array.from(effectiveAllocations.entries()).map(([rentBillId, a]) => ({
         rentBillId,
         billNo: a.billNo,
         allocatedAmount: a.allocated,
@@ -343,7 +337,7 @@ export function ReceiptFormDialog({
 
           {/* Bill Adjustment */}
           {partyId && unpaidBills.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label>Bill Adjustment</Label>
                 <div className="flex items-center space-x-2">
@@ -373,7 +367,7 @@ export function ReceiptFormDialog({
                   </TableHeader>
                   <TableBody>
                     {unpaidBills.map((bill) => {
-                      const allocation = allocations.get(bill.id);
+                      const allocation = effectiveAllocations.get(bill.id);
                       return (
                         <TableRow key={bill.id}>
                           <TableCell className="font-medium">

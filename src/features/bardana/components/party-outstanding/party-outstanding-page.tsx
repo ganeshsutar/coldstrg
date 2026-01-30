@@ -184,7 +184,7 @@ export function PartyOutstandingPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-4">
           {filtered.map((party) => (
             <Collapsible
               key={party.partyId}

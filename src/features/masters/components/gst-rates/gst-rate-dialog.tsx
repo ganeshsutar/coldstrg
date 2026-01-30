@@ -117,7 +117,7 @@ function GstRateForm({
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="gCgst">CGST %</Label>
             <Input
               id="gCgst"
@@ -128,7 +128,7 @@ function GstRateForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="gSgst">SGST %</Label>
             <Input
               id="gSgst"
@@ -139,7 +139,7 @@ function GstRateForm({
               required
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="gIgst">IGST %</Label>
             <Input
               id="gIgst"
@@ -152,7 +152,7 @@ function GstRateForm({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="gHsn">HSN Code</Label>
             <Input
               id="gHsn"
@@ -160,7 +160,7 @@ function GstRateForm({
               onChange={(e) => setHsnCode(e.target.value)}
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <Label htmlFor="gDate">Effective Date</Label>
             <Input
               id="gDate"
@@ -172,7 +172,7 @@ function GstRateForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="gDesc">Description</Label>
           <Input
             id="gDesc"
@@ -181,7 +181,7 @@ function GstRateForm({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="gStatus">Status</Label>
           <Select
             value={isActive ? "active" : "inactive"}

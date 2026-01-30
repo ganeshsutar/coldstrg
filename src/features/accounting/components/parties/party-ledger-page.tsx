@@ -32,9 +32,11 @@ export function PartyLedgerPage() {
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
   const [nextCode, setNextCode] = useState("P0001");
 
-  // Get only party accounts (not groups)
+  // Get only party accounts (accounts with partyType set, not system accounts)
   const partyAccounts = useMemo(() => {
-    return accounts.filter((a) => a.accountType === "ACCOUNT" && a.isActive !== false);
+    return accounts.filter(
+      (a) => a.accountType === "ACCOUNT" && a.partyType && a.isActive !== false
+    );
   }, [accounts]);
 
   useEffect(() => {
@@ -198,6 +200,7 @@ export function PartyLedgerPage() {
           account={editingAccount}
           nextCode={nextCode}
           organizationId={organizationId}
+          accounts={accounts}
           onSave={handleSave}
           isPending={createMutation.isPending || updateMutation.isPending}
         />

@@ -183,14 +183,14 @@ function KataiFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Katai Number</Label>
                 <Input
                   value={formatKataiNo(katai?.kataiNo ?? nextKataiNo)}
                   disabled
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="kataiDate">Date *</Label>
                 <Input
                   id="kataiDate"
@@ -210,7 +210,7 @@ function KataiFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Party *</Label>
                 <Select
                   value={partyId}
@@ -231,7 +231,7 @@ function KataiFormContent({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Amad *</Label>
                 <Select
                   value={amadId}
@@ -272,7 +272,7 @@ function KataiFormContent({
               </div>
             )}
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="bagsGraded">Bags to Grade *</Label>
               <Input
                 id="bagsGraded"
@@ -316,7 +316,7 @@ function KataiFormContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="laborName">Labor Name</Label>
                 <Input
                   id="laborName"
@@ -325,7 +325,7 @@ function KataiFormContent({
                   placeholder="Worker name"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="laborRate">Rate per Bag (₹)</Label>
                 <Input
                   id="laborRate"
@@ -336,7 +336,7 @@ function KataiFormContent({
                   onChange={(e) => setLaborRate(parseFloat(e.target.value) || 0)}
                 />
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>Total Charges</Label>
                 <Input
                   value={formatCurrency(charges)}
@@ -349,7 +349,7 @@ function KataiFormContent({
         </Card>
 
         {/* Remarks */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="remarks">Remarks</Label>
           <Textarea
             id="remarks"
