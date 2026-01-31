@@ -76,8 +76,8 @@ export function StockKpiCards({
   }, [bardanaTypes, stockRecords, issues, receipts]);
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+    <div data-testid="bardana-kpi-cards" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <Card data-testid="bardana-kpi-total-stock" className="@container/card bg-gradient-to-t from-primary/5 to-card">
         <CardHeader className="relative">
           <CardDescription>Total Stock</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -92,7 +92,7 @@ export function StockKpiCards({
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card data-testid="bardana-kpi-issued-today" className="@container/card bg-gradient-to-t from-primary/5 to-card">
         <CardHeader className="relative">
           <CardDescription>Issued Today</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -107,7 +107,7 @@ export function StockKpiCards({
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card data-testid="bardana-kpi-outstanding" className="@container/card bg-gradient-to-t from-primary/5 to-card">
         <CardHeader className="relative">
           <CardDescription>Outstanding</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -122,7 +122,7 @@ export function StockKpiCards({
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card data-testid="bardana-kpi-returns-pending" className="@container/card bg-gradient-to-t from-primary/5 to-card">
         <CardHeader className="relative">
           <CardDescription>Returns Pending</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">

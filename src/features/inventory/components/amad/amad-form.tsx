@@ -15,9 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PartySelect } from "@/components/shared/party-select";
 import { useCommodities } from "@/features/masters";
-import { useAccountList } from "@/features/accounting/hooks/use-accounts";
 import { useChambers, useChamberFloorsByChamberId } from "@/features/warehouse";
+import type { Account } from "@/features/accounting/types";
 import type { Amad, CreateAmadInput } from "../../types";
 
 interface AmadFormProps {
@@ -46,18 +47,11 @@ export function AmadForm({
 }: AmadFormProps) {
   const isEdit = !!amad;
   const { data: commodities = [] } = useCommodities(organizationId);
-  const { data: accounts = [] } = useAccountList(organizationId);
   const { data: chambers = [] } = useChambers(organizationId);
 
   // Local state for chamber selection (used to fetch floors)
   const [selectedChamberId, setSelectedChamberId] = useState(amad?.chamberId ?? "");
   const { data: chamberFloors = [] } = useChamberFloorsByChamberId(selectedChamberId || undefined);
-
-  // Filter to party accounts only (type ACCOUNT)
-  const partyAccounts = useMemo(
-    () => accounts.filter((a) => a.accountType === "ACCOUNT"),
-    [accounts]
-  );
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -122,9 +116,8 @@ export function AmadForm({
     );
   }, [pwt1, pwt2, pwt3]);
 
-  function handlePartyChange(id: string) {
+  function handlePartyChange(id: string, party: Account | undefined) {
     setPartyId(id);
-    const party = partyAccounts.find((a) => a.id === id);
     if (party) {
       setPartyName(party.name);
       // Auto-fill village from party's city field
@@ -172,6 +165,7 @@ export function AmadForm({
       partyName,
       totalPackets,
       totalWeight,
+      ...(!isEdit && { status: "IN_STOCK" }),
       ...(isEdit && { id: amad!.id }),
       ...(partyId && { partyId }),
       ...(villageName && { villageName }),
@@ -252,18 +246,12 @@ export function AmadForm({
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="partyName">Party Name</Label>
-                <Select value={partyId} onValueChange={handlePartyChange}>
-                  <SelectTrigger data-testid="amad-form-party-select">
-                    <SelectValue placeholder="Select party" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {partyAccounts.map((account) => (
-                      <SelectItem key={account.id} value={account.id}>
-                        {account.name} ({account.code})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <PartySelect
+                  organizationId={organizationId}
+                  value={partyId}
+                  onValueChange={handlePartyChange}
+                  data-testid="amad-form-party-select"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="villageName">Village</Label>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { LoginForm, checkAuth, useAuth } from "@/features/auth";
+import { AuthLoadingSkeleton } from "@/components/loading";
 
 export const Route = createFileRoute("/login")({
   beforeLoad: ({ context }) => {
@@ -37,11 +38,7 @@ function LoginPage() {
 
   // Show loading while checking auth
   if (isAuthenticated === null) {
-    return (
-      <div className="flex min-h-svh w-full items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <AuthLoadingSkeleton />;
   }
 
   // Already authenticated, will redirect via useEffect

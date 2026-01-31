@@ -215,6 +215,7 @@ function IssueFormContent({
                 <Label htmlFor="issueDate">Date *</Label>
                 <Input
                   id="issueDate"
+                  data-testid="bardana-issue-form-date-input"
                   type="date"
                   value={issueDate}
                   onChange={(e) => setIssueDate(e.target.value)}
@@ -225,7 +226,7 @@ function IssueFormContent({
             <div className="flex flex-col gap-2">
               <Label>Party *</Label>
               <Select value={partyId} onValueChange={setPartyId}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="bardana-issue-form-party-select">
                   <SelectValue placeholder="Select party" />
                 </SelectTrigger>
                 <SelectContent>
@@ -254,8 +255,8 @@ function IssueFormContent({
                 }
                 className="justify-start"
               >
-                <ToggleGroupItem value="REGULAR">Regular</ToggleGroupItem>
-                <ToggleGroupItem value="ADVANCE">
+                <ToggleGroupItem data-testid="bardana-issue-form-type-regular" value="REGULAR">Regular</ToggleGroupItem>
+                <ToggleGroupItem data-testid="bardana-issue-form-type-advance" value="ADVANCE">
                   Advance (with Interest)
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -282,7 +283,7 @@ function IssueFormContent({
         <Card>
           <CardHeader className="pb-3 flex flex-row items-center justify-between">
             <CardTitle className="text-base">Items</CardTitle>
-            <Button size="sm" variant="outline" onClick={addItem}>
+            <Button data-testid="bardana-issue-form-add-item-button" size="sm" variant="outline" onClick={addItem}>
               <Plus className="h-4 w-4 mr-1" />
               Add Item
             </Button>
@@ -394,6 +395,7 @@ function IssueFormContent({
           <Label htmlFor="narration">Narration</Label>
           <Textarea
             id="narration"
+            data-testid="bardana-issue-form-narration-input"
             placeholder="Additional notes..."
             rows={2}
             value={narration}
@@ -403,10 +405,11 @@ function IssueFormContent({
       </div>
 
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel}>
+        <Button data-testid="bardana-issue-form-cancel-button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
         <Button
+          data-testid="bardana-issue-form-submit-button"
           onClick={handleSubmit}
           disabled={isPending || !partyId || items.length === 0}
         >
@@ -431,7 +434,7 @@ export function IssueFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent data-testid="bardana-issue-form-dialog" className="max-w-3xl max-h-[90vh] overflow-y-auto">
         {open && (
           <IssueFormContent
             key={formKey}

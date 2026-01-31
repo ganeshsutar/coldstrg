@@ -78,20 +78,20 @@ export function RecentTransactionsTable({
   }, [issues, receipts]);
 
   return (
-    <Card>
+    <Card data-testid="bardana-recent-transactions">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-base font-medium">
           Recent Transactions
         </CardTitle>
         <div className="flex gap-2">
           {onViewAll && (
-            <Button variant="ghost" size="sm" onClick={onViewAll}>
+            <Button data-testid="bardana-view-all-button" variant="ghost" size="sm" onClick={onViewAll}>
               View All
               <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Button>
           )}
           {onNewIssue && (
-            <Button size="sm" onClick={onNewIssue}>
+            <Button data-testid="bardana-new-issue-button" size="sm" onClick={onNewIssue}>
               + Issue
             </Button>
           )}
@@ -104,7 +104,7 @@ export function RecentTransactionsTable({
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table data-testid="bardana-recent-transactions-table" className="w-full text-sm">
               <thead>
                 <tr className="border-b">
                   <th className="py-2 text-left font-medium text-muted-foreground">

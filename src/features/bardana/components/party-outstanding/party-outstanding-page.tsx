@@ -124,7 +124,7 @@ export function PartyOutstandingPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div data-testid="bardana-outstanding-page" className="flex flex-col gap-4 md:gap-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -138,10 +138,10 @@ export function PartyOutstandingPage() {
       </div>
 
       {/* Summary Card */}
-      <Card>
+      <Card data-testid="bardana-outstanding-summary-card">
         <CardContent className="py-4">
           <div className="flex flex-wrap gap-6">
-            <div>
+            <div data-testid="bardana-outstanding-total-bags">
               <div className="text-sm text-muted-foreground">
                 Total Outstanding
               </div>
@@ -149,13 +149,13 @@ export function PartyOutstandingPage() {
                 {formatNumber(totals.totalBags)} bags
               </div>
             </div>
-            <div>
+            <div data-testid="bardana-outstanding-total-value">
               <div className="text-sm text-muted-foreground">Total Value</div>
               <div className="text-2xl font-semibold">
                 {formatCurrency(totals.totalValue)}
               </div>
             </div>
-            <div>
+            <div data-testid="bardana-outstanding-parties-count">
               <div className="text-sm text-muted-foreground">Parties</div>
               <div className="text-2xl font-semibold">
                 {partyOutstandings.length}
@@ -169,6 +169,7 @@ export function PartyOutstandingPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
+          data-testid="bardana-outstanding-search-input"
           placeholder="Search by party or village..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -184,14 +185,14 @@ export function PartyOutstandingPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div data-testid="bardana-outstanding-party-list" className="space-y-4">
           {filtered.map((party) => (
             <Collapsible
               key={party.partyId}
               open={expandedParties.has(party.partyId)}
               onOpenChange={() => toggleParty(party.partyId)}
             >
-              <Card>
+              <Card data-testid={`bardana-outstanding-party-card-${party.partyId}`}>
                 <CollapsibleTrigger asChild>
                   <CardHeader className="cursor-pointer hover:bg-muted/50 py-3">
                     <div className="flex items-center justify-between">
@@ -308,6 +309,7 @@ export function PartyOutstandingPage() {
                     {/* Quick Actions */}
                     <div className="flex gap-2">
                       <Button
+                        data-testid={`bardana-outstanding-record-return-button-${party.partyId}`}
                         variant="outline"
                         size="sm"
                         onClick={handleRecordReturn}
@@ -316,6 +318,7 @@ export function PartyOutstandingPage() {
                         Record Return
                       </Button>
                       <Button
+                        data-testid={`bardana-outstanding-issue-more-button-${party.partyId}`}
                         variant="outline"
                         size="sm"
                         onClick={handleIssueMore}

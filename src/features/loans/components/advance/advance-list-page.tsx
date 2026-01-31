@@ -12,6 +12,8 @@ import {
 } from "../../hooks/use-advances";
 import { getAdvanceColumns } from "./advance-columns";
 import { AdvanceFormDialog } from "./advance-form-dialog";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Advance } from "../../types";
 
 type FilterTab = "all" | "pending" | "converted" | "closed";
@@ -107,8 +109,16 @@ export function AdvanceListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading advances...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        {/* Tabs skeleton */}
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }

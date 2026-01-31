@@ -5,6 +5,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { Badge } from "@/components/ui/badge";
 import { SHIFTING_STATUS_COLORS } from "@/config/constants";
 import { useShiftingHeaders } from "../../hooks/use-shifting";
+import { TableSkeleton } from "@/components/loading";
 import type { ShiftingHeader } from "../../types";
 
 interface ShiftingListProps {
@@ -69,11 +70,7 @@ export function ShiftingList({ organizationId }: ShiftingListProps) {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <TableSkeleton columns={8} rows={6} />;
   }
 
   return <DataTable columns={columns} data={sortedShiftings} />;

@@ -15,6 +15,8 @@ import {
 } from "../../hooks";
 import { getSaudaColumns } from "./sauda-columns";
 import { SaudaFormDialog } from "./sauda-form-dialog";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Sauda } from "../../types";
 import { formatCurrency, formatNumber } from "../../utils";
 
@@ -122,8 +124,21 @@ export function SaudaListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading deals...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={7} rows={8} />
       </div>
     );
   }

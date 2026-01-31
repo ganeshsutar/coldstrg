@@ -8,6 +8,7 @@ import { LoanKpiCards } from "./loan-kpi-cards";
 import { LoanListTable } from "./loan-list-table";
 import { AdvanceFormDialog } from "../advance/advance-form-dialog";
 import { LagFormDialog } from "../loan-against-goods/lag-form-dialog";
+import { PageHeaderSkeleton, MetricCardSkeleton, TableSkeleton } from "@/components/loading";
 import type { Advance, LoanAmount } from "../../types";
 
 export function LoanDashboardPage() {
@@ -40,8 +41,16 @@ export function LoanDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading loan data...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        {/* KPI Cards skeleton */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }

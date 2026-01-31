@@ -15,6 +15,8 @@ import { getNextAccountCode } from "../../api/accounts";
 import { PartyKpiCards } from "./party-kpi-cards";
 import { getPartyColumns } from "./party-columns";
 import { PartyFormDialog } from "./party-form-dialog";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Account, PartyFilterTab, CreateAccountInput } from "../../types";
 
 export function PartyLedgerPage() {
@@ -130,8 +132,21 @@ export function PartyLedgerPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading party records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }

@@ -13,6 +13,8 @@ import { DataTable } from "@/components/shared/data-table";
 import { getAuditLogColumns } from "./audit-log-columns";
 import { useAuditLogs } from "../../hooks/use-audit-log";
 import { AUDIT_ACTIONS } from "@/config/constants";
+import { SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { AuditLogEntry } from "../../types";
 
 interface AuditLogTabProps {
@@ -106,8 +108,20 @@ export function AuditLogTab({ organizationId }: AuditLogTabProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading audit logs...</div>
+      <div className="space-y-4">
+        {/* Filter bar skeleton */}
+        <div className="flex flex-wrap items-center gap-3">
+          <SearchSkeleton />
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-9 w-[150px]" />
+            <Skeleton className="h-4 w-4" />
+            <Skeleton className="h-9 w-[150px]" />
+          </div>
+          <Skeleton className="h-9 w-[130px]" />
+          <Skeleton className="h-9 w-[130px]" />
+          <Skeleton className="h-8 w-24" />
+        </div>
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }

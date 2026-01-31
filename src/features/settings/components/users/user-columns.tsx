@@ -12,13 +12,16 @@ interface UserColumnsOptions {
 export function getUserColumns({ onEdit }: UserColumnsOptions): ColumnDef<OrganizationMembership>[] {
   return [
     {
-      accessorKey: "userId",
-      header: "User ID",
-      cell: ({ row }) => (
-        <span className="font-mono text-xs truncate max-w-[120px] block">
-          {row.getValue("userId")}
-        </span>
-      ),
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => {
+        const email = row.getValue("email") as string | null;
+        return (
+          <span className="text-sm">
+            {email || "—"}
+          </span>
+        );
+      },
     },
     {
       accessorKey: "role",

@@ -18,6 +18,7 @@ import {
   useDeleteChamberFloor,
 } from "../../hooks/use-chamber-floors";
 import { getNextChamberCode, getNextRoomNumber } from "../../api/chambers";
+import { SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { Chamber, CreateChamberInput, CreateChamberFloorInput } from "../../types";
 
 interface ChambersTabProps {
@@ -132,8 +133,11 @@ export function ChambersTab({ organizationId }: ChambersTabProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading chambers...</div>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <SearchSkeleton />
+        </div>
+        <TableSkeleton columns={6} rows={6} />
       </div>
     );
   }

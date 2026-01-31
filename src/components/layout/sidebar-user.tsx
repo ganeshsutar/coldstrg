@@ -91,6 +91,7 @@ export function SidebarUser({ email, name, onSignOut }: SidebarUserProps) {
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              data-testid="user-menu-button"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={avatarUrl} alt={displayName} />
@@ -214,7 +215,7 @@ export function SidebarUser({ email, name, onSignOut }: SidebarUserProps) {
               </DropdownMenuSub>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
+            <DropdownMenuItem onClick={handleSignOut} data-testid="logout-button">
               <LogOut />
               Log out
             </DropdownMenuItem>

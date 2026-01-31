@@ -18,6 +18,8 @@ import {
 import { getGatePassColumns } from "./gate-pass-columns";
 import { GatePassFormDialog } from "./gate-pass-form-dialog";
 import { GatePassPrintPreview } from "./gate-pass-print-preview";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { GatePass } from "../../types";
 import { formatNumber } from "../../utils";
 
@@ -145,8 +147,21 @@ export function GatePassListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64" data-testid="gate-pass-page">
-        <div className="text-muted-foreground">Loading gate passes...</div>
+      <div className="flex flex-col gap-4 md:gap-6" data-testid="gate-pass-page">
+        <PageHeaderSkeleton />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={7} rows={8} />
       </div>
     );
   }

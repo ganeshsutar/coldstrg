@@ -1,5 +1,5 @@
 import { generateClient } from "aws-amplify/data";
-import { getCurrentUser } from "aws-amplify/auth";
+import { getCurrentUser, fetchUserAttributes } from "aws-amplify/auth";
 import type { Schema } from "../../../../amplify/data/resource";
 import type { Organization, OrganizationMembership } from "../types";
 
@@ -19,6 +19,7 @@ export async function fetchMemberships(): Promise<{
         selectionSet: [
           "id",
           "userId",
+          "email",
           "organizationId",
           "role",
           "isDefault",
@@ -86,6 +87,10 @@ export async function createOrganization(): Promise<{
   const user = await getCurrentUser();
   const userId = user.userId;
 
+  // Fetch user attributes to get email
+  const userAttributes = await fetchUserAttributes();
+  const userEmail = userAttributes.email;
+
   // Get user's email from sign-in details or use a fallback
   const emailPrefix = user.signInDetails?.loginId?.split("@")[0] || "user";
   const orgName = `${emailPrefix}'s Organization`;
@@ -118,6 +123,7 @@ export async function createOrganization(): Promise<{
   const { data: newMembership, errors: membershipErrors } =
     await client.models.OrganizationMembership.create({
       userId,
+      email: userEmail,
       organizationId: newOrg.id,
       role: "ADMIN",
       isDefault: true,

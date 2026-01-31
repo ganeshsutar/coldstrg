@@ -11,6 +11,7 @@ import {
   useDeleteBardanaType,
 } from "../../hooks/use-bardana-types";
 import { BardanaTypeDialog } from "./bardana-type-dialog";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { BardanaType, CreateBardanaTypeInput } from "../../types";
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatCurrency, formatNumber } from "../../utils/calculations";
@@ -117,6 +118,7 @@ export function BardanaTypeList() {
         cell: ({ row }) => (
           <div className="flex items-center gap-1">
             <Button
+              data-testid={`bardana-types-edit-button-${row.original.id}`}
               variant="ghost"
               size="icon-xs"
               onClick={() => handleEdit(row.original)}
@@ -124,6 +126,7 @@ export function BardanaTypeList() {
               <Pencil className="h-3.5 w-3.5" />
             </Button>
             <Button
+              data-testid={`bardana-types-delete-button-${row.original.id}`}
               variant="ghost"
               size="icon-xs"
               onClick={() => handleDelete(row.original)}
@@ -140,14 +143,16 @@ export function BardanaTypeList() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading bardana types...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={6} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div data-testid="bardana-types-page" className="flex flex-col gap-4 md:gap-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -159,6 +164,7 @@ export function BardanaTypeList() {
           </p>
         </div>
         <Button
+          data-testid="bardana-types-add-button"
           onClick={() => {
             setEditingType(null);
             setDialogOpen(true);
@@ -173,6 +179,7 @@ export function BardanaTypeList() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
+          data-testid="bardana-types-search-input"
           placeholder="Search by code or name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}

@@ -261,6 +261,7 @@ const schema = a.schema({
   OrganizationMembership: a
     .model({
       userId: a.string().required(), // Cognito user sub
+      email: a.email(), // Denormalized user email for display
       organizationId: a.id().required(),
       role: a.ref("MemberRole").required(),
       isDefault: a.boolean().default(false),

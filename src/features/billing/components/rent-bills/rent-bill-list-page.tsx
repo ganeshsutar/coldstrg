@@ -9,6 +9,8 @@ import { useOrganization } from "@/features/organizations";
 import { useRentBillList, useBillingStats, useConfirmRentBill, useCancelRentBill } from "../../hooks";
 import { getRentBillColumns } from "./rent-bill-columns";
 import { RentBillKpiCards } from "./rent-bill-kpi-cards";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { RentBillHeader } from "../../types";
 
 type FilterTab = "all" | "draft" | "pending" | "paid" | "cancelled";
@@ -123,8 +125,21 @@ export function RentBillListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading rent bills...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={7} rows={8} />
       </div>
     );
   }

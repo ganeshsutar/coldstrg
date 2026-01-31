@@ -3,6 +3,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { DataTable } from "@/components/shared/data-table";
 import { useUnloadings } from "../../hooks/use-unloading";
+import { TableSkeleton } from "@/components/loading";
 import type { Unloading } from "../../types";
 
 interface UnloadingListProps {
@@ -67,11 +68,7 @@ export function UnloadingList({ organizationId }: UnloadingListProps) {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <TableSkeleton columns={9} rows={6} />;
   }
 
   return <DataTable columns={columns} data={sortedUnloadings} />;

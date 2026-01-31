@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { ConfirmSignupForm, useAuth } from "@/features/auth";
+import { AuthLoadingSkeleton } from "@/components/loading";
 
 const confirmSignupSearchSchema = z.object({
   email: z.string().email().optional(),
@@ -42,11 +43,7 @@ function ConfirmSignupPage() {
 
   // Show loading while checking auth
   if (isAuthenticated === null) {
-    return (
-      <div className="flex min-h-svh w-full items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <AuthLoadingSkeleton />;
   }
 
   // Already authenticated, will redirect via useEffect

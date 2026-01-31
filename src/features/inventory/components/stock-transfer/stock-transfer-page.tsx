@@ -2,6 +2,16 @@ import { useState, useMemo, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DataTable } from "@/components/shared/data-table";
 import { useOrganization } from "@/features/organizations";
 import {
@@ -12,6 +22,7 @@ import {
 import { getNextTransferNo } from "../../api/stock-transfer";
 import { getTransferColumns } from "./transfer-columns";
 import { StockTransferWizard } from "./stock-transfer-wizard";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { StockTransfer, CreateStockTransferInput } from "../../types";
 
 export function StockTransferPage() {
@@ -26,6 +37,8 @@ export function StockTransferPage() {
   const [search, setSearch] = useState("");
   const [wizardOpen, setWizardOpen] = useState(false);
   const [nextTransferNo, setNextTransferNo] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [transferToDelete, setTransferToDelete] = useState<StockTransfer | null>(null);
 
   useEffect(() => {
     if (wizardOpen && organizationId) {
@@ -45,8 +58,15 @@ export function StockTransferPage() {
   }, [transferList, search]);
 
   function handleDelete(transfer: StockTransfer) {
-    if (confirm(`Delete Transfer #${transfer.transferNo}?`)) {
-      deleteMutation.mutate(transfer.id);
+    setTransferToDelete(transfer);
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDelete() {
+    if (transferToDelete) {
+      deleteMutation.mutate(transferToDelete.id);
+      setDeleteDialogOpen(false);
+      setTransferToDelete(null);
     }
   }
 
@@ -58,16 +78,16 @@ export function StockTransferPage() {
 
   const columns = useMemo(
     () => getTransferColumns({ onDelete: handleDelete }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">
-          Loading transfer records...
-        </div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }
@@ -116,6 +136,24 @@ export function StockTransferPage() {
           isPending={createMutation.isPending}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Transfer</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete Transfer #{transferToDelete?.transferNo}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

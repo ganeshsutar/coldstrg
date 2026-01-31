@@ -5,6 +5,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { Badge } from "@/components/ui/badge";
 import { RACK_STATUS_COLORS } from "@/config/constants";
 import { useLoadings } from "../../hooks/use-loading";
+import { TableSkeleton } from "@/components/loading";
 import type { Loading } from "../../types";
 
 interface LoadingListProps {
@@ -78,11 +79,7 @@ export function LoadingList({ organizationId }: LoadingListProps) {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <TableSkeleton columns={9} rows={6} />;
   }
 
   return <DataTable columns={columns} data={sortedLoadings} />;

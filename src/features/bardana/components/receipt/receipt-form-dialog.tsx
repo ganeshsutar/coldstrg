@@ -238,6 +238,7 @@ function ReceiptFormContent({
                 <Label htmlFor="receiptDate">Date *</Label>
                 <Input
                   id="receiptDate"
+                  data-testid="bardana-receipt-form-date-input"
                   type="date"
                   value={receiptDate}
                   onChange={(e) => setReceiptDate(e.target.value)}
@@ -248,7 +249,7 @@ function ReceiptFormContent({
             <div className="flex flex-col gap-2">
               <Label>Party *</Label>
               <Select value={partyId} onValueChange={setPartyId}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="bardana-receipt-form-party-select">
                   <SelectValue placeholder="Select party" />
                 </SelectTrigger>
                 <SelectContent>
@@ -263,7 +264,7 @@ function ReceiptFormContent({
 
             {/* Outstanding Summary */}
             {partyId && outstandingByType.size > 0 && (
-              <div className="rounded-lg border bg-muted/50 p-4">
+              <div data-testid="bardana-receipt-outstanding-summary" className="rounded-lg border bg-muted/50 p-4">
                 <h4 className="text-sm font-medium mb-2">
                   Outstanding Bardana
                 </h4>
@@ -300,6 +301,7 @@ function ReceiptFormContent({
           <CardHeader className="pb-3 flex flex-row items-center justify-between">
             <CardTitle className="text-base">Return Items</CardTitle>
             <Button
+              data-testid="bardana-receipt-form-add-item-button"
               size="sm"
               variant="outline"
               onClick={addItem}
@@ -456,6 +458,7 @@ function ReceiptFormContent({
           <Label htmlFor="narration">Narration</Label>
           <Textarea
             id="narration"
+            data-testid="bardana-receipt-form-narration-input"
             placeholder="Additional notes..."
             rows={2}
             value={narration}
@@ -465,10 +468,11 @@ function ReceiptFormContent({
       </div>
 
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel}>
+        <Button data-testid="bardana-receipt-form-cancel-button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
         <Button
+          data-testid="bardana-receipt-form-submit-button"
           onClick={handleSubmit}
           disabled={isPending || !partyId || items.length === 0}
         >
@@ -493,7 +497,7 @@ export function ReceiptFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent data-testid="bardana-receipt-form-dialog" className="max-w-4xl max-h-[90vh] overflow-y-auto">
         {open && (
           <ReceiptFormContent
             key={formKey}

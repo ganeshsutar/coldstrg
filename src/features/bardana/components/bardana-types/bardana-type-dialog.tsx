@@ -86,6 +86,7 @@ function BardanaTypeFormInner({
           <Label htmlFor="code">Code *</Label>
           <Input
             id="code"
+            data-testid="bardana-types-form-code-input"
             placeholder="e.g., JUTE"
             {...register("code", { required: "Code is required" })}
           />
@@ -98,6 +99,7 @@ function BardanaTypeFormInner({
           <Label htmlFor="name">Name *</Label>
           <Input
             id="name"
+            data-testid="bardana-types-form-name-input"
             placeholder="e.g., Jute Bags"
             {...register("name", { required: "Name is required" })}
           />
@@ -111,6 +113,7 @@ function BardanaTypeFormInner({
         <Label htmlFor="nameHindi">Name (Hindi)</Label>
         <Input
           id="nameHindi"
+          data-testid="bardana-types-form-name-hindi-input"
           placeholder="e.g., जूट बोरी"
           {...register("nameHindi")}
         />
@@ -121,6 +124,7 @@ function BardanaTypeFormInner({
           <Label htmlFor="defaultRate">Default Rate (Rs)</Label>
           <Input
             id="defaultRate"
+            data-testid="bardana-types-form-rate-input"
             type="number"
             step="0.01"
             {...register("defaultRate", { valueAsNumber: true })}
@@ -131,6 +135,7 @@ function BardanaTypeFormInner({
           <Label htmlFor="unit">Unit</Label>
           <Input
             id="unit"
+            data-testid="bardana-types-form-unit-input"
             placeholder="bags"
             {...register("unit")}
           />
@@ -141,6 +146,7 @@ function BardanaTypeFormInner({
         <Label htmlFor="openingStock">Opening Stock</Label>
         <Input
           id="openingStock"
+          data-testid="bardana-types-form-opening-stock-input"
           type="number"
           {...register("openingStock", { valueAsNumber: true })}
         />
@@ -159,12 +165,13 @@ function BardanaTypeFormInner({
       <DialogFooter>
         <Button
           type="button"
+          data-testid="bardana-types-form-cancel-button"
           variant="outline"
           onClick={onCancel}
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button data-testid="bardana-types-form-submit-button" type="submit" disabled={isPending}>
           {isPending ? "Saving..." : isEditing ? "Update" : "Create"}
         </Button>
       </DialogFooter>
@@ -184,7 +191,7 @@ export function BardanaTypeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent data-testid="bardana-types-form-dialog" className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Edit Bardana Type" : "Add Bardana Type"}

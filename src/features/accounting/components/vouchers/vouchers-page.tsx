@@ -15,6 +15,8 @@ import { useAccountList } from "../../hooks/use-accounts";
 import { getNextVoucherNo } from "../../api/vouchers";
 import { getVoucherColumns } from "./voucher-columns";
 import { VoucherFormDialog } from "./voucher-form-dialog";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Voucher, VoucherTypeValue, CreateVoucherInput } from "../../types";
 
 type VoucherFilterTab = "all" | VoucherTypeValue;
@@ -151,8 +153,18 @@ export function VouchersPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading vouchers...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="flex gap-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-20" />
+          ))}
+        </div>
+        <div className="flex gap-4">
+          <SearchSkeleton />
+          <Skeleton className="h-9 w-44" />
+        </div>
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }

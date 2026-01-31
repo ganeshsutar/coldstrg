@@ -15,6 +15,8 @@ import {
 } from "../../hooks/use-bardana-receipt";
 import { getReceiptColumns } from "./receipt-columns";
 import { ReceiptFormDialog } from "./receipt-form-dialog";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { BardanaReceiptHeader, BardanaReceiptFormInput } from "../../types";
 
 type FilterTab = "all" | "draft" | "confirmed" | "cancelled";
@@ -135,14 +137,21 @@ export function ReceiptListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading receipt records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div data-testid="bardana-receipt-page" className="flex flex-col gap-4 md:gap-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -154,6 +163,7 @@ export function ReceiptListPage() {
           </p>
         </div>
         <Button
+          data-testid="bardana-new-receipt-button"
           onClick={() => {
             setEditingReceipt(null);
             setDialogOpen(true);
@@ -170,12 +180,12 @@ export function ReceiptListPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({receipts.length})</TabsTrigger>
-          <TabsTrigger value="draft">Draft ({counts.draft})</TabsTrigger>
-          <TabsTrigger value="confirmed">
+          <TabsTrigger data-testid="bardana-receipt-tab-all" value="all">All ({receipts.length})</TabsTrigger>
+          <TabsTrigger data-testid="bardana-receipt-tab-draft" value="draft">Draft ({counts.draft})</TabsTrigger>
+          <TabsTrigger data-testid="bardana-receipt-tab-confirmed" value="confirmed">
             Confirmed ({counts.confirmed})
           </TabsTrigger>
-          <TabsTrigger value="cancelled">
+          <TabsTrigger data-testid="bardana-receipt-tab-cancelled" value="cancelled">
             Cancelled ({counts.cancelled})
           </TabsTrigger>
         </TabsList>
@@ -185,6 +195,7 @@ export function ReceiptListPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
+          data-testid="bardana-receipt-search-input"
           placeholder="Search by party or voucher #..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}

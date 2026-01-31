@@ -47,7 +47,7 @@ export function StockByTypeCards({
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div data-testid="bardana-stock-type-cards" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {bardanaTypes.map((type) => {
         const stats = getTypeStats(type.id);
         const availability = calculateStockAvailability(
@@ -56,7 +56,7 @@ export function StockByTypeCards({
         );
 
         return (
-          <Card key={type.id} className="@container/card">
+          <Card key={type.id} data-testid={`bardana-stock-type-card-${type.id}`} className="@container/card">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium">
                 {type.name}
@@ -99,6 +99,7 @@ export function StockByTypeCards({
             </CardContent>
             <CardFooter className="pt-0">
               <Button
+                data-testid={`bardana-stock-type-issue-button-${type.id}`}
                 variant="outline"
                 size="sm"
                 className="w-full"

@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRolePermissions, useUpdateRolePermission } from "../../hooks/use-permissions";
+import { TableSkeleton } from "@/components/loading";
 import type { RolePermission, PermissionRow } from "../../types";
 
 interface PermissionsTabProps {
@@ -120,9 +121,17 @@ export function PermissionsTab({ organizationId }: PermissionsTabProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading permissions...</div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Role Permissions</CardTitle>
+          <CardDescription>
+            Configure permissions for each role across your organization.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TableSkeleton columns={4} rows={8} />
+        </CardContent>
+      </Card>
     );
   }
 

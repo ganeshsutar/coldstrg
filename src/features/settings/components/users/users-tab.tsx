@@ -5,6 +5,7 @@ import { DataTable } from "@/components/shared/data-table";
 import { getUserColumns } from "./user-columns";
 import { UserDialog } from "./user-dialog";
 import { useOrgMembers, useUpdateMember } from "../../hooks/use-members";
+import { SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { OrganizationMembership } from "@/features/organizations/types";
 import type { UpdateMemberInput } from "../../types";
 
@@ -25,7 +26,7 @@ export function UsersTab({ organizationId }: UsersTabProps) {
     const lower = search.toLowerCase();
     return members.filter(
       (m) =>
-        m.userId.toLowerCase().includes(lower) ||
+        (m.email || "").toLowerCase().includes(lower) ||
         m.role.toLowerCase().includes(lower) ||
         (m.status || "").toLowerCase().includes(lower)
     );
@@ -52,8 +53,9 @@ export function UsersTab({ organizationId }: UsersTabProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <div className="text-muted-foreground">Loading members...</div>
+      <div className="space-y-4">
+        <SearchSkeleton />
+        <TableSkeleton columns={4} rows={5} />
       </div>
     );
   }

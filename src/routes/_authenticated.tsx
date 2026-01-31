@@ -8,6 +8,7 @@ import {
 } from "@/features/organizations";
 import { AppShell } from "@/components/layout/app-shell";
 import { BreadcrumbItemData } from "@/components/layout/header";
+import { AuthLoadingSkeleton } from "@/components/loading";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: ({ context }) => {
@@ -23,11 +24,12 @@ function AuthenticatedLayout() {
 
   // Show loading while auth is being determined
   if (isAuthenticated === null) {
-    return (
-      <div className="flex min-h-svh w-full items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
-    );
+    return <AuthLoadingSkeleton />;
+  }
+
+  // Redirect to login if not authenticated (e.g., after logout)
+  if (isAuthenticated === false) {
+    return <Navigate to="/login" />;
   }
 
   return (
@@ -582,17 +584,7 @@ function AuthenticatedContent() {
 
   // Show loading state
   if (isLoading || isAutoCreating) {
-    return (
-      <div className="flex min-h-svh w-full items-center justify-center">
-        <div className="text-center">
-          <div className="text-muted-foreground">
-            {isAutoCreating
-              ? "Setting up your organization..."
-              : "Loading..."}
-          </div>
-        </div>
-      </div>
-    );
+    return <AuthLoadingSkeleton />;
   }
 
   // Show organization setup fallback if no org and there was an error

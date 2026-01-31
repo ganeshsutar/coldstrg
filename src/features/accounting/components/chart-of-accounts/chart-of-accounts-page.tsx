@@ -23,6 +23,8 @@ import {
 import { getNextAccountCode } from "../../api/accounts";
 import { AccountTree } from "./account-tree";
 import { AccountFormDialog } from "./account-form-dialog";
+import { PageHeaderSkeleton, CardSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Account, CreateAccountInput } from "../../types";
 
 export function ChartOfAccountsPage() {
@@ -137,8 +139,24 @@ export function ChartOfAccountsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading chart of accounts...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-5 w-32" />
+                <Skeleton className="h-8 w-64" />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+          <CardSkeleton contentLines={6} />
+        </div>
       </div>
     );
   }

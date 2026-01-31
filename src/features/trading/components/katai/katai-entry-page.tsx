@@ -29,6 +29,8 @@ import {
   useCompleteKatai,
 } from "../../hooks";
 import { KataiFormDialog } from "./katai-form-dialog";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Katai } from "../../types";
 import { formatKataiNo, formatNumber, formatCurrency } from "../../utils";
 
@@ -139,8 +141,21 @@ export function KataiEntryPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading grading records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={13} rows={8} />
       </div>
     );
   }

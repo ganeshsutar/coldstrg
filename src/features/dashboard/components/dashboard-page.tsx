@@ -4,14 +4,32 @@ import { ChartSection } from "./chart-section";
 import { DataTable } from "@/components/shared/data-table";
 import { transactionColumns } from "./transaction-columns";
 import { useDashboardData } from "../hooks/use-dashboard-data";
+import { MetricCardSkeleton, CardSkeleton, TableSkeleton } from "@/components/loading";
 
 export function DashboardPage() {
   const { data, isLoading, error } = useDashboardData();
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading dashboard...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        {/* Metric cards skeleton */}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        {/* Chart skeleton */}
+        <CardSkeleton contentLines={6} />
+        {/* Table skeleton */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TableSkeleton columns={4} rows={5} />
+          </CardContent>
+        </Card>
       </div>
     );
   }

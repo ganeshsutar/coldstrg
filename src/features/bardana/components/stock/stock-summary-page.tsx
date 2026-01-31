@@ -8,6 +8,8 @@ import { useBardanaReceiptList } from "../../hooks/use-bardana-receipt";
 import { StockKpiCards } from "./stock-kpi-cards";
 import { StockByTypeCards } from "./stock-by-type-cards";
 import { RecentTransactionsTable } from "./recent-transactions-table";
+import { PageHeaderSkeleton, MetricCardSkeleton, CardSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function StockSummaryPage() {
   const navigate = useNavigate();
@@ -41,14 +43,34 @@ export function StockSummaryPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading bardana data...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <div className="flex gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-28" />
+          ))}
+        </div>
+        <div>
+          <Skeleton className="h-6 w-32 mb-4" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <CardSkeleton contentLines={3} />
+            <CardSkeleton contentLines={3} />
+            <CardSkeleton contentLines={3} />
+          </div>
+        </div>
+        <TableSkeleton columns={5} rows={5} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div data-testid="bardana-stock-page" className="flex flex-col gap-4 md:gap-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -72,14 +94,15 @@ export function StockSummaryPage() {
       {/* Navigation Tabs */}
       <Tabs defaultValue="stock" className="w-full">
         <TabsList>
-          <TabsTrigger value="stock">Stock Summary</TabsTrigger>
-          <TabsTrigger value="issues" onClick={handleNavigateToIssues}>
+          <TabsTrigger data-testid="bardana-stock-tab-summary" value="stock">Stock Summary</TabsTrigger>
+          <TabsTrigger data-testid="bardana-stock-tab-issues" value="issues" onClick={handleNavigateToIssues}>
             Issues ({issues.length})
           </TabsTrigger>
-          <TabsTrigger value="receipts" onClick={handleNavigateToReceipts}>
+          <TabsTrigger data-testid="bardana-stock-tab-receipts" value="receipts" onClick={handleNavigateToReceipts}>
             Returns ({receipts.length})
           </TabsTrigger>
           <TabsTrigger
+            data-testid="bardana-stock-tab-outstanding"
             value="outstanding"
             onClick={() => navigate({ to: "/bardana/outstanding" })}
           >

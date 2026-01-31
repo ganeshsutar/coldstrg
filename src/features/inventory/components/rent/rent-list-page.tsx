@@ -9,6 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DataTable } from "@/components/shared/data-table";
 import { useOrganization } from "@/features/organizations";
 import { useRentList, useCreateRent, useUpdateRent, useDeleteRent } from "../../hooks/use-rent";
@@ -16,6 +26,7 @@ import { getNextRentSerialNo } from "../../api/rent";
 import { getRentColumns } from "./rent-columns";
 import { RentFormDialog } from "./rent-form-dialog";
 import { PackageOpen, IndianRupee } from "lucide-react";
+import { PageHeaderSkeleton, MetricCardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { Rent, CreateRentInput } from "../../types";
 
 export function RentListPage() {
@@ -31,6 +42,8 @@ export function RentListPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingRent, setEditingRent] = useState<Rent | null>(null);
   const [nextSerialNo, setNextSerialNo] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [rentToDelete, setRentToDelete] = useState<Rent | null>(null);
 
   useEffect(() => {
     if (dialogOpen && !editingRent && organizationId) {
@@ -72,8 +85,15 @@ export function RentListPage() {
   }
 
   function handleDelete(rent: Rent) {
-    if (confirm(`Delete dispatch #${rent.serialNo}?`)) {
-      deleteMutation.mutate(rent.id);
+    setRentToDelete(rent);
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDelete() {
+    if (rentToDelete) {
+      deleteMutation.mutate(rentToDelete.id);
+      setDeleteDialogOpen(false);
+      setRentToDelete(null);
     }
   }
 
@@ -100,14 +120,20 @@ export function RentListPage() {
 
   const columns = useMemo(
     () => getRentColumns({ onEdit: handleEdit, onDelete: handleDelete }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading dispatch records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }
@@ -198,6 +224,24 @@ export function RentListPage() {
           isPending={createMutation.isPending || updateMutation.isPending}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Dispatch</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete Dispatch #{rentToDelete?.serialNo}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

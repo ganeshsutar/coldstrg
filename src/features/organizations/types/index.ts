@@ -32,6 +32,7 @@ export interface Organization {
 export interface OrganizationMembership {
   id: string;
   userId: string;
+  email?: string | null;
   organizationId: string;
   role: "ADMIN" | "SUPERVISOR" | "OPERATOR";
   isDefault?: boolean | null;

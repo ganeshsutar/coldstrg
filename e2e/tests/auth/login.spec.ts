@@ -72,4 +72,28 @@ test.describe("Login Page", () => {
     );
     expect(passwordValidity).toBe(true);
   });
+
+  test("should redirect to login page after logout", async ({ page }) => {
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
+
+    if (!email || !password) {
+      test.skip();
+      return;
+    }
+
+    const dashboardPage = new DashboardPage(page);
+
+    // Login first
+    await loginPage.login(email, password);
+    await dashboardPage.waitForDashboard();
+    await expect(page).toHaveURL(/\/dashboard/);
+
+    // Logout
+    await dashboardPage.logout();
+
+    // Should be redirected to login page
+    await expect(page).toHaveURL(/\/login/, { timeout: 10_000 });
+    await expect(loginPage.loginForm).toBeVisible();
+  });
 });

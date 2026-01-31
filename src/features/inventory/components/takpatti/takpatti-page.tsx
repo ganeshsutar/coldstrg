@@ -2,6 +2,16 @@ import { useState, useMemo, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DataTable } from "@/components/shared/data-table";
 import { useOrganization } from "@/features/organizations";
 import {
@@ -12,6 +22,7 @@ import {
 import { getNextTakpattiNo } from "../../api/takpatti";
 import { getTakpattiColumns } from "./takpatti-columns";
 import { TakpattiFormDialog } from "./takpatti-form-dialog";
+import { PageHeaderSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
 import type { CreateTakpattiInput } from "../../types";
 
 export function TakpattiPage() {
@@ -26,6 +37,8 @@ export function TakpattiPage() {
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [nextTakpattiNo, setNextTakpattiNo] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [takpattiToDelete, setTakpattiToDelete] = useState<{ id: string; takpattiNo: number } | null>(null);
 
   useEffect(() => {
     if (dialogOpen && organizationId) {
@@ -45,8 +58,15 @@ export function TakpattiPage() {
   }, [takpattiList, search]);
 
   function handleDelete(takpatti: { id: string; takpattiNo: number }) {
-    if (confirm(`Delete Takpatti #${takpatti.takpattiNo}?`)) {
-      deleteMutation.mutate(takpatti.id);
+    setTakpattiToDelete(takpatti);
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDelete() {
+    if (takpattiToDelete) {
+      deleteMutation.mutate(takpattiToDelete.id);
+      setDeleteDialogOpen(false);
+      setTakpattiToDelete(null);
     }
   }
 
@@ -58,14 +78,16 @@ export function TakpattiPage() {
 
   const columns = useMemo(
     () => getTakpattiColumns({ onDelete: handleDelete }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading takpatti records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <SearchSkeleton />
+        <TableSkeleton columns={6} rows={8} />
       </div>
     );
   }
@@ -112,6 +134,24 @@ export function TakpattiPage() {
           isPending={createMutation.isPending}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Takpatti</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete Takpatti #{takpattiToDelete?.takpattiNo}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

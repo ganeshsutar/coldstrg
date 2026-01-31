@@ -4,6 +4,16 @@ import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/shared/data-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useOrganization } from "@/features/organizations";
 import { useAmadList, useCreateAmad, useUpdateAmad, useDeleteAmad } from "../../hooks/use-amad";
 import { getNextAmadNo } from "../../api/amad";
@@ -12,6 +22,8 @@ import { AmadKpiCards } from "./amad-kpi-cards";
 import { AmadChart } from "./amad-chart";
 import { AmadTabFilters } from "./amad-tab-filters";
 import { AmadFormDialog } from "./amad-form-dialog";
+import { PageHeaderSkeleton, MetricCardSkeleton, CardSkeleton, SearchSkeleton, TableSkeleton } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Amad, AmadFilterTab, CreateAmadInput } from "../../types";
 
 export function AmadListPage() {
@@ -29,6 +41,8 @@ export function AmadListPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingAmad, setEditingAmad] = useState<Amad | null>(null);
   const [nextAmadNo, setNextAmadNo] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [amadToDelete, setAmadToDelete] = useState<Amad | null>(null);
 
   useEffect(() => {
     if (dialogOpen && !editingAmad && organizationId) {
@@ -74,8 +88,15 @@ export function AmadListPage() {
   }
 
   function handleDelete(amad: Amad) {
-    if (confirm(`Delete Amad #${amad.amadNo}?`)) {
-      deleteMutation.mutate(amad.id);
+    setAmadToDelete(amad);
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDelete() {
+    if (amadToDelete) {
+      deleteMutation.mutate(amadToDelete.id);
+      setDeleteDialogOpen(false);
+      setAmadToDelete(null);
     }
   }
 
@@ -113,8 +134,22 @@ export function AmadListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading amad records...</div>
+      <div className="flex flex-col gap-4 md:gap-6">
+        <PageHeaderSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+          <MetricCardSkeleton />
+        </div>
+        <CardSkeleton contentLines={4} />
+        <div className="flex gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-24" />
+          ))}
+        </div>
+        <SearchSkeleton />
+        <TableSkeleton columns={7} rows={8} />
       </div>
     );
   }
@@ -186,6 +221,24 @@ export function AmadListPage() {
           isPending={createMutation.isPending || updateMutation.isPending}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Amad</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete Amad #{amadToDelete?.amadNo}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
