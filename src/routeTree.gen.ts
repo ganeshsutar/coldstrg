@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConfirmSignupRouteImport } from './routes/confirm-signup'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSetupWizardRouteImport } from './routes/_authenticated/setup-wizard'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -87,6 +88,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSetupWizardRoute =
+  AuthenticatedSetupWizardRouteImport.update({
+    id: '/setup-wizard',
+    path: '/setup-wizard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -379,6 +386,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/setup-wizard': typeof AuthenticatedSetupWizardRoute
   '/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
   '/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
   '/accounts/interest': typeof AuthenticatedAccountsInterestRoute
@@ -433,6 +441,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/masters': typeof AuthenticatedMastersRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/setup-wizard': typeof AuthenticatedSetupWizardRoute
   '/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
   '/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
   '/accounts/interest': typeof AuthenticatedAccountsInterestRoute
@@ -489,6 +498,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/setup-wizard': typeof AuthenticatedSetupWizardRoute
   '/_authenticated/accounts/chart-of-accounts': typeof AuthenticatedAccountsChartOfAccountsRoute
   '/_authenticated/accounts/daybook': typeof AuthenticatedAccountsDaybookRoute
   '/_authenticated/accounts/interest': typeof AuthenticatedAccountsInterestRoute
@@ -545,6 +555,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/setup-wizard'
     | '/accounts/chart-of-accounts'
     | '/accounts/daybook'
     | '/accounts/interest'
@@ -599,6 +610,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/masters'
     | '/settings'
+    | '/setup-wizard'
     | '/accounts/chart-of-accounts'
     | '/accounts/daybook'
     | '/accounts/interest'
@@ -654,6 +666,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/masters'
     | '/_authenticated/settings'
+    | '/_authenticated/setup-wizard'
     | '/_authenticated/accounts/chart-of-accounts'
     | '/_authenticated/accounts/daybook'
     | '/_authenticated/accounts/interest'
@@ -745,6 +758,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/setup-wizard': {
+      id: '/_authenticated/setup-wizard'
+      path: '/setup-wizard'
+      fullPath: '/setup-wizard'
+      preLoaderRoute: typeof AuthenticatedSetupWizardRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
@@ -1104,6 +1124,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSetupWizardRoute: typeof AuthenticatedSetupWizardRoute
   AuthenticatedAccountsChartOfAccountsRoute: typeof AuthenticatedAccountsChartOfAccountsRoute
   AuthenticatedAccountsDaybookRoute: typeof AuthenticatedAccountsDaybookRoute
   AuthenticatedAccountsInterestRoute: typeof AuthenticatedAccountsInterestRoute
@@ -1154,6 +1175,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSetupWizardRoute: AuthenticatedSetupWizardRoute,
   AuthenticatedAccountsChartOfAccountsRoute:
     AuthenticatedAccountsChartOfAccountsRoute,
   AuthenticatedAccountsDaybookRoute: AuthenticatedAccountsDaybookRoute,

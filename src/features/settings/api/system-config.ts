@@ -54,3 +54,38 @@ export async function updateSystemConfig(input: UpdateSystemConfigInput): Promis
 
   return data as unknown as SystemConfig;
 }
+
+export type ProgressCallback = (completed: number, currentItem: string, skipped?: number) => void;
+
+export async function createSystemConfigWithProgress(
+  organizationId: string,
+  onProgress?: ProgressCallback
+): Promise<{ config: SystemConfig; skipped: number }> {
+  onProgress?.(0, "Checking existing configuration...");
+
+  // Check if config already exists
+  const existing = await fetchSystemConfig(organizationId);
+  if (existing) {
+    onProgress?.(1, "System Configuration (already exists)", 1);
+    return { config: existing, skipped: 1 };
+  }
+
+  onProgress?.(0, "System Configuration");
+
+  const { data, errors } = await client.models.SystemConfig.create({
+    organizationId,
+    ...DEFAULT_SYSTEM_CONFIG,
+    isActive: true,
+  });
+
+  if (errors && errors.length > 0) {
+    throw new Error(errors[0].message);
+  }
+
+  if (!data) {
+    throw new Error("Failed to create system config");
+  }
+
+  onProgress?.(1, "System Configuration", 0);
+  return { config: data as unknown as SystemConfig, skipped: 0 };
+}

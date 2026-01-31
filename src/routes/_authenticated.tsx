@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, Outlet, useNavigate, useMatchRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect, Outlet, useNavigate, useMatchRoute, useLocation, Navigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/features/auth";
 import {
@@ -41,6 +41,7 @@ function AuthenticatedContent() {
   const { handleSignOut, userInfo } = useAuth();
   const navigate = useNavigate();
   const matchRoute = useMatchRoute();
+  const location = useLocation();
   const {
     currentOrganization,
     memberships,
@@ -50,6 +51,9 @@ function AuthenticatedContent() {
   } = useOrganization();
   const [isAutoCreating, setIsAutoCreating] = useState(false);
   const hasTriedAutoCreate = useRef(false);
+
+  // Check if currently on setup wizard route
+  const isOnSetupWizard = location.pathname === "/setup-wizard";
 
   // Memoized auto-creation function to avoid lint warning
   const handleAutoCreate = useCallback(async () => {
@@ -599,6 +603,24 @@ function AuthenticatedContent() {
   // Show organization setup if no org (edge case)
   if (!currentOrganization) {
     return <OrganizationSetup />;
+  }
+
+  // Redirect to setup wizard if organization is not configured
+  // (unless already on setup wizard)
+  if (!currentOrganization.isConfigured && !isOnSetupWizard) {
+    return <Navigate to="/setup-wizard" />;
+  }
+
+  // If organization is configured but user is on setup wizard, redirect to dashboard
+  // (unless in reconfigure mode)
+  const isReconfiguring = location.searchStr?.includes("mode=reconfigure") ?? false;
+  if (currentOrganization.isConfigured && isOnSetupWizard && !isReconfiguring) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // If on setup wizard route, render without AppShell
+  if (isOnSetupWizard) {
+    return <Outlet />;
   }
 
   return (

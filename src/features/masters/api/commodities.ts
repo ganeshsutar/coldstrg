@@ -99,3 +99,66 @@ export async function seedCommodities(organizationId: string): Promise<Commodity
 
   return results;
 }
+
+export type ProgressCallback = (completed: number, currentItem: string, skipped?: number) => void;
+
+export async function seedCommoditiesWithProgress(
+  organizationId: string,
+  onProgress?: ProgressCallback
+): Promise<{ results: Commodity[]; skipped: number }> {
+  const results: Commodity[] = [];
+
+  // Fetch existing commodities to check which names already exist
+  onProgress?.(0, "Checking existing commodities...");
+  const existingCommodities = await fetchCommodities(organizationId);
+  const existingNameMap = new Map<string, Commodity>();
+  for (const commodity of existingCommodities) {
+    existingNameMap.set(commodity.name.toLowerCase(), commodity);
+  }
+
+  let skippedCount = 0;
+  let completed = 0;
+
+  for (let i = 0; i < SEED_COMMODITIES.length; i++) {
+    const commodity = SEED_COMMODITIES[i];
+
+    // Skip if commodity with this name already exists (case-insensitive)
+    const existingCommodity = existingNameMap.get(commodity.name.toLowerCase());
+    if (existingCommodity) {
+      skippedCount++;
+      completed++;
+      results.push(existingCommodity);
+      onProgress?.(completed, `${commodity.name} (already exists)`, skippedCount);
+      continue;
+    }
+
+    // Get next available code
+    const code = await getNextCommodityCode(organizationId);
+    onProgress?.(completed, commodity.name);
+
+    const { data, errors } = await client.models.Commodity.create({
+      organizationId,
+      name: commodity.name,
+      code,
+      commodityType: commodity.commodityType,
+      rentRatePKT3: commodity.rentRatePKT3,
+      gracePeriod: commodity.gracePeriod,
+      rentBasis: commodity.rentBasis,
+      hsnCode: commodity.hsnCode,
+      isActive: true,
+    });
+
+    if (errors && errors.length > 0) {
+      console.error(`Failed to seed commodity ${commodity.name}:`, errors[0].message);
+      continue;
+    }
+
+    if (data) {
+      results.push(data as unknown as Commodity);
+      completed++;
+      onProgress?.(completed, commodity.name, skippedCount);
+    }
+  }
+
+  return { results, skipped: skippedCount };
+}

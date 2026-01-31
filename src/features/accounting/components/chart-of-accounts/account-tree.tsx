@@ -53,6 +53,7 @@ function AccountNode({
         )}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
         onClick={() => onSelect?.(account)}
+        data-testid={`account-node-${account.code}`}
       >
         {/* Expand/collapse button */}
         {hasChildren ? (
@@ -165,7 +166,7 @@ export function AccountTree({ accounts, onSelect, selectedId }: AccountTreeProps
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" data-testid="account-tree">
       {rootAccounts.map((account) => (
         <AccountNode
           key={account.id}

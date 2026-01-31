@@ -245,6 +245,9 @@ const schema = a.schema({
       financialYearEnd: a.integer().default(3), // March
       billingStatus: a.ref("BillingStatus"),
       isActive: a.boolean().default(true),
+      // Setup wizard fields
+      isConfigured: a.boolean().default(false),
+      configuredAt: a.datetime(),
       // Relationships
       memberships: a.hasMany("OrganizationMembership", "organizationId"),
     })

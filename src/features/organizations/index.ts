@@ -1,5 +1,5 @@
 // Components
-export { OrganizationSetup, SettingsPage, GeneralSettingsForm } from "./components";
+export { OrganizationSetup, SettingsPage, GeneralSettingsForm, SetupWizard } from "./components";
 
 // Hooks
 export { OrganizationProvider, useOrganization } from "./hooks/use-organization.tsx";
@@ -9,6 +9,7 @@ export {
   fetchMemberships,
   createOrganization,
   updateOrganization,
+  markOrganizationConfigured,
   type UpdateOrganizationInput,
 } from "./api/organizations";
 

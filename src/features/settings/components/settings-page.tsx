@@ -6,6 +6,7 @@ import { UsersTab } from "./users/users-tab";
 import { PermissionsTab } from "./permissions/permissions-tab";
 import { ConfigurationTab } from "./configuration/configuration-tab";
 import { AuditLogTab } from "./audit-log/audit-log-tab";
+import { SystemTab } from "./system/system-tab";
 
 interface SettingsTab {
   id: string;
@@ -18,6 +19,7 @@ const SETTINGS_TABS: SettingsTab[] = [
   { id: "permissions", label: "Permissions" },
   { id: "configuration", label: "Configuration" },
   { id: "audit-log", label: "Audit Log" },
+  { id: "system", label: "System" },
 ];
 
 export function SettingsPage() {
@@ -82,6 +84,9 @@ export function SettingsPage() {
           )}
           {activeTab === "audit-log" && (
             <AuditLogTab organizationId={orgId} />
+          )}
+          {activeTab === "system" && (
+            <SystemTab />
           )}
         </div>
       </div>

@@ -22,6 +22,9 @@ export interface Organization {
   financialYearEnd?: number | null;
   billingStatus?: "TRIAL" | "ACTIVE" | "SUSPENDED" | "CANCELLED" | null;
   isActive?: boolean | null;
+  // Setup wizard fields
+  isConfigured?: boolean | null;
+  configuredAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }

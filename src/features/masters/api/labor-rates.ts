@@ -64,3 +64,63 @@ export async function seedLaborRates(organizationId: string): Promise<LaborRate[
 
   return results;
 }
+
+export type ProgressCallback = (completed: number, currentItem: string, skipped?: number) => void;
+
+// Fixed effective date for seeded labor rates
+const SEED_EFFECTIVE_DATE = "2024-01-01T00:00:00.000Z";
+
+export async function seedLaborRatesWithProgress(
+  organizationId: string,
+  onProgress?: ProgressCallback
+): Promise<{ results: LaborRate[]; skipped: number }> {
+  const results: LaborRate[] = [];
+
+  // Fetch existing labor rates to check which rate types already exist
+  onProgress?.(0, "Checking existing labor rates...");
+  const existingRates = await fetchLaborRates(organizationId);
+  const existingTypeMap = new Map<string, LaborRate>();
+  for (const rate of existingRates) {
+    existingTypeMap.set(rate.rateType, rate);
+  }
+
+  let skippedCount = 0;
+  let completed = 0;
+
+  for (let i = 0; i < SEED_LABOR_RATES.length; i++) {
+    const rate = SEED_LABOR_RATES[i];
+
+    // Skip if labor rate with this type already exists
+    const existingRate = existingTypeMap.get(rate.rateType);
+    if (existingRate) {
+      skippedCount++;
+      completed++;
+      results.push(existingRate);
+      onProgress?.(completed, `${rate.rateType} (already exists)`, skippedCount);
+      continue;
+    }
+
+    onProgress?.(completed, rate.rateType);
+
+    const { data, errors } = await client.models.LaborRate.create({
+      organizationId,
+      rateType: rate.rateType,
+      ratePKT1: rate.ratePKT1,
+      effectiveDate: SEED_EFFECTIVE_DATE,
+      isActive: true,
+    });
+
+    if (errors && errors.length > 0) {
+      console.error(`Failed to seed labor rate ${rate.rateType}:`, errors[0].message);
+      continue;
+    }
+
+    if (data) {
+      results.push(data as unknown as LaborRate);
+      completed++;
+      onProgress?.(completed, rate.rateType, skippedCount);
+    }
+  }
+
+  return { results, skipped: skippedCount };
+}

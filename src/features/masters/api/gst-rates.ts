@@ -84,3 +84,67 @@ export async function seedGstRates(organizationId: string): Promise<GstRate[]> {
 
   return results;
 }
+
+export type ProgressCallback = (completed: number, currentItem: string, skipped?: number) => void;
+
+// Fixed effective date for seeded GST rates
+const SEED_EFFECTIVE_DATE = "2024-01-01T00:00:00.000Z";
+
+export async function seedGstRatesWithProgress(
+  organizationId: string,
+  onProgress?: ProgressCallback
+): Promise<{ results: GstRate[]; skipped: number }> {
+  const results: GstRate[] = [];
+
+  // Fetch existing GST rates to check which descriptions already exist
+  onProgress?.(0, "Checking existing GST rates...");
+  const existingRates = await fetchGstRates(organizationId);
+  const existingDescriptionMap = new Map<string, GstRate>();
+  for (const rate of existingRates) {
+    if (rate.description) {
+      existingDescriptionMap.set(rate.description.toLowerCase(), rate);
+    }
+  }
+
+  let skippedCount = 0;
+  let completed = 0;
+
+  for (let i = 0; i < SEED_GST_RATES.length; i++) {
+    const rate = SEED_GST_RATES[i];
+
+    // Skip if GST rate with this description already exists (case-insensitive)
+    const existingRate = existingDescriptionMap.get(rate.description.toLowerCase());
+    if (existingRate) {
+      skippedCount++;
+      completed++;
+      results.push(existingRate);
+      onProgress?.(completed, `${rate.description} (already exists)`, skippedCount);
+      continue;
+    }
+
+    onProgress?.(completed, rate.description);
+
+    const { data, errors } = await client.models.GstRate.create({
+      organizationId,
+      description: rate.description,
+      cgstRate: rate.cgstRate,
+      sgstRate: rate.sgstRate,
+      igstRate: rate.igstRate,
+      effectiveDate: SEED_EFFECTIVE_DATE,
+      isActive: true,
+    });
+
+    if (errors && errors.length > 0) {
+      console.error(`Failed to seed GST rate ${rate.description}:`, errors[0].message);
+      continue;
+    }
+
+    if (data) {
+      results.push(data as unknown as GstRate);
+      completed++;
+      onProgress?.(completed, rate.description, skippedCount);
+    }
+  }
+
+  return { results, skipped: skippedCount };
+}

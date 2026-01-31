@@ -133,3 +133,69 @@ export async function seedAccounts(organizationId: string): Promise<Account[]> {
 
   return results;
 }
+
+export type ProgressCallback = (completed: number, currentItem: string, skipped?: number) => void;
+
+export async function seedAccountsWithProgress(
+  organizationId: string,
+  onProgress?: ProgressCallback
+): Promise<{ results: Account[]; skipped: number }> {
+  const results: Account[] = [];
+  const codeToIdMap: Record<string, string> = {};
+
+  // Fetch existing accounts to check which codes already exist
+  onProgress?.(0, "Checking existing accounts...");
+  const existingAccounts = await fetchAccountList(organizationId);
+  const existingCodeMap = new Map<string, Account>();
+  for (const acc of existingAccounts) {
+    existingCodeMap.set(acc.code, acc);
+    codeToIdMap[acc.code] = acc.id;
+  }
+
+  let skippedCount = 0;
+  let completed = 0;
+
+  for (let i = 0; i < SEED_CHART_OF_ACCOUNTS.length; i++) {
+    const account = SEED_CHART_OF_ACCOUNTS[i];
+    const under = "under" in account ? account.under : undefined;
+    const parentId = under ? codeToIdMap[under] : undefined;
+
+    // Skip if account with this code already exists
+    const existingAccount = existingCodeMap.get(account.code);
+    if (existingAccount) {
+      skippedCount++;
+      completed++;
+      results.push(existingAccount);
+      onProgress?.(completed, `${account.name} (already exists)`, skippedCount);
+      continue;
+    }
+
+    onProgress?.(completed, account.name);
+
+    const { data, errors } = await client.models.Account.create({
+      organizationId,
+      code: account.code,
+      name: account.name,
+      accountType: account.accountType,
+      nature: account.nature,
+      level: account.level,
+      under,
+      parentId,
+      isActive: true,
+    });
+
+    if (errors && errors.length > 0) {
+      console.error(`Failed to seed account ${account.name}:`, errors[0].message);
+      continue;
+    }
+
+    if (data) {
+      codeToIdMap[account.code] = data.id;
+      results.push(data as unknown as Account);
+      completed++;
+      onProgress?.(completed, account.name, skippedCount);
+    }
+  }
+
+  return { results, skipped: skippedCount };
+}

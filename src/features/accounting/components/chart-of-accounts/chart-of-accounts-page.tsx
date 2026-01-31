@@ -3,6 +3,16 @@ import { Plus, FolderPlus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useOrganization } from "@/features/organizations";
 import {
   useAccountList,
@@ -30,6 +40,7 @@ export function ChartOfAccountsPage() {
   const [parentAccount, setParentAccount] = useState<Account | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [nextCode, setNextCode] = useState("1000");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (dialogOpen && !editingAccount && organizationId) {
@@ -37,15 +48,37 @@ export function ChartOfAccountsPage() {
     }
   }, [dialogOpen, editingAccount, organizationId]);
 
-  // Filter by search
-  const filteredAccounts = search
-    ? accounts.filter(
-        (a) =>
-          a.name.toLowerCase().includes(search.toLowerCase()) ||
-          a.code.includes(search) ||
-          a.nameHindi?.toLowerCase().includes(search.toLowerCase())
-      )
-    : accounts;
+  // Filter by search - include parent chain for matched accounts
+  const filteredAccounts = (() => {
+    if (!search) return accounts;
+
+    // Find accounts matching the search term
+    const matchedIds = new Set<string>();
+    accounts.forEach((a) => {
+      if (
+        a.name.toLowerCase().includes(search.toLowerCase()) ||
+        a.code.includes(search) ||
+        a.nameHindi?.toLowerCase().includes(search.toLowerCase())
+      ) {
+        matchedIds.add(a.id);
+      }
+    });
+
+    // Build a map for quick parent lookup
+    const accountMap = new Map(accounts.map((a) => [a.id, a]));
+
+    // Add all ancestors of matched accounts
+    const includeIds = new Set<string>(matchedIds);
+    matchedIds.forEach((id) => {
+      let current = accountMap.get(id);
+      while (current?.parentId) {
+        includeIds.add(current.parentId);
+        current = accountMap.get(current.parentId);
+      }
+    });
+
+    return accounts.filter((a) => includeIds.has(a.id));
+  })();
 
   function handleAddAccount() {
     setEditingAccount(null);
@@ -69,10 +102,14 @@ export function ChartOfAccountsPage() {
 
   function handleDelete() {
     if (!selectedAccount) return;
-    if (confirm(`Delete account "${selectedAccount.name}"?`)) {
-      deleteMutation.mutate(selectedAccount.id);
-      setSelectedAccount(null);
-    }
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDelete() {
+    if (!selectedAccount) return;
+    deleteMutation.mutate(selectedAccount.id);
+    setSelectedAccount(null);
+    setDeleteDialogOpen(false);
   }
 
   function handleSave(input: CreateAccountInput & { id?: string }) {
@@ -107,7 +144,7 @@ export function ChartOfAccountsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="chart-of-accounts-page">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -137,6 +174,7 @@ export function ChartOfAccountsPage() {
               <div className="relative w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
+                  data-testid="chart-search-input"
                   placeholder="Search accounts..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -259,6 +297,24 @@ export function ChartOfAccountsPage() {
           isPending={createMutation.isPending || updateMutation.isPending}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Account</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{selectedAccount?.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -49,8 +49,13 @@ export interface UpdateOrganizationInput {
   phone?: string | null;
   email?: string | null;
   gstNo?: string | null;
+  panNo?: string | null;
   timezone?: string | null;
   financialYearStart?: number | null;
+  bankName?: string | null;
+  bankAccountNo?: string | null;
+  bankIfsc?: string | null;
+  bankBranch?: string | null;
 }
 
 export async function updateOrganization(
@@ -138,4 +143,22 @@ export async function createOrganization(): Promise<{
     organization: orgData,
     membership: membershipData,
   };
+}
+
+export async function markOrganizationConfigured(id: string): Promise<Organization> {
+  const { data, errors } = await client.models.Organization.update({
+    id,
+    isConfigured: true,
+    configuredAt: new Date().toISOString(),
+  });
+
+  if (errors && errors.length > 0) {
+    throw new Error(errors[0].message);
+  }
+
+  if (!data) {
+    throw new Error("Failed to mark organization as configured");
+  }
+
+  return data as unknown as Organization;
 }
