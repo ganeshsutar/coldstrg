@@ -16,6 +16,18 @@ export const quickCreateItems: QuickCreateItem[] = [
 export const mainNavItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: "layout-dashboard", to: "/dashboard" },
   {
+    id: "accounts",
+    label: "Accounts",
+    icon: "indian-rupee",
+    children: [
+      { id: "party-ledger", label: "Party Ledger", icon: "book-open", to: "/accounts/party-ledger" },
+      { id: "chart-of-accounts", label: "Chart of Accounts", icon: "list", to: "/accounts/chart-of-accounts" },
+      { id: "vouchers", label: "Vouchers", icon: "receipt", to: "/accounts/vouchers" },
+      { id: "daybook", label: "Daybook", icon: "calendar", to: "/accounts/daybook" },
+      { id: "interest", label: "Interest", icon: "percent", to: "/accounts/interest" },
+    ],
+  },
+  {
     id: "inventory",
     label: "Inventory",
     icon: "boxes",
@@ -41,15 +53,13 @@ export const mainNavItems: NavItem[] = [
     ],
   },
   {
-    id: "accounts",
-    label: "Accounts",
-    icon: "indian-rupee",
+    id: "trading",
+    label: "Trading",
+    icon: "handshake",
     children: [
-      { id: "party-ledger", label: "Party Ledger", icon: "book-open", to: "/accounts/party-ledger" },
-      { id: "chart-of-accounts", label: "Chart of Accounts", icon: "list", to: "/accounts/chart-of-accounts" },
-      { id: "vouchers", label: "Vouchers", icon: "receipt", to: "/accounts/vouchers" },
-      { id: "daybook", label: "Daybook", icon: "calendar", to: "/accounts/daybook" },
-      { id: "interest", label: "Interest", icon: "percent", to: "/accounts/interest" },
+      { id: "sauda", label: "Deals (Sauda)", icon: "file-text", to: "/trading/sauda" },
+      { id: "gate-pass", label: "Gate Pass", icon: "truck", to: "/trading/gate-pass" },
+      { id: "katai", label: "Grading (Katai)", icon: "layers", to: "/trading/katai" },
     ],
   },
   {
@@ -59,16 +69,6 @@ export const mainNavItems: NavItem[] = [
     children: [
       { id: "rent-bills", label: "Rent Bills", icon: "file-text", to: "/billing/rent-bills" },
       { id: "receipts", label: "Receipts", icon: "banknote", to: "/billing/receipts" },
-    ],
-  },
-  {
-    id: "trading",
-    label: "Trading",
-    icon: "handshake",
-    children: [
-      { id: "sauda", label: "Deals (Sauda)", icon: "file-text", to: "/trading/sauda" },
-      { id: "gate-pass", label: "Gate Pass", icon: "truck", to: "/trading/gate-pass" },
-      { id: "katai", label: "Grading (Katai)", icon: "layers", to: "/trading/katai" },
     ],
   },
 ];

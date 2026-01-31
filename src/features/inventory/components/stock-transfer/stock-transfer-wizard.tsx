@@ -163,164 +163,166 @@ function WizardContent({
         </DialogDescription>
       </DialogHeader>
 
-      {/* Step indicator */}
-      <div className="flex items-center gap-2 mb-4">
-        {[1, 2, 3].map((step) => (
-          <div
-            key={step}
-            className={`flex-1 h-1.5 rounded-full ${
-              step <= currentStep ? "bg-primary" : "bg-muted"
-            }`}
-          />
-        ))}
+      <div className="py-6">
+        {/* Step indicator */}
+        <div className="flex items-center gap-2 mb-6">
+          {[1, 2, 3].map((step) => (
+            <div
+              key={step}
+              className={`flex-1 h-1.5 rounded-full ${
+                step <= currentStep ? "bg-primary" : "bg-muted"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Step 1: Source */}
+        {currentStep === 1 && (
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <Label>Select Amad</Label>
+              <Select value={amadId} onValueChange={handleAmadSelect}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Amad to transfer from" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableAmads.map((a) => (
+                    <SelectItem key={a.id} value={a.id}>
+                      #{a.amadNo} - {a.partyName} ({(a.totalPackets ?? 0) - (a.dispatchedPackets ?? 0)} pkt)
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {selectedAmad && (
+              <div className="rounded-md bg-muted/50 p-3 space-y-1 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Party: </span>
+                  {selectedAmad.partyName}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Commodity: </span>
+                  {selectedAmad.commodityName || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Room: </span>
+                  {selectedAmad.room || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Balance: </span>
+                  {(selectedAmad.totalPackets ?? 0) -
+                    (selectedAmad.dispatchedPackets ?? 0)}{" "}
+                  packets
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>PKT1</Label>
+                <Input
+                  type="number"
+                  value={pkt1}
+                  onChange={(e) => setPkt1(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT2</Label>
+                <Input
+                  type="number"
+                  value={pkt2}
+                  onChange={(e) => setPkt2(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT3</Label>
+                <Input
+                  type="number"
+                  value={pkt3}
+                  onChange={(e) => setPkt3(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="rounded-md bg-muted/50 p-3 text-sm">
+              <span className="text-muted-foreground">Transfer Packets: </span>
+              <span className="font-semibold">{totalPackets}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Destination */}
+        {currentStep === 2 && (
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <Label>Destination Party</Label>
+              <Select value={toPartyId} onValueChange={handleToPartyChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select destination party" />
+                </SelectTrigger>
+                <SelectContent>
+                  {partyAccounts.map((account) => (
+                    <SelectItem key={account.id} value={account.id}>
+                      {account.name} ({account.code})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Destination Room</Label>
+              <Input
+                value={destRoom}
+                onChange={(e) => setDestRoom(e.target.value)}
+                placeholder="Enter destination room"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Confirm */}
+        {currentStep === 3 && (
+          <div className="space-y-4">
+            <div className="rounded-md border p-4 space-y-2 text-sm">
+              <div className="font-medium text-base mb-3">Transfer Summary</div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-muted-foreground">From: </span>
+                  {selectedAmad?.partyName || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">To: </span>
+                  {toPartyName || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Amad #: </span>
+                  {selectedAmad?.amadNo || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Packets: </span>
+                  {totalPackets}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Source Room: </span>
+                  {selectedAmad?.room || "-"}
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Dest Room: </span>
+                  {destRoom || "-"}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Remarks</Label>
+              <Input
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+                placeholder="Optional remarks"
+              />
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Step 1: Source */}
-      {currentStep === 1 && (
-        <div className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <Label>Select Amad</Label>
-            <Select value={amadId} onValueChange={handleAmadSelect}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Amad to transfer from" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableAmads.map((a) => (
-                  <SelectItem key={a.id} value={a.id}>
-                    #{a.amadNo} - {a.partyName} ({(a.totalPackets ?? 0) - (a.dispatchedPackets ?? 0)} pkt)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {selectedAmad && (
-            <div className="rounded-md bg-muted/50 p-3 space-y-1 text-sm">
-              <div>
-                <span className="text-muted-foreground">Party: </span>
-                {selectedAmad.partyName}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Commodity: </span>
-                {selectedAmad.commodityName || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Room: </span>
-                {selectedAmad.room || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Balance: </span>
-                {(selectedAmad.totalPackets ?? 0) -
-                  (selectedAmad.dispatchedPackets ?? 0)}{" "}
-                packets
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>PKT1</Label>
-              <Input
-                type="number"
-                value={pkt1}
-                onChange={(e) => setPkt1(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT2</Label>
-              <Input
-                type="number"
-                value={pkt2}
-                onChange={(e) => setPkt2(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT3</Label>
-              <Input
-                type="number"
-                value={pkt3}
-                onChange={(e) => setPkt3(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="rounded-md bg-muted/50 p-3 text-sm">
-            <span className="text-muted-foreground">Transfer Packets: </span>
-            <span className="font-semibold">{totalPackets}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Destination */}
-      {currentStep === 2 && (
-        <div className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <Label>Destination Party</Label>
-            <Select value={toPartyId} onValueChange={handleToPartyChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select destination party" />
-              </SelectTrigger>
-              <SelectContent>
-                {partyAccounts.map((account) => (
-                  <SelectItem key={account.id} value={account.id}>
-                    {account.name} ({account.code})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label>Destination Room</Label>
-            <Input
-              value={destRoom}
-              onChange={(e) => setDestRoom(e.target.value)}
-              placeholder="Enter destination room"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Confirm */}
-      {currentStep === 3 && (
-        <div className="space-y-4">
-          <div className="rounded-md border p-4 space-y-2 text-sm">
-            <div className="font-medium text-base mb-3">Transfer Summary</div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <span className="text-muted-foreground">From: </span>
-                {selectedAmad?.partyName || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">To: </span>
-                {toPartyName || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Amad #: </span>
-                {selectedAmad?.amadNo || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Packets: </span>
-                {totalPackets}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Source Room: </span>
-                {selectedAmad?.room || "-"}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Dest Room: </span>
-                {destRoom || "-"}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label>Remarks</Label>
-            <Input
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-              placeholder="Optional remarks"
-            />
-          </div>
-        </div>
-      )}
 
       <DialogFooter className="flex justify-between">
         <div>

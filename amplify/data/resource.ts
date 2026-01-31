@@ -248,6 +248,7 @@ const schema = a.schema({
       // Relationships
       memberships: a.hasMany("OrganizationMembership", "organizationId"),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("slug")])
     .authorization((allow) => [
       allow.authenticated(),
@@ -275,6 +276,7 @@ const schema = a.schema({
       // Relationships
       organization: a.belongsTo("Organization", "organizationId"),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("userId"),
       index("organizationId"),
@@ -321,6 +323,7 @@ const schema = a.schema({
       openingStock: a.integer().default(0),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -337,6 +340,7 @@ const schema = a.schema({
       road: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -349,6 +353,7 @@ const schema = a.schema({
       ifscPattern: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -364,6 +369,7 @@ const schema = a.schema({
       effectiveDate: a.date().required(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -379,6 +385,7 @@ const schema = a.schema({
       reason: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -410,6 +417,7 @@ const schema = a.schema({
       canManageUsers: a.boolean().default(false),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -460,6 +468,7 @@ const schema = a.schema({
       searchOnMobile: a.boolean().default(false),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -476,6 +485,7 @@ const schema = a.schema({
       entityType: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions", "get", "update", "delete"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -493,6 +503,8 @@ const schema = a.schema({
       road: a.string(),
       floor: a.string(),
       room: a.string(),
+      chamberId: a.id(),
+      chamberName: a.string(),
       position: a.string(),
       commodityId: a.string(),
       commodityName: a.string(),
@@ -521,6 +533,7 @@ const schema = a.schema({
       grading: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -554,6 +567,7 @@ const schema = a.schema({
       billAmount: a.float(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -574,6 +588,7 @@ const schema = a.schema({
       room: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -601,6 +616,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -624,6 +640,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -640,6 +657,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("chamberId"),
@@ -670,6 +688,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("amadId"),
@@ -703,6 +722,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("amadId"),
@@ -728,6 +748,7 @@ const schema = a.schema({
       completedAt: a.datetime(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -755,6 +776,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("shiftingHeaderId"),
@@ -779,6 +801,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("chamberId"),
@@ -803,6 +826,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("chamberId"),
@@ -867,6 +891,7 @@ const schema = a.schema({
       drLimit: a.float(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("parentId"),
@@ -904,6 +929,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("drAccountId"),
@@ -941,6 +967,7 @@ const schema = a.schema({
       roi: a.float(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("accountId"),
@@ -969,6 +996,7 @@ const schema = a.schema({
       bankCloseCr: a.float().default(0),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -988,6 +1016,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -1008,6 +1037,7 @@ const schema = a.schema({
       lastReturnDate: a.date(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1043,6 +1073,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1061,6 +1092,7 @@ const schema = a.schema({
       amount: a.float().required(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("issueHeaderId"),
@@ -1094,6 +1126,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1116,6 +1149,7 @@ const schema = a.schema({
       netAmount: a.float().required(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("receiptHeaderId"),
@@ -1143,6 +1177,7 @@ const schema = a.schema({
       convertedAmadId: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1169,6 +1204,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1194,6 +1230,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1238,6 +1275,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("sellerPartyId"),
@@ -1282,6 +1320,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("sellerPartyId"),
@@ -1312,6 +1351,7 @@ const schema = a.schema({
       amount: a.float().default(0),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("gatePassId"),
@@ -1348,6 +1388,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1413,6 +1454,7 @@ const schema = a.schema({
       cancelReason: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1450,6 +1492,7 @@ const schema = a.schema({
       rentAmount: a.float().default(0),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("rentBillId"),
@@ -1471,6 +1514,7 @@ const schema = a.schema({
       hsnCode: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("rentBillId"),
@@ -1512,6 +1556,7 @@ const schema = a.schema({
       cancelReason: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("partyId"),
@@ -1529,6 +1574,7 @@ const schema = a.schema({
       allocatedAmount: a.float().required(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("receiptId"),
@@ -1559,6 +1605,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -1578,6 +1625,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -1597,6 +1645,7 @@ const schema = a.schema({
       description: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -1617,6 +1666,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1641,6 +1691,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1674,6 +1725,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1732,6 +1784,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1770,6 +1823,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1803,6 +1857,7 @@ const schema = a.schema({
       narration: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),
@@ -1836,6 +1891,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [index("organizationId")])
     .authorization((allow) => [allow.authenticated()]),
 
@@ -1892,6 +1948,7 @@ const schema = a.schema({
       remarks: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("postId"),
@@ -1920,6 +1977,7 @@ const schema = a.schema({
       markedBy: a.string(),
       isActive: a.boolean().default(true),
     })
+    .disableOperations(["subscriptions"])
     .secondaryIndexes((index) => [
       index("organizationId"),
       index("employeeId"),

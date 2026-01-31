@@ -181,217 +181,219 @@ export function RentForm({
         </DialogDescription>
       </DialogHeader>
 
-      <div className="flex items-center gap-2 mb-4">
-        {[1, 2, 3].map((step) => (
-          <div
-            key={step}
-            className={`flex-1 h-1.5 rounded-full ${
-              step <= currentStep ? "bg-primary" : "bg-muted"
-            }`}
-          />
-        ))}
+      <div className="py-6">
+        <div className="flex items-center gap-2 mb-6">
+          {[1, 2, 3].map((step) => (
+            <div
+              key={step}
+              className={`flex-1 h-1.5 rounded-full ${
+                step <= currentStep ? "bg-primary" : "bg-muted"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Step 1: Amad Selection */}
+        {currentStep === 1 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="serialNo">Serial No</Label>
+                <Input id="serialNo" type="number" value={serialNo} disabled />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="date">Date</Label>
+                <Input
+                  id="date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="amad">Select Amad</Label>
+                <Select value={amadId} onValueChange={handleAmadSelect}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Amad" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableAmads.map((a) => (
+                      <SelectItem key={a.id} value={a.id}>
+                        #{a.amadNo} - {a.partyName} ({(a.totalPackets ?? 0) - (a.dispatchedPackets ?? 0)} pkt)
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="partyName">Party Name</Label>
+                <Input
+                  id="partyName"
+                  value={partyName}
+                  onChange={(e) => setPartyName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="receiverName">Receiver Name</Label>
+                <Input
+                  id="receiverName"
+                  value={receiverName}
+                  onChange={(e) => setReceiverName(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="vehicleNo">Vehicle No</Label>
+                <Input
+                  id="vehicleNo"
+                  value={vehicleNo}
+                  onChange={(e) => setVehicleNo(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Dispatch Packets */}
+        {currentStep === 2 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>PKT1</Label>
+                <Input
+                  type="number"
+                  value={pkt1}
+                  onChange={(e) => setPkt1(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT2</Label>
+                <Input
+                  type="number"
+                  value={pkt2}
+                  onChange={(e) => setPkt2(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT3</Label>
+                <Input
+                  type="number"
+                  value={pkt3}
+                  onChange={(e) => setPkt3(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="rounded-md bg-muted/50 p-3 text-sm">
+              <span className="text-muted-foreground">Total Packets: </span>
+              <span className="font-semibold">{totalPackets}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Rent & Charges */}
+        {currentStep === 3 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>Storage Days</Label>
+                <Input
+                  type="number"
+                  value={storageDays}
+                  onChange={(e) => setStorageDays(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Rate</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Rent Amount</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={rentAmount.toFixed(2)}
+                  disabled
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>Loading Amt</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={loadingAmt}
+                  onChange={(e) => setLoadingAmt(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Unloading Amt</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={unloadingAmt}
+                  onChange={(e) => setUnloadingAmt(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>Dumping Amt</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={dumpingAmt}
+                  onChange={(e) => setDumpingAmt(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>CGST</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={cgst}
+                  onChange={(e) => setCgst(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>SGST</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={sgst}
+                  onChange={(e) => setSgst(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>IGST</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={igst}
+                  onChange={(e) => setIgst(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="rounded-md bg-muted/50 p-3 text-sm">
+              <span className="text-muted-foreground">Bill Amount: </span>
+              <span className="font-semibold">
+                {`\u20B9${billAmount.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Step 1: Amad Selection */}
-      {currentStep === 1 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="serialNo">Serial No</Label>
-              <Input id="serialNo" type="number" value={serialNo} disabled />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="amad">Select Amad</Label>
-              <Select value={amadId} onValueChange={handleAmadSelect}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Amad" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableAmads.map((a) => (
-                    <SelectItem key={a.id} value={a.id}>
-                      #{a.amadNo} - {a.partyName} ({(a.totalPackets ?? 0) - (a.dispatchedPackets ?? 0)} pkt)
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="partyName">Party Name</Label>
-              <Input
-                id="partyName"
-                value={partyName}
-                onChange={(e) => setPartyName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="receiverName">Receiver Name</Label>
-              <Input
-                id="receiverName"
-                value={receiverName}
-                onChange={(e) => setReceiverName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="vehicleNo">Vehicle No</Label>
-              <Input
-                id="vehicleNo"
-                value={vehicleNo}
-                onChange={(e) => setVehicleNo(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Dispatch Packets */}
-      {currentStep === 2 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>PKT1</Label>
-              <Input
-                type="number"
-                value={pkt1}
-                onChange={(e) => setPkt1(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT2</Label>
-              <Input
-                type="number"
-                value={pkt2}
-                onChange={(e) => setPkt2(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT3</Label>
-              <Input
-                type="number"
-                value={pkt3}
-                onChange={(e) => setPkt3(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="rounded-md bg-muted/50 p-3 text-sm">
-            <span className="text-muted-foreground">Total Packets: </span>
-            <span className="font-semibold">{totalPackets}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Rent & Charges */}
-      {currentStep === 3 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Storage Days</Label>
-              <Input
-                type="number"
-                value={storageDays}
-                onChange={(e) => setStorageDays(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Rate</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Rent Amount</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={rentAmount.toFixed(2)}
-                disabled
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Loading Amt</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={loadingAmt}
-                onChange={(e) => setLoadingAmt(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Unloading Amt</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={unloadingAmt}
-                onChange={(e) => setUnloadingAmt(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Dumping Amt</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={dumpingAmt}
-                onChange={(e) => setDumpingAmt(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>CGST</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={cgst}
-                onChange={(e) => setCgst(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>SGST</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={sgst}
-                onChange={(e) => setSgst(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>IGST</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={igst}
-                onChange={(e) => setIgst(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="rounded-md bg-muted/50 p-3 text-sm">
-            <span className="text-muted-foreground">Bill Amount: </span>
-            <span className="font-semibold">
-              {`\u20B9${billAmount.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}`}
-            </span>
-          </div>
-        </div>
-      )}
 
       <DialogFooter className="flex justify-between">
         <div>

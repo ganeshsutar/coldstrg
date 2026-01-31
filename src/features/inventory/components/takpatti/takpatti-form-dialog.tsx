@@ -123,73 +123,75 @@ function TakpattiForm({
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="takpattiNo">Takpatti No</Label>
-            <Input id="takpattiNo" type="number" value={takpattiNo} disabled />
+      <form onSubmit={handleSubmit}>
+        <div className="py-6 space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="takpattiNo">Takpatti No</Label>
+              <Input id="takpattiNo" type="number" value={takpattiNo} disabled />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="amad">Select Amad</Label>
+              <Select value={amadId} onValueChange={handleAmadSelect}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Amad" />
+                </SelectTrigger>
+                <SelectContent>
+                  {amadList.map((a) => (
+                    <SelectItem key={a.id} value={a.id}>
+                      #{a.amadNo} - {a.partyName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="date">Date</Label>
-            <Input
-              id="date"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="amad">Select Amad</Label>
-            <Select value={amadId} onValueChange={handleAmadSelect}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Amad" />
-              </SelectTrigger>
-              <SelectContent>
-                {amadList.map((a) => (
-                  <SelectItem key={a.id} value={a.id}>
-                    #{a.amadNo} - {a.partyName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-4 gap-4">
-          <div className="flex flex-col gap-2">
-            <Label>Room</Label>
-            <Input value={room} onChange={(e) => setRoom(e.target.value)} />
+          <div className="grid grid-cols-4 gap-4">
+            <div className="flex flex-col gap-2">
+              <Label>Room</Label>
+              <Input value={room} onChange={(e) => setRoom(e.target.value)} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>PKT1</Label>
+              <Input
+                type="number"
+                value={pkt1}
+                onChange={(e) => setPkt1(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>PKT2</Label>
+              <Input
+                type="number"
+                value={pkt2}
+                onChange={(e) => setPkt2(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>PKT3</Label>
+              <Input
+                type="number"
+                value={pkt3}
+                onChange={(e) => setPkt3(e.target.value)}
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label>PKT1</Label>
-            <Input
-              type="number"
-              value={pkt1}
-              onChange={(e) => setPkt1(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label>PKT2</Label>
-            <Input
-              type="number"
-              value={pkt2}
-              onChange={(e) => setPkt2(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label>PKT3</Label>
-            <Input
-              type="number"
-              value={pkt3}
-              onChange={(e) => setPkt3(e.target.value)}
-            />
-          </div>
-        </div>
 
-        <div className="rounded-md bg-muted/50 p-3 text-sm">
-          <span className="text-muted-foreground">Total Packets: </span>
-          <span className="font-semibold">{totalPackets}</span>
+          <div className="rounded-md bg-muted/50 p-3 text-sm">
+            <span className="text-muted-foreground">Total Packets: </span>
+            <span className="font-semibold">{totalPackets}</span>
+          </div>
         </div>
 
         <DialogFooter>

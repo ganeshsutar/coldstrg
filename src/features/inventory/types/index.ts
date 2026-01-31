@@ -21,6 +21,8 @@ export interface Amad {
   road?: string | null;
   floor?: string | null;
   room?: string | null;
+  chamberId?: string | null;
+  chamberName?: string | null;
   position?: string | null;
   commodityId?: string | null;
   commodityName?: string | null;
@@ -64,6 +66,8 @@ export interface CreateAmadInput {
   road?: string;
   floor?: string;
   room?: string;
+  chamberId?: string;
+  chamberName?: string;
   position?: string;
   commodityId?: string;
   commodityName?: string;

@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -39,16 +39,6 @@ interface AccountFormDialogProps {
   isPending: boolean;
 }
 
-interface FormData {
-  code: string;
-  name: string;
-  nameHindi: string;
-  accountType: AccountTypeValue;
-  nature: AccountNatureValue;
-  parentId: string;
-  openingBalance: string;
-}
-
 interface AccountFormInnerProps {
   account?: Account | null;
   parentAccount?: Account | null;
@@ -75,43 +65,44 @@ function AccountFormInner({
   // Get potential parent accounts (only groups)
   const parentOptions = accounts.filter((a) => a.accountType === "GROUP");
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      code: account?.code ?? nextCode,
-      name: account?.name ?? "",
-      nameHindi: account?.nameHindi ?? "",
-      accountType: account?.accountType ?? "ACCOUNT",
-      nature: account?.nature ?? parentAccount?.nature ?? "DR",
-      parentId: account?.parentId ?? parentAccount?.id ?? NONE_VALUE,
-      openingBalance: account?.openingBalance?.toString() ?? "0",
-    },
-  });
+  // Use useState for controlled inputs (same pattern as ChamberForm)
+  const [code, setCode] = useState(account?.code ?? nextCode);
+  const [name, setName] = useState(account?.name ?? "");
+  const [nameHindi, setNameHindi] = useState(account?.nameHindi ?? "");
+  const [accountType, setAccountType] = useState<AccountTypeValue>(account?.accountType ?? "ACCOUNT");
+  const [nature, setNature] = useState<AccountNatureValue>(account?.nature ?? parentAccount?.nature ?? "DR");
+  const [parentId, setParentId] = useState(account?.parentId ?? parentAccount?.id ?? NONE_VALUE);
+  const [openingBalance, setOpeningBalance] = useState(account?.openingBalance?.toString() ?? "0");
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const accountType = watch("accountType");
-  const nature = watch("nature");
-  const parentId = watch("parentId");
+  // Form validation errors
+  const [errors, setErrors] = useState<{ code?: string; name?: string }>({});
 
-  const onSubmit = (data: FormData) => {
-    const parent = parentOptions.find((p) => p.id === data.parentId);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate required fields
+    const newErrors: { code?: string; name?: string } = {};
+    if (!code.trim()) newErrors.code = "Code is required";
+    if (!name.trim()) newErrors.name = "Name is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const parent = parentOptions.find((p) => p.id === parentId);
 
     const input: CreateAccountInput & { id?: string } = {
       organizationId,
-      code: data.code,
-      name: data.name,
-      nameHindi: data.nameHindi || undefined,
-      accountType: data.accountType,
-      nature: data.nature,
-      parentId: data.parentId === NONE_VALUE ? undefined : data.parentId || undefined,
+      code,
+      name,
+      nameHindi: nameHindi || undefined,
+      accountType,
+      nature,
+      parentId: parentId === NONE_VALUE ? undefined : parentId || undefined,
       level: parent ? (parent.level ?? 0) + 1 : 0,
       under: parent?.name,
-      openingBalance: parseFloat(data.openingBalance) || 0,
+      openingBalance: parseFloat(openingBalance) || 0,
     };
 
     if (account?.id) {
@@ -122,24 +113,28 @@ function AccountFormInner({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="code">Account Code</Label>
           <Input
             id="code"
-            {...register("code", { required: "Code is required" })}
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value);
+              if (errors.code) setErrors((prev) => ({ ...prev, code: undefined }));
+            }}
             placeholder="1000"
           />
           {errors.code && (
-            <p className="text-sm text-destructive">{errors.code.message}</p>
+            <p className="text-sm text-destructive">{errors.code}</p>
           )}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="accountType">Type</Label>
           <Select
             value={accountType}
-            onValueChange={(val) => setValue("accountType", val as AccountTypeValue)}
+            onValueChange={(val) => setAccountType(val as AccountTypeValue)}
           >
             <SelectTrigger>
               <SelectValue />
@@ -160,18 +155,23 @@ function AccountFormInner({
           <Label htmlFor="name">Account Name</Label>
           <Input
             id="name"
-            {...register("name", { required: "Name is required" })}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+            }}
             placeholder="Enter account name"
           />
           {errors.name && (
-            <p className="text-sm text-destructive">{errors.name.message}</p>
+            <p className="text-sm text-destructive">{errors.name}</p>
           )}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="nameHindi">Name (Hindi)</Label>
           <Input
             id="nameHindi"
-            {...register("nameHindi")}
+            value={nameHindi}
+            onChange={(e) => setNameHindi(e.target.value)}
             placeholder="हिंदी में नाम"
           />
         </div>
@@ -182,7 +182,7 @@ function AccountFormInner({
           <Label htmlFor="nature">Nature</Label>
           <Select
             value={nature}
-            onValueChange={(val) => setValue("nature", val as AccountNatureValue)}
+            onValueChange={(val) => setNature(val as AccountNatureValue)}
           >
             <SelectTrigger>
               <SelectValue />
@@ -200,7 +200,7 @@ function AccountFormInner({
           <Label htmlFor="parentId">Under</Label>
           <Select
             value={parentId}
-            onValueChange={(val) => setValue("parentId", val)}
+            onValueChange={(val) => setParentId(val)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select parent" />
@@ -224,7 +224,8 @@ function AccountFormInner({
             id="openingBalance"
             type="number"
             step="0.01"
-            {...register("openingBalance")}
+            value={openingBalance}
+            onChange={(e) => setOpeningBalance(e.target.value)}
             placeholder="0.00"
           />
         </div>
@@ -270,6 +271,7 @@ export function AccountFormDialog({
 
         {open && (
           <AccountFormInner
+            key={account?.id ?? 'new'}
             account={account}
             parentAccount={parentAccount}
             accounts={accounts}

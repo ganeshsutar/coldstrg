@@ -39,7 +39,6 @@ interface ReceiptFormDialogProps {
   organizationId: string;
   nextReceiptNo: string;
   preselectedPartyId?: string;
-  preselectedBillId?: string;
   onSave: (formInput: ReceiptFormInput) => void;
   isPending?: boolean;
 }
@@ -50,7 +49,6 @@ export function ReceiptFormDialog({
   organizationId,
   nextReceiptNo,
   preselectedPartyId,
-  preselectedBillId: _preselectedBillId,
   onSave,
   isPending,
 }: ReceiptFormDialogProps) {

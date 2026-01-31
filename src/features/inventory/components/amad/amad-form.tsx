@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { useCommodities } from "@/features/masters";
 import { useAccountList } from "@/features/accounting/hooks/use-accounts";
+import { useChambers, useChamberFloorsByChamberId } from "@/features/warehouse";
 import type { Amad, CreateAmadInput } from "../../types";
 
 interface AmadFormProps {
@@ -46,6 +47,11 @@ export function AmadForm({
   const isEdit = !!amad;
   const { data: commodities = [] } = useCommodities(organizationId);
   const { data: accounts = [] } = useAccountList(organizationId);
+  const { data: chambers = [] } = useChambers(organizationId);
+
+  // Local state for chamber selection (used to fetch floors)
+  const [selectedChamberId, setSelectedChamberId] = useState(amad?.chamberId ?? "");
+  const { data: chamberFloors = [] } = useChamberFloorsByChamberId(selectedChamberId || undefined);
 
   // Filter to party accounts only (type ACCOUNT)
   const partyAccounts = useMemo(
@@ -73,6 +79,8 @@ export function AmadForm({
     amad?.commodityName ?? ""
   );
   const [variety, setVariety] = useState(amad?.variety ?? "");
+  const [chamberId, setChamberId] = useState(amad?.chamberId ?? "");
+  const [chamberName, setChamberName] = useState(amad?.chamberName ?? "");
   const [room, setRoom] = useState(amad?.room ?? "");
   const [floor, setFloor] = useState(amad?.floor ?? "");
   const [rentRate, setRentRate] = useState(
@@ -140,6 +148,21 @@ export function AmadForm({
     }
   }
 
+  function handleChamberChange(id: string) {
+    setSelectedChamberId(id);
+    setChamberId(id);
+    const chamber = chambers.find((c) => c.id === id);
+    if (chamber) {
+      setChamberName(chamber.name);
+      setRoom(chamber.name); // Store chamber name as room for backward compatibility
+      setFloor(""); // Reset floor when chamber changes
+    }
+  }
+
+  function handleFloorChange(floorNumber: string) {
+    setFloor(floorNumber);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const input: CreateAmadInput & { id?: string } = {
@@ -158,6 +181,8 @@ export function AmadForm({
       ...(commodityId && { commodityId }),
       ...(commodityName && { commodityName }),
       ...(variety && { variety }),
+      ...(chamberId && { chamberId }),
+      ...(chamberName && { chamberName }),
       ...(room && { room }),
       ...(floor && { floor }),
       ...(rentRate && { rentRate: parseFloat(rentRate) }),
@@ -186,301 +211,321 @@ export function AmadForm({
         </DialogDescription>
       </DialogHeader>
 
-      <div className="flex items-center gap-2 mb-4">
-        {[1, 2, 3, 4].map((step) => (
-          <div
-            key={step}
-            className={`flex-1 h-1.5 rounded-full ${
-              step <= currentStep ? "bg-primary" : "bg-muted"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Step 1: Basic Information */}
-      {currentStep === 1 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="amadNo">Amad No</Label>
-              <Input
-                id="amadNo"
-                type="number"
-                value={amadNo}
-                disabled
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="date">Date</Label>
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="partyName">Party Name</Label>
-              <Select value={partyId} onValueChange={handlePartyChange}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select party" />
-                </SelectTrigger>
-                <SelectContent>
-                  {partyAccounts.map((account) => (
-                    <SelectItem key={account.id} value={account.id}>
-                      {account.name} ({account.code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="villageName">Village</Label>
-              <Input
-                id="villageName"
-                value={villageName}
-                onChange={(e) => setVillageName(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="post">Post</Label>
-              <Input
-                id="post"
-                value={post}
-                onChange={(e) => setPost(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="district">District</Label>
-              <Input
-                id="district"
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="road">Road</Label>
-              <Input
-                id="road"
-                value={road}
-                onChange={(e) => setRoad(e.target.value)}
-              />
-            </div>
-          </div>
+      <div className="py-6">
+        <div className="flex items-center gap-2 mb-6">
+          {[1, 2, 3, 4].map((step) => (
+            <div
+              key={step}
+              className={`flex-1 h-1.5 rounded-full ${
+                step <= currentStep ? "bg-primary" : "bg-muted"
+              }`}
+            />
+          ))}
         </div>
-      )}
 
-      {/* Step 2: Commodity & Storage */}
-      {currentStep === 2 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="commodity">Commodity</Label>
-              <Select value={commodityId} onValueChange={handleCommodityChange}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select commodity" />
-                </SelectTrigger>
-                <SelectContent>
-                  {commodities.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="variety">Variety</Label>
-              <Input
-                id="variety"
-                value={variety}
-                onChange={(e) => setVariety(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="room">Room</Label>
-              <Input
-                id="room"
-                value={room}
-                onChange={(e) => setRoom(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="floor">Floor</Label>
-              <Input
-                id="floor"
-                value={floor}
-                onChange={(e) => setFloor(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="rentRate">Rent Rate</Label>
-              <Input
-                id="rentRate"
-                type="number"
-                step="0.01"
-                value={rentRate}
-                onChange={(e) => setRentRate(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="graceDays">Grace Days</Label>
-              <Input
-                id="graceDays"
-                type="number"
-                value={graceDays}
-                onChange={(e) => setGraceDays(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="eWayBillNo">E-Way Bill No</Label>
-              <Input
-                id="eWayBillNo"
-                value={eWayBillNo}
-                onChange={(e) => setEWayBillNo(e.target.value)}
-              />
-            </div>
-          </div>
-          {eWayBillNo && (
-            <div className="grid grid-cols-4 gap-4">
+        {/* Step 1: Basic Information */}
+        {currentStep === 1 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="eWayBillDate">E-Way Bill Date</Label>
+                <Label htmlFor="amadNo">Amad No</Label>
                 <Input
-                  id="eWayBillDate"
+                  id="amadNo"
+                  type="number"
+                  value={amadNo}
+                  disabled
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="date">Date</Label>
+                <Input
+                  id="date"
                   type="date"
-                  value={eWayBillDate}
-                  onChange={(e) => setEWayBillDate(e.target.value)}
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
                 />
               </div>
             </div>
-          )}
-        </div>
-      )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="partyName">Party Name</Label>
+                <Select value={partyId} onValueChange={handlePartyChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select party" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {partyAccounts.map((account) => (
+                      <SelectItem key={account.id} value={account.id}>
+                        {account.name} ({account.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="villageName">Village</Label>
+                <Input
+                  id="villageName"
+                  value={villageName}
+                  onChange={(e) => setVillageName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="post">Post</Label>
+                <Input
+                  id="post"
+                  value={post}
+                  onChange={(e) => setPost(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="district">District</Label>
+                <Input
+                  id="district"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="road">Road</Label>
+                <Input
+                  id="road"
+                  value={road}
+                  onChange={(e) => setRoad(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
-      {/* Step 3: Packet Details */}
-      {currentStep === 3 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>PKT1 (80kg)</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
+        {/* Step 2: Commodity & Storage */}
+        {currentStep === 2 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="commodity">Commodity</Label>
+                <Select value={commodityId} onValueChange={handleCommodityChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select commodity" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {commodities.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="variety">Variety</Label>
+                <Input
+                  id="variety"
+                  value={variety}
+                  onChange={(e) => setVariety(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="chamber">Chamber</Label>
+                <Select value={chamberId} onValueChange={handleChamberChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select chamber" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {chambers.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name} (Room {c.roomNumber})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="floor">Floor</Label>
+                <Select
+                  value={floor}
+                  onValueChange={handleFloorChange}
+                  disabled={!chamberId || chamberFloors.length === 0}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={chamberId ? "Select floor" : "Select chamber first"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {chamberFloors.map((f) => (
+                      <SelectItem key={f.id} value={String(f.floorNumber)}>
+                        {f.floorName || `Floor ${f.floorNumber}`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="rentRate">Rent Rate</Label>
+                <Input
+                  id="rentRate"
+                  type="number"
+                  step="0.01"
+                  value={rentRate}
+                  onChange={(e) => setRentRate(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="graceDays">Grace Days</Label>
+                <Input
+                  id="graceDays"
+                  type="number"
+                  value={graceDays}
+                  onChange={(e) => setGraceDays(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="eWayBillNo">E-Way Bill No</Label>
+                <Input
+                  id="eWayBillNo"
+                  value={eWayBillNo}
+                  onChange={(e) => setEWayBillNo(e.target.value)}
+                />
+              </div>
+            </div>
+            {eWayBillNo && (
+              <div className="grid grid-cols-4 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="eWayBillDate">E-Way Bill Date</Label>
                   <Input
-                    type="number"
-                    placeholder="Count"
-                    value={pkt1}
-                    onChange={(e) => setPkt1(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="Weight"
-                    value={pwt1}
-                    onChange={(e) => setPwt1(e.target.value)}
+                    id="eWayBillDate"
+                    type="date"
+                    value={eWayBillDate}
+                    onChange={(e) => setEWayBillDate(e.target.value)}
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT2 (70kg)</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="Count"
-                    value={pkt2}
-                    onChange={(e) => setPkt2(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="Weight"
-                    value={pwt2}
-                    onChange={(e) => setPwt2(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>PKT3 (50kg)</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="Count"
-                    value={pkt3}
-                    onChange={(e) => setPkt3(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="Weight"
-                    value={pwt3}
-                    onChange={(e) => setPwt3(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
+            )}
           </div>
-          <div className="grid grid-cols-2 gap-4 rounded-md bg-muted/50 p-3">
-            <div className="text-sm">
-              <span className="text-muted-foreground">Total Packets: </span>
-              <span className="font-semibold">{totalPackets}</span>
-            </div>
-            <div className="text-sm">
-              <span className="text-muted-foreground">Total Weight: </span>
-              <span className="font-semibold">
-                {totalWeight.toLocaleString("en-IN")} kg
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Step 4: Identification Marks */}
-      {currentStep === 4 && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="mark1">Mark 1</Label>
-              <Input
-                id="mark1"
-                value={mark1}
-                onChange={(e) => setMark1(e.target.value)}
-              />
+        {/* Step 3: Packet Details */}
+        {currentStep === 3 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label>PKT1 (80kg)</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Input
+                      type="number"
+                      placeholder="Count"
+                      value={pkt1}
+                      onChange={(e) => setPkt1(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Weight"
+                      value={pwt1}
+                      onChange={(e) => setPwt1(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT2 (70kg)</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Input
+                      type="number"
+                      placeholder="Count"
+                      value={pkt2}
+                      onChange={(e) => setPkt2(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Weight"
+                      value={pwt2}
+                      onChange={(e) => setPwt2(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label>PKT3 (50kg)</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Input
+                      type="number"
+                      placeholder="Count"
+                      value={pkt3}
+                      onChange={(e) => setPkt3(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Weight"
+                      value={pwt3}
+                      onChange={(e) => setPwt3(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="mark2">Mark 2</Label>
-              <Input
-                id="mark2"
-                value={mark2}
-                onChange={(e) => setMark2(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="partyMark">Party Mark</Label>
-              <Input
-                id="partyMark"
-                value={partyMark}
-                onChange={(e) => setPartyMark(e.target.value)}
-              />
+            <div className="grid grid-cols-2 gap-4 rounded-md bg-muted/50 p-3">
+              <div className="text-sm">
+                <span className="text-muted-foreground">Total Packets: </span>
+                <span className="font-semibold">{totalPackets}</span>
+              </div>
+              <div className="text-sm">
+                <span className="text-muted-foreground">Total Weight: </span>
+                <span className="font-semibold">
+                  {totalWeight.toLocaleString("en-IN")} kg
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Step 4: Identification Marks */}
+        {currentStep === 4 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="mark1">Mark 1</Label>
+                <Input
+                  id="mark1"
+                  value={mark1}
+                  onChange={(e) => setMark1(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="mark2">Mark 2</Label>
+                <Input
+                  id="mark2"
+                  value={mark2}
+                  onChange={(e) => setMark2(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="partyMark">Party Mark</Label>
+                <Input
+                  id="partyMark"
+                  value={partyMark}
+                  onChange={(e) => setPartyMark(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <DialogFooter className="flex justify-between">
         <div>
