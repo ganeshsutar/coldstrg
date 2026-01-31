@@ -41,7 +41,7 @@ export function RentSelector({
   const selectedRent = allRents.find((r) => r.id === selectedRentId);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-testid="rent-selector">
       <Label>Select Dispatch (Rent/Nikasi)</Label>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -51,11 +51,12 @@ export function RentSelector({
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
           disabled={disabled}
+          data-testid="rent-selector-search-input"
         />
       </div>
 
       {selectedRent && (
-        <div className="p-3 border rounded-lg bg-primary/5 border-primary">
+        <div className="p-3 border rounded-lg bg-primary/5 border-primary" data-testid="rent-selector-selected">
           <div className="flex items-start gap-3">
             <FileText className="h-5 w-5 text-primary mt-0.5" />
             <div>
@@ -71,7 +72,7 @@ export function RentSelector({
         </div>
       )}
 
-      <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
+      <div className="max-h-48 overflow-y-auto border rounded-lg divide-y" data-testid="rent-selector-list">
         {filteredRents.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground text-sm">
             No dispatches found
@@ -87,6 +88,7 @@ export function RentSelector({
                 "w-full p-3 text-left hover:bg-muted transition-colors",
                 selectedRentId === rent.id && "bg-primary/10"
               )}
+              data-testid={`rent-selector-item-${rent.id}`}
             >
               <div className="flex justify-between items-start">
                 <div>

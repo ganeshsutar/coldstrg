@@ -68,3 +68,9 @@ dist-ssr
 amplify_outputs.json
 amplifyconfiguration*
 
+# Playwright E2E testing
+e2e/.env
+e2e/.auth/
+playwright-report/
+test-results/
+

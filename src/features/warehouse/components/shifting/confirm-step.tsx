@@ -22,7 +22,7 @@ export function ConfirmStep({
   const reasonLabel = SHIFTING_REASONS.find((r) => r.value === state.reason)?.label;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="shifting-confirm-step">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Review Shifting Details</CardTitle>

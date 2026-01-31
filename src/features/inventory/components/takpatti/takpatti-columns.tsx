@@ -82,6 +82,7 @@ export function getTakpattiColumns({
             variant="ghost"
             size="icon-xs"
             onClick={() => onDelete(row.original)}
+            data-testid={`takpatti-delete-button-${row.original.id}`}
           >
             <Trash2 className="h-3.5 w-3.5 text-destructive" />
           </Button>

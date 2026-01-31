@@ -31,12 +31,12 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
   const bankClosing = (daybook?.bankCloseDr ?? 0) - (daybook?.bankCloseCr ?? 0);
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" data-testid="daybook-summary-cards">
       {/* Cash Opening */}
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="daybook-cash-opening">
         <CardHeader className="relative">
           <CardDescription>Cash Opening</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="daybook-cash-opening-value">
             {formatCurrency(cashOpening)}
           </CardTitle>
         </CardHeader>
@@ -49,7 +49,7 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
       </Card>
 
       {/* Cash Closing */}
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="daybook-cash-closing">
         <CardHeader className="relative">
           <CardDescription>Cash Closing</CardDescription>
           <CardTitle
@@ -58,6 +58,7 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
                 ? "text-green-600 dark:text-green-400"
                 : "text-red-600 dark:text-red-400"
             }`}
+            data-testid="daybook-cash-closing-value"
           >
             {formatCurrency(cashClosing)}
           </CardTitle>
@@ -78,10 +79,10 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
       </Card>
 
       {/* Bank Opening */}
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="daybook-bank-opening">
         <CardHeader className="relative">
           <CardDescription>Bank Opening</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="daybook-bank-opening-value">
             {formatCurrency(bankOpening)}
           </CardTitle>
         </CardHeader>
@@ -94,7 +95,7 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
       </Card>
 
       {/* Bank Closing */}
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="daybook-bank-closing">
         <CardHeader className="relative">
           <CardDescription>Bank Closing</CardDescription>
           <CardTitle
@@ -103,6 +104,7 @@ export function DaybookSummaryCards({ daybook }: DaybookSummaryCardsProps) {
                 ? "text-green-600 dark:text-green-400"
                 : "text-red-600 dark:text-red-400"
             }`}
+            data-testid="daybook-bank-closing-value"
           >
             {formatCurrency(bankClosing)}
           </CardTitle>

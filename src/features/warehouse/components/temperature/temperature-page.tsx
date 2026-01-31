@@ -14,7 +14,7 @@ export function TemperaturePage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="temperature-page">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Temperature</h1>
         <p className="text-sm text-muted-foreground">

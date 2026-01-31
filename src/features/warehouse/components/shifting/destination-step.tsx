@@ -14,7 +14,7 @@ export function DestinationStep({
   onStateChange,
 }: DestinationStepProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="shifting-destination-step">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Destination Location</CardTitle>

@@ -101,7 +101,7 @@ export function MeterReadingTab({ organizationId }: MeterReadingTabProps) {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <Select value={selectedChamberId} onValueChange={setSelectedChamberId}>
-          <SelectTrigger className="w-64">
+          <SelectTrigger className="w-64" data-testid="meter-chamber-filter">
             <SelectValue placeholder="All Meters" />
           </SelectTrigger>
           <SelectContent>
@@ -114,7 +114,7 @@ export function MeterReadingTab({ organizationId }: MeterReadingTabProps) {
           </SelectContent>
         </Select>
 
-        <Button onClick={() => setDialogOpen(true)}>
+        <Button onClick={() => setDialogOpen(true)} data-testid="new-meter-reading-button">
           <Plus className="h-4 w-4 mr-1" />
           Add Reading
         </Button>

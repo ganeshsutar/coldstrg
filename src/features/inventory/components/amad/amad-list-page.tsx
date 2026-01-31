@@ -120,7 +120,7 @@ export function AmadListPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="amad-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -136,6 +136,7 @@ export function AmadListPage() {
             setEditingAmad(null);
             setDialogOpen(true);
           }}
+          data-testid="new-amad-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           New Amad
@@ -163,6 +164,7 @@ export function AmadListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="amad-search-input"
         />
       </div>
 

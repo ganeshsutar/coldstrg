@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -38,25 +38,6 @@ interface VoucherFormDialogProps {
   isPending: boolean;
 }
 
-interface FormData {
-  voucherNo: string;
-  voucherType: VoucherTypeValue;
-  date: string;
-  drAccountId: string;
-  crAccountId: string;
-  amount: string;
-  rentAmount: string;
-  loanAmount: string;
-  interestAmount: string;
-  bardanaAmount: string;
-  otherAmount: string;
-  paymentMode: PaymentModeValue | "";
-  chequeNo: string;
-  chequeDate: string;
-  bankName: string;
-  narration: string;
-}
-
 interface VoucherFormInnerProps {
   voucher?: Voucher | null;
   accounts: Account[];
@@ -81,65 +62,98 @@ function VoucherFormInner({
   // Only show accounts (not groups) for selection
   const partyAccounts = accounts.filter((a) => a.accountType === "ACCOUNT");
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      voucherNo: voucher?.voucherNo?.toString() ?? nextVoucherNo.toString(),
-      voucherType: voucher?.voucherType ?? "CR",
-      date: voucher?.date ?? new Date().toISOString().split("T")[0],
-      drAccountId: voucher?.drAccountId ?? "",
-      crAccountId: voucher?.crAccountId ?? "",
-      amount: voucher?.amount?.toString() ?? "",
-      rentAmount: voucher?.rentAmount?.toString() ?? "0",
-      loanAmount: voucher?.loanAmount?.toString() ?? "0",
-      interestAmount: voucher?.interestAmount?.toString() ?? "0",
-      bardanaAmount: voucher?.bardanaAmount?.toString() ?? "0",
-      otherAmount: voucher?.otherAmount?.toString() ?? "0",
-      paymentMode: voucher?.paymentMode ?? "",
-      chequeNo: voucher?.chequeNo ?? "",
-      chequeDate: voucher?.chequeDate ?? "",
-      bankName: voucher?.bankName ?? "",
-      narration: voucher?.narration ?? "",
-    },
-  });
+  // Form state using useState (like Party form)
+  const [voucherNo, setVoucherNo] = useState(
+    voucher?.voucherNo?.toString() ?? nextVoucherNo.toString()
+  );
+  const [voucherType, setVoucherType] = useState<VoucherTypeValue>(
+    voucher?.voucherType ?? "CR"
+  );
+  const [date, setDate] = useState(
+    voucher?.date ?? new Date().toISOString().split("T")[0]
+  );
+  const [drAccountId, setDrAccountId] = useState(voucher?.drAccountId ?? "");
+  const [crAccountId, setCrAccountId] = useState(voucher?.crAccountId ?? "");
+  const [amount, setAmount] = useState(voucher?.amount?.toString() ?? "");
+  const [rentAmount, setRentAmount] = useState(
+    voucher?.rentAmount?.toString() ?? "0"
+  );
+  const [loanAmount, setLoanAmount] = useState(
+    voucher?.loanAmount?.toString() ?? "0"
+  );
+  const [interestAmount, setInterestAmount] = useState(
+    voucher?.interestAmount?.toString() ?? "0"
+  );
+  const [bardanaAmount, setBardanaAmount] = useState(
+    voucher?.bardanaAmount?.toString() ?? "0"
+  );
+  const [otherAmount, setOtherAmount] = useState(
+    voucher?.otherAmount?.toString() ?? "0"
+  );
+  const [paymentMode, setPaymentMode] = useState<PaymentModeValue | "">(
+    voucher?.paymentMode ?? ""
+  );
+  const [chequeNo, setChequeNo] = useState(voucher?.chequeNo ?? "");
+  const [chequeDate, setChequeDate] = useState(voucher?.chequeDate ?? "");
+  const [bankName, setBankName] = useState(voucher?.bankName ?? "");
+  const [narration, setNarration] = useState(voucher?.narration ?? "");
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const voucherType = watch("voucherType");
-  const paymentMode = watch("paymentMode");
-  const drAccountId = watch("drAccountId");
-  const crAccountId = watch("crAccountId");
+  // Validation errors
+  const [errors, setErrors] = useState<{
+    voucherNo?: string;
+    date?: string;
+    amount?: string;
+  }>({});
 
   const drAccount = partyAccounts.find((a) => a.id === drAccountId);
   const crAccount = partyAccounts.find((a) => a.id === crAccountId);
 
-  const onSubmit = (data: FormData) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate required fields
+    const newErrors: { voucherNo?: string; date?: string; amount?: string } =
+      {};
+    if (!voucherNo.trim()) {
+      newErrors.voucherNo = "Required";
+    }
+    if (!date.trim()) {
+      newErrors.date = "Required";
+    }
+    if (!amount.trim()) {
+      newErrors.amount = "Amount is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Clear errors
+    setErrors({});
+
     const input: CreateVoucherInput & { id?: string } = {
       organizationId,
-      voucherNo: parseInt(data.voucherNo, 10),
-      voucherType: data.voucherType,
-      date: data.date,
-      drAccountId: data.drAccountId || undefined,
+      voucherNo: parseInt(voucherNo, 10),
+      voucherType,
+      date,
+      drAccountId: drAccountId || undefined,
       drAccountCode: drAccount?.code,
       drAccountName: drAccount?.name,
-      crAccountId: data.crAccountId || undefined,
+      crAccountId: crAccountId || undefined,
       crAccountCode: crAccount?.code,
       crAccountName: crAccount?.name,
-      amount: parseFloat(data.amount) || 0,
-      rentAmount: parseFloat(data.rentAmount) || 0,
-      loanAmount: parseFloat(data.loanAmount) || 0,
-      interestAmount: parseFloat(data.interestAmount) || 0,
-      bardanaAmount: parseFloat(data.bardanaAmount) || 0,
-      otherAmount: parseFloat(data.otherAmount) || 0,
-      paymentMode: data.paymentMode || undefined,
-      chequeNo: data.chequeNo || undefined,
-      chequeDate: data.chequeDate || undefined,
-      bankName: data.bankName || undefined,
-      narration: data.narration || undefined,
+      amount: parseFloat(amount) || 0,
+      rentAmount: parseFloat(rentAmount) || 0,
+      loanAmount: parseFloat(loanAmount) || 0,
+      interestAmount: parseFloat(interestAmount) || 0,
+      bardanaAmount: parseFloat(bardanaAmount) || 0,
+      otherAmount: parseFloat(otherAmount) || 0,
+      paymentMode: paymentMode || undefined,
+      chequeNo: chequeNo || undefined,
+      chequeDate: chequeDate || undefined,
+      bankName: bankName || undefined,
+      narration: narration || undefined,
     };
 
     if (voucher?.id) {
@@ -150,21 +164,27 @@ function VoucherFormInner({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+      data-testid="voucher-form"
+    >
       {/* Voucher Type Toggle */}
       <div className="flex flex-col gap-2">
         <Label>Voucher Type</Label>
         <ToggleGroup
           type="single"
           value={voucherType}
-          onValueChange={(val) => val && setValue("voucherType", val as VoucherTypeValue)}
+          onValueChange={(val) => val && setVoucherType(val as VoucherTypeValue)}
           className="justify-start"
+          data-testid="voucher-form-type-toggle"
         >
           {VOUCHER_TYPE_OPTIONS.map((opt) => (
             <ToggleGroupItem
               key={opt.value}
               value={opt.value}
               className="px-4"
+              data-testid={`voucher-form-type-${opt.value.toLowerCase()}`}
             >
               {opt.shortLabel}
             </ToggleGroupItem>
@@ -179,15 +199,34 @@ function VoucherFormInner({
           <Input
             id="voucherNo"
             type="number"
-            {...register("voucherNo", { required: "Required" })}
+            data-testid="voucher-form-number-input"
+            value={voucherNo}
+            onChange={(e) => {
+              setVoucherNo(e.target.value);
+              if (errors.voucherNo)
+                setErrors((prev) => ({ ...prev, voucherNo: undefined }));
+            }}
           />
           {errors.voucherNo && (
-            <p className="text-sm text-destructive">{errors.voucherNo.message}</p>
+            <p className="text-sm text-destructive">{errors.voucherNo}</p>
           )}
         </div>
         <div className="flex flex-col gap-2 col-span-2">
           <Label htmlFor="date">Date</Label>
-          <Input id="date" type="date" {...register("date", { required: "Required" })} />
+          <Input
+            id="date"
+            type="date"
+            data-testid="voucher-form-date-input"
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value);
+              if (errors.date)
+                setErrors((prev) => ({ ...prev, date: undefined }));
+            }}
+          />
+          {errors.date && (
+            <p className="text-sm text-destructive">{errors.date}</p>
+          )}
         </div>
       </div>
 
@@ -195,11 +234,8 @@ function VoucherFormInner({
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="drAccountId">Debit Account (Dr)</Label>
-          <Select
-            value={drAccountId}
-            onValueChange={(val) => setValue("drAccountId", val)}
-          >
-            <SelectTrigger>
+          <Select value={drAccountId} onValueChange={setDrAccountId}>
+            <SelectTrigger data-testid="voucher-form-dr-account-select">
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
@@ -213,11 +249,8 @@ function VoucherFormInner({
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="crAccountId">Credit Account (Cr)</Label>
-          <Select
-            value={crAccountId}
-            onValueChange={(val) => setValue("crAccountId", val)}
-          >
-            <SelectTrigger>
+          <Select value={crAccountId} onValueChange={setCrAccountId}>
+            <SelectTrigger data-testid="voucher-form-cr-account-select">
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
@@ -238,12 +271,18 @@ function VoucherFormInner({
           id="amount"
           type="number"
           step="0.01"
-          {...register("amount", { required: "Amount is required" })}
+          data-testid="voucher-form-amount-input"
+          value={amount}
+          onChange={(e) => {
+            setAmount(e.target.value);
+            if (errors.amount)
+              setErrors((prev) => ({ ...prev, amount: undefined }));
+          }}
           placeholder="0.00"
           className="text-lg font-semibold"
         />
         {errors.amount && (
-          <p className="text-sm text-destructive">{errors.amount.message}</p>
+          <p className="text-sm text-destructive">{errors.amount}</p>
         )}
       </div>
 
@@ -261,7 +300,8 @@ function VoucherFormInner({
               id="rentAmount"
               type="number"
               step="0.01"
-              {...register("rentAmount")}
+              value={rentAmount}
+              onChange={(e) => setRentAmount(e.target.value)}
               className="h-8"
             />
           </div>
@@ -273,7 +313,8 @@ function VoucherFormInner({
               id="loanAmount"
               type="number"
               step="0.01"
-              {...register("loanAmount")}
+              value={loanAmount}
+              onChange={(e) => setLoanAmount(e.target.value)}
               className="h-8"
             />
           </div>
@@ -285,7 +326,8 @@ function VoucherFormInner({
               id="interestAmount"
               type="number"
               step="0.01"
-              {...register("interestAmount")}
+              value={interestAmount}
+              onChange={(e) => setInterestAmount(e.target.value)}
               className="h-8"
             />
           </div>
@@ -297,7 +339,8 @@ function VoucherFormInner({
               id="bardanaAmount"
               type="number"
               step="0.01"
-              {...register("bardanaAmount")}
+              value={bardanaAmount}
+              onChange={(e) => setBardanaAmount(e.target.value)}
               className="h-8"
             />
           </div>
@@ -309,7 +352,8 @@ function VoucherFormInner({
               id="otherAmount"
               type="number"
               step="0.01"
-              {...register("otherAmount")}
+              value={otherAmount}
+              onChange={(e) => setOtherAmount(e.target.value)}
               className="h-8"
             />
           </div>
@@ -326,11 +370,19 @@ function VoucherFormInner({
           <ToggleGroup
             type="single"
             value={paymentMode}
-            onValueChange={(val) => setValue("paymentMode", (val || "") as PaymentModeValue | "")}
+            onValueChange={(val) =>
+              setPaymentMode((val || "") as PaymentModeValue | "")
+            }
             className="justify-start"
+            data-testid="voucher-form-payment-mode-toggle"
           >
             {PAYMENT_MODE_OPTIONS.map((opt) => (
-              <ToggleGroupItem key={opt.value} value={opt.value} className="px-4">
+              <ToggleGroupItem
+                key={opt.value}
+                value={opt.value}
+                className="px-4"
+                data-testid={`voucher-form-payment-${opt.value.toLowerCase()}`}
+              >
                 {opt.label}
               </ToggleGroupItem>
             ))}
@@ -343,17 +395,30 @@ function VoucherFormInner({
               <>
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="chequeNo">Cheque No</Label>
-                  <Input id="chequeNo" {...register("chequeNo")} />
+                  <Input
+                    id="chequeNo"
+                    value={chequeNo}
+                    onChange={(e) => setChequeNo(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="chequeDate">Cheque Date</Label>
-                  <Input id="chequeDate" type="date" {...register("chequeDate")} />
+                  <Input
+                    id="chequeDate"
+                    type="date"
+                    value={chequeDate}
+                    onChange={(e) => setChequeDate(e.target.value)}
+                  />
                 </div>
               </>
             )}
             <div className="flex flex-col gap-2">
               <Label htmlFor="bankName">Bank Name</Label>
-              <Input id="bankName" {...register("bankName")} />
+              <Input
+                id="bankName"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+              />
             </div>
           </div>
         )}
@@ -364,7 +429,9 @@ function VoucherFormInner({
         <Label htmlFor="narration">Narration</Label>
         <Textarea
           id="narration"
-          {...register("narration")}
+          data-testid="voucher-form-narration-input"
+          value={narration}
+          onChange={(e) => setNarration(e.target.value)}
           placeholder="Enter remarks or description..."
           rows={2}
         />
@@ -375,10 +442,15 @@ function VoucherFormInner({
           type="button"
           variant="outline"
           onClick={onCancel}
+          data-testid="voucher-form-cancel-button"
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          data-testid="voucher-form-submit-button"
+        >
           {isPending ? "Saving..." : isEditing ? "Update Voucher" : "Save Voucher"}
         </Button>
       </DialogFooter>
@@ -400,7 +472,10 @@ export function VoucherFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="max-w-2xl max-h-[90vh] overflow-y-auto"
+        data-testid="voucher-form-dialog"
+      >
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Edit Voucher" : "New Voucher Entry"}

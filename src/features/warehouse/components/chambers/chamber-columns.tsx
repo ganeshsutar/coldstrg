@@ -116,6 +116,7 @@ export function getChamberColumns({
               className="h-8 w-8"
               onClick={() => onEdit(chamber)}
               title="Edit"
+              data-testid={`chamber-edit-button-${chamber.id}`}
             >
               <Pencil className="h-4 w-4" />
             </Button>
@@ -125,6 +126,7 @@ export function getChamberColumns({
               className="h-8 w-8"
               onClick={() => onConfigureFloors(chamber)}
               title="Configure Floors"
+              data-testid={`chamber-floors-button-${chamber.id}`}
             >
               <Settings className="h-4 w-4" />
             </Button>
@@ -134,6 +136,7 @@ export function getChamberColumns({
               className="h-8 w-8"
               onClick={() => onDelete(chamber)}
               title="Delete"
+              data-testid={`chamber-delete-button-${chamber.id}`}
             >
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>

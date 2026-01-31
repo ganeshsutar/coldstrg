@@ -80,7 +80,7 @@ export function DaybookTab() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4" data-testid="daybook-page">
       {/* Header with date navigator */}
       <div className="flex items-center justify-between">
         <div>
@@ -98,7 +98,7 @@ export function DaybookTab() {
       {/* Daily Summary */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Cash Summary */}
-        <Card>
+        <Card data-testid="daybook-cash-summary">
           <CardHeader className="pb-2">
             <CardTitle className="text-base">Cash Summary</CardTitle>
           </CardHeader>
@@ -132,7 +132,7 @@ export function DaybookTab() {
         </Card>
 
         {/* Bank Summary */}
-        <Card>
+        <Card data-testid="daybook-bank-summary">
           <CardHeader className="pb-2">
             <CardTitle className="text-base">Bank Summary</CardTitle>
           </CardHeader>
@@ -167,7 +167,7 @@ export function DaybookTab() {
       </div>
 
       {/* Transaction List */}
-      <Card>
+      <Card data-testid="daybook-transactions">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">
             Transactions ({vouchers.length})
@@ -175,7 +175,7 @@ export function DaybookTab() {
         </CardHeader>
         <CardContent>
           {vouchers.length === 0 ? (
-            <div className="flex items-center justify-center h-32 text-muted-foreground">
+            <div className="flex items-center justify-center h-32 text-muted-foreground" data-testid="daybook-empty-state">
               <p>No transactions for this date</p>
             </div>
           ) : (
@@ -184,6 +184,7 @@ export function DaybookTab() {
                 <div
                   key={voucher.id}
                   className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors"
+                  data-testid={`daybook-transaction-${voucher.id}`}
                 >
                   <div className="flex items-center gap-3">
                     <Badge

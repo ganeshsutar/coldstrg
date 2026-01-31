@@ -40,17 +40,17 @@ export function ReceiptPreview({
   }[receipt.paymentMode || "CASH"];
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-testid="receipt-preview-page">
       {/* Header */}
       <div className="flex items-center justify-between print:hidden">
         <div className="flex items-center gap-4">
           {onBack && (
-            <Button variant="ghost" size="icon" onClick={onBack}>
+            <Button variant="ghost" size="icon" onClick={onBack} data-testid="receipt-preview-back">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           )}
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-tight" data-testid="receipt-preview-number">
               Receipt #{receipt.receiptNo}
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -69,11 +69,12 @@ export function ReceiptPreview({
                   ? "destructive"
                   : "secondary"
             }
+            data-testid="receipt-preview-status"
           >
             {receipt.status}
           </Badge>
         </div>
-        <Button variant="outline" onClick={handlePrint}>
+        <Button variant="outline" onClick={handlePrint} data-testid="receipt-preview-print">
           <Printer className="h-4 w-4 mr-1" />
           Print
         </Button>

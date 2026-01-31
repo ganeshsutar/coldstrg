@@ -43,7 +43,7 @@ export function LocationPicker({
     : [];
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4" data-testid="location-picker">
       <div className="space-y-4">
         <Label>Chamber</Label>
         <Select
@@ -54,7 +54,7 @@ export function LocationPicker({
           }}
           disabled={disabled}
         >
-          <SelectTrigger>
+          <SelectTrigger data-testid="location-chamber-select">
             <SelectValue placeholder="Select chamber" />
           </SelectTrigger>
           <SelectContent>
@@ -78,7 +78,7 @@ export function LocationPicker({
           }}
           disabled={disabled || !selectedChamberId}
         >
-          <SelectTrigger>
+          <SelectTrigger data-testid="location-floor-select">
             <SelectValue placeholder="Select floor" />
           </SelectTrigger>
           <SelectContent>
@@ -100,7 +100,7 @@ export function LocationPicker({
           onValueChange={(value) => onRackChange(parseInt(value, 10))}
           disabled={disabled || !selectedFloorNumber}
         >
-          <SelectTrigger>
+          <SelectTrigger data-testid="location-rack-select">
             <SelectValue placeholder="Select rack" />
           </SelectTrigger>
           <SelectContent>

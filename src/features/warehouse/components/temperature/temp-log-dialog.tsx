@@ -102,7 +102,7 @@ export function TempLogDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" data-testid="temp-log-dialog">
         <DialogHeader>
           <DialogTitle>Log Temperature Reading</DialogTitle>
           <DialogDescription>
@@ -114,7 +114,7 @@ export function TempLogDialog({
           <div className="flex flex-col gap-2">
             <Label htmlFor="chamber">Chamber</Label>
             <Select value={chamberId} onValueChange={setChamberId}>
-              <SelectTrigger>
+              <SelectTrigger data-testid="temp-form-chamber-select">
                 <SelectValue placeholder="Select chamber" />
               </SelectTrigger>
               <SelectContent>
@@ -135,6 +135,7 @@ export function TempLogDialog({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                data-testid="temp-form-date-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -144,6 +145,7 @@ export function TempLogDialog({
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
+                data-testid="temp-form-time-input"
               />
             </div>
           </div>
@@ -158,6 +160,7 @@ export function TempLogDialog({
                 value={lowTemp}
                 onChange={(e) => setLowTemp(e.target.value)}
                 required
+                data-testid="temp-form-low-temp-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -169,6 +172,7 @@ export function TempLogDialog({
                 value={highTemp}
                 onChange={(e) => setHighTemp(e.target.value)}
                 required
+                data-testid="temp-form-high-temp-input"
               />
             </div>
           </div>
@@ -182,6 +186,7 @@ export function TempLogDialog({
                 step="0.1"
                 value={humidity}
                 onChange={(e) => setHumidity(e.target.value)}
+                data-testid="temp-form-humidity-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -190,6 +195,7 @@ export function TempLogDialog({
                 id="recordedBy"
                 value={recordedBy}
                 onChange={(e) => setRecordedBy(e.target.value)}
+                data-testid="temp-form-recorded-by-input"
               />
             </div>
           </div>
@@ -201,14 +207,15 @@ export function TempLogDialog({
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               rows={2}
+              data-testid="temp-form-remarks-input"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} data-testid="temp-form-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={!isValid || createMutation.isPending}>
+            <Button type="submit" disabled={!isValid || createMutation.isPending} data-testid="temp-form-submit-button">
               {createMutation.isPending ? "Saving..." : "Save Reading"}
             </Button>
           </DialogFooter>

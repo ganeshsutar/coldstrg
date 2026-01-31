@@ -39,7 +39,7 @@ export function TakpattiFormDialog({
 }: TakpattiFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="takpatti-form-dialog">
         {open && (
           <TakpattiForm
             nextTakpattiNo={nextTakpattiNo}
@@ -123,12 +123,12 @@ function TakpattiForm({
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid="takpatti-form">
         <div className="py-6 space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="takpattiNo">Takpatti No</Label>
-              <Input id="takpattiNo" type="number" value={takpattiNo} disabled />
+              <Input id="takpattiNo" type="number" value={takpattiNo} disabled data-testid="takpatti-form-no-input" />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
@@ -138,12 +138,13 @@ function TakpattiForm({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
+                data-testid="takpatti-form-date-input"
               />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="amad">Select Amad</Label>
               <Select value={amadId} onValueChange={handleAmadSelect}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full" data-testid="takpatti-form-amad-select">
                   <SelectValue placeholder="Select Amad" />
                 </SelectTrigger>
                 <SelectContent>
@@ -160,7 +161,7 @@ function TakpattiForm({
           <div className="grid grid-cols-4 gap-4">
             <div className="flex flex-col gap-2">
               <Label>Room</Label>
-              <Input value={room} onChange={(e) => setRoom(e.target.value)} />
+              <Input value={room} onChange={(e) => setRoom(e.target.value)} data-testid="takpatti-form-room-input" />
             </div>
             <div className="flex flex-col gap-2">
               <Label>PKT1</Label>
@@ -168,6 +169,7 @@ function TakpattiForm({
                 type="number"
                 value={pkt1}
                 onChange={(e) => setPkt1(e.target.value)}
+                data-testid="takpatti-form-pkt1-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -176,6 +178,7 @@ function TakpattiForm({
                 type="number"
                 value={pkt2}
                 onChange={(e) => setPkt2(e.target.value)}
+                data-testid="takpatti-form-pkt2-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -184,21 +187,22 @@ function TakpattiForm({
                 type="number"
                 value={pkt3}
                 onChange={(e) => setPkt3(e.target.value)}
+                data-testid="takpatti-form-pkt3-input"
               />
             </div>
           </div>
 
           <div className="rounded-md bg-muted/50 p-3 text-sm">
             <span className="text-muted-foreground">Total Packets: </span>
-            <span className="font-semibold">{totalPackets}</span>
+            <span className="font-semibold" data-testid="takpatti-form-total-packets">{totalPackets}</span>
           </div>
         </div>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} data-testid="takpatti-form-cancel-button">
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending || !date}>
+          <Button type="submit" disabled={isPending || !date} data-testid="takpatti-form-submit-button">
             {isPending ? "Saving..." : "Create"}
           </Button>
         </DialogFooter>

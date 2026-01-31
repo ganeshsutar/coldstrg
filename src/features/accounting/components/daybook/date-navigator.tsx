@@ -38,8 +38,8 @@ export function DateNavigator({ date, onDateChange }: DateNavigatorProps) {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <Button variant="outline" size="icon" onClick={goToPrevDay}>
+    <div className="flex items-center gap-2" data-testid="daybook-date-navigator">
+      <Button variant="outline" size="icon" onClick={goToPrevDay} data-testid="daybook-nav-prev">
         <ChevronLeft className="h-4 w-4" />
       </Button>
 
@@ -51,21 +51,22 @@ export function DateNavigator({ date, onDateChange }: DateNavigatorProps) {
             value={date}
             onChange={(e) => onDateChange(e.target.value)}
             className="pl-9"
+            data-testid="daybook-date-input"
           />
         </div>
       </div>
 
-      <Button variant="outline" size="icon" onClick={goToNextDay}>
+      <Button variant="outline" size="icon" onClick={goToNextDay} data-testid="daybook-nav-next">
         <ChevronRight className="h-4 w-4" />
       </Button>
 
       {!isToday && (
-        <Button variant="ghost" size="sm" onClick={goToToday}>
+        <Button variant="ghost" size="sm" onClick={goToToday} data-testid="daybook-nav-today">
           Today
         </Button>
       )}
 
-      <span className="text-sm text-muted-foreground ml-2">
+      <span className="text-sm text-muted-foreground ml-2" data-testid="daybook-date-display">
         {formatDisplayDate(date)}
       </span>
     </div>

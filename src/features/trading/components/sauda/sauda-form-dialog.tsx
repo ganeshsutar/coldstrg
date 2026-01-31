@@ -128,7 +128,7 @@ function SaudaFormContent({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle data-testid="sauda-form-dialog-title">
           {isEditing ? "Edit Deal (Sauda)" : "New Deal (Sauda)"}
         </DialogTitle>
       </DialogHeader>
@@ -146,6 +146,7 @@ function SaudaFormContent({
                 <Input
                   value={formatSaudaNo(sauda?.saudaNo ?? nextSaudaNo)}
                   disabled
+                  data-testid="sauda-form-sauda-no-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -155,6 +156,7 @@ function SaudaFormContent({
                   type="date"
                   value={saudaDate}
                   onChange={(e) => setSaudaDate(e.target.value)}
+                  data-testid="sauda-form-date-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -165,8 +167,9 @@ function SaudaFormContent({
                   min="0"
                   value={dueDays}
                   onChange={(e) => setDueDays(parseInt(e.target.value) || 0)}
+                  data-testid="sauda-form-due-days-input"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground" data-testid="sauda-form-due-date-display">
                   Due: {dueDate}
                 </p>
               </div>
@@ -185,7 +188,7 @@ function SaudaFormContent({
               <div className="flex flex-col gap-2">
                 <Label>Seller (Party with stock) *</Label>
                 <Select value={sellerPartyId} onValueChange={setSellerPartyId}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="sauda-form-seller-select">
                     <SelectValue placeholder="Select seller" />
                   </SelectTrigger>
                   <SelectContent>
@@ -207,7 +210,7 @@ function SaudaFormContent({
               <div className="flex flex-col gap-2">
                 <Label>Buyer (Trader/Vyapari) *</Label>
                 <Select value={buyerPartyId} onValueChange={setBuyerPartyId}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="sauda-form-buyer-select">
                     <SelectValue placeholder="Select buyer" />
                   </SelectTrigger>
                   <SelectContent>
@@ -234,6 +237,7 @@ function SaudaFormContent({
                   value={buyerContact}
                   onChange={(e) => setBuyerContact(e.target.value)}
                   placeholder="Phone number"
+                  data-testid="sauda-form-buyer-contact-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -243,6 +247,7 @@ function SaudaFormContent({
                   value={buyerLocation}
                   onChange={(e) => setBuyerLocation(e.target.value)}
                   placeholder="City/Location"
+                  data-testid="sauda-form-buyer-location-input"
                 />
               </div>
             </div>
@@ -263,6 +268,7 @@ function SaudaFormContent({
                   value={commodityName}
                   onChange={(e) => setCommodityName(e.target.value)}
                   placeholder="e.g., Potato"
+                  data-testid="sauda-form-commodity-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -272,6 +278,7 @@ function SaudaFormContent({
                   value={variety}
                   onChange={(e) => setVariety(e.target.value)}
                   placeholder="e.g., Chipsona"
+                  data-testid="sauda-form-variety-input"
                 />
               </div>
             </div>
@@ -285,6 +292,7 @@ function SaudaFormContent({
                   min="1"
                   value={quantity || ""}
                   onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
+                  data-testid="sauda-form-quantity-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -296,6 +304,7 @@ function SaudaFormContent({
                   step="0.01"
                   value={rate || ""}
                   onChange={(e) => setRate(parseFloat(e.target.value) || 0)}
+                  data-testid="sauda-form-rate-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -304,6 +313,7 @@ function SaudaFormContent({
                   value={formatCurrency(amount)}
                   disabled
                   className="font-semibold"
+                  data-testid="sauda-form-amount-display"
                 />
               </div>
             </div>
@@ -324,6 +334,7 @@ function SaudaFormContent({
                   value={paymentTerms}
                   onChange={(e) => setPaymentTerms(e.target.value)}
                   placeholder="e.g., Advance 50%, Balance on delivery"
+                  data-testid="sauda-form-payment-terms-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -333,6 +344,7 @@ function SaudaFormContent({
                   value={deliveryLocation}
                   onChange={(e) => setDeliveryLocation(e.target.value)}
                   placeholder="Delivery address"
+                  data-testid="sauda-form-delivery-location-input"
                 />
               </div>
             </div>
@@ -345,6 +357,7 @@ function SaudaFormContent({
                 rows={2}
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
+                data-testid="sauda-form-remarks-input"
               />
             </div>
           </CardContent>
@@ -352,12 +365,13 @@ function SaudaFormContent({
       </div>
 
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel}>
+        <Button variant="outline" onClick={onCancel} data-testid="sauda-form-cancel-button">
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isPending || !sellerPartyId || !buyerPartyId || quantity <= 0 || rate <= 0}
+          data-testid="sauda-form-submit-button"
         >
           {isPending ? "Saving..." : isEditing ? "Update" : "Create Deal"}
         </Button>
@@ -411,7 +425,7 @@ export function SaudaFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" data-testid="sauda-form-dialog">
         {open && (
           <SaudaFormContent
             key={formKey}

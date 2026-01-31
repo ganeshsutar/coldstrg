@@ -45,7 +45,7 @@ export function AmadSelector({
   const selectedAmad = allAmads.find((a) => a.id === selectedAmadId);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-testid="amad-selector">
       <Label>Select Amad</Label>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -55,11 +55,12 @@ export function AmadSelector({
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
           disabled={disabled}
+          data-testid="amad-selector-search-input"
         />
       </div>
 
       {selectedAmad && (
-        <div className="p-3 border rounded-lg bg-primary/5 border-primary">
+        <div className="p-3 border rounded-lg bg-primary/5 border-primary" data-testid="amad-selector-selected">
           <div className="flex items-start gap-3">
             <Package className="h-5 w-5 text-primary mt-0.5" />
             <div>
@@ -75,7 +76,7 @@ export function AmadSelector({
         </div>
       )}
 
-      <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
+      <div className="max-h-48 overflow-y-auto border rounded-lg divide-y" data-testid="amad-selector-list">
         {filteredAmads.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground text-sm">
             No amads found
@@ -91,6 +92,7 @@ export function AmadSelector({
                 "w-full p-3 text-left hover:bg-muted transition-colors",
                 selectedAmadId === amad.id && "bg-primary/10"
               )}
+              data-testid={`amad-selector-item-${amad.id}`}
             >
               <div className="flex justify-between items-start">
                 <div>

@@ -129,7 +129,7 @@ export function SaudaListPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="sauda-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -143,6 +143,7 @@ export function SaudaListPage() {
             setEditingSauda(null);
             setDialogOpen(true);
           }}
+          data-testid="new-deal-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           New Deal
@@ -152,7 +153,7 @@ export function SaudaListPage() {
       {/* KPI Cards */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+          <Card data-testid="sauda-kpi-open-deals">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Open Deals</div>
               <div className="text-2xl font-bold">
@@ -163,7 +164,7 @@ export function SaudaListPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="sauda-kpi-partial-dispatch">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Partial Dispatch</div>
               <div className="text-2xl font-bold">{stats.partialDeals}</div>
@@ -172,7 +173,7 @@ export function SaudaListPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="sauda-kpi-total-value">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Total Value</div>
               <div className="text-2xl font-bold">
@@ -183,7 +184,7 @@ export function SaudaListPage() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="sauda-kpi-dispatched">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Dispatched</div>
               <div className="text-2xl font-bold">
@@ -203,10 +204,10 @@ export function SaudaListPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({saudas.length})</TabsTrigger>
-          <TabsTrigger value="open">Open ({counts.open})</TabsTrigger>
-          <TabsTrigger value="partial">Partial ({counts.partial})</TabsTrigger>
-          <TabsTrigger value="completed">Completed ({counts.completed})</TabsTrigger>
+          <TabsTrigger value="all" data-testid="sauda-tab-all">All ({saudas.length})</TabsTrigger>
+          <TabsTrigger value="open" data-testid="sauda-tab-open">Open ({counts.open})</TabsTrigger>
+          <TabsTrigger value="partial" data-testid="sauda-tab-partial">Partial ({counts.partial})</TabsTrigger>
+          <TabsTrigger value="completed" data-testid="sauda-tab-completed">Completed ({counts.completed})</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -218,6 +219,7 @@ export function SaudaListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="sauda-search-input"
         />
       </div>
 

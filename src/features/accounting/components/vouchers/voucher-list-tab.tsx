@@ -158,16 +158,17 @@ export function VoucherListTab() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4" data-testid="vouchers-page">
       {/* Header with add button */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-medium">Vouchers</h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground" data-testid="voucher-today-summary">
             {totals.todayCount} vouchers today · Total: {formatCurrency(totals.totalToday)}
           </p>
         </div>
         <Button
+          data-testid="new-voucher-button"
           onClick={() => {
             setEditingVoucher(null);
             setDialogOpen(true);
@@ -181,12 +182,12 @@ export function VoucherListTab() {
       {/* Tab Filters */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as VoucherFilterTab)}>
         <TabsList className="flex-wrap h-auto">
-          <TabsTrigger value="all">All ({tabCounts.all})</TabsTrigger>
-          <TabsTrigger value="CR">Receipt ({tabCounts.CR})</TabsTrigger>
-          <TabsTrigger value="DR">Payment ({tabCounts.DR})</TabsTrigger>
-          <TabsTrigger value="JV">Journal ({tabCounts.JV})</TabsTrigger>
-          <TabsTrigger value="CV">Contra ({tabCounts.CV})</TabsTrigger>
-          <TabsTrigger value="BH">Bank ({tabCounts.BH})</TabsTrigger>
+          <TabsTrigger value="all" data-testid="voucher-tab-all">All ({tabCounts.all})</TabsTrigger>
+          <TabsTrigger value="CR" data-testid="voucher-tab-cr">Receipt ({tabCounts.CR})</TabsTrigger>
+          <TabsTrigger value="DR" data-testid="voucher-tab-dr">Payment ({tabCounts.DR})</TabsTrigger>
+          <TabsTrigger value="JV" data-testid="voucher-tab-jv">Journal ({tabCounts.JV})</TabsTrigger>
+          <TabsTrigger value="CV" data-testid="voucher-tab-cv">Contra ({tabCounts.CV})</TabsTrigger>
+          <TabsTrigger value="BH" data-testid="voucher-tab-bh">Bank ({tabCounts.BH})</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -195,6 +196,7 @@ export function VoucherListTab() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
+            data-testid="voucher-search-input"
             placeholder="Search by account or narration..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -204,6 +206,7 @@ export function VoucherListTab() {
         <div className="relative">
           <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
+            data-testid="voucher-date-filter"
             type="date"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
@@ -211,14 +214,14 @@ export function VoucherListTab() {
           />
         </div>
         {dateFilter && (
-          <Button variant="ghost" size="sm" onClick={() => setDateFilter("")}>
+          <Button variant="ghost" size="sm" onClick={() => setDateFilter("")} data-testid="voucher-clear-date-button">
             Clear Date
           </Button>
         )}
       </div>
 
       {/* Table */}
-      <DataTable columns={columns} data={filtered} />
+      <DataTable columns={columns} data={filtered} data-testid="voucher-data-table" />
 
       {/* Form Dialog */}
       {organizationId && (

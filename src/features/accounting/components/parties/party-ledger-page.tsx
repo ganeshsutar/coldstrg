@@ -137,7 +137,7 @@ export function PartyLedgerPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="party-ledger-page">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -147,6 +147,7 @@ export function PartyLedgerPage() {
           </p>
         </div>
         <Button
+          data-testid="add-party-button"
           onClick={() => {
             setEditingAccount(null);
             setDialogOpen(true);
@@ -163,13 +164,13 @@ export function PartyLedgerPage() {
       {/* Tab Filters */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as PartyFilterTab)}>
         <TabsList>
-          <TabsTrigger value="all">
+          <TabsTrigger value="all" data-testid="party-tab-all">
             All ({tabCounts.all})
           </TabsTrigger>
-          <TabsTrigger value="debtors">
+          <TabsTrigger value="debtors" data-testid="party-tab-debtors">
             Debtors ({tabCounts.debtors})
           </TabsTrigger>
-          <TabsTrigger value="creditors">
+          <TabsTrigger value="creditors" data-testid="party-tab-creditors">
             Creditors ({tabCounts.creditors})
           </TabsTrigger>
         </TabsList>
@@ -179,6 +180,7 @@ export function PartyLedgerPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
+          data-testid="party-search-input"
           placeholder="Search by name, code, phone, or city..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -187,7 +189,7 @@ export function PartyLedgerPage() {
       </div>
 
       {/* Table */}
-      <DataTable columns={columns} data={filtered} />
+      <DataTable columns={columns} data={filtered} data-testid="party-data-table" />
 
       {/* Form Dialog */}
       {organizationId && (

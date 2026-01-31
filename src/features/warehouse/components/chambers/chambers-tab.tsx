@@ -139,7 +139,7 @@ export function ChambersTab({ organizationId }: ChambersTabProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-testid="chambers-page">
       <div className="flex items-center justify-between gap-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -148,6 +148,7 @@ export function ChambersTab({ organizationId }: ChambersTabProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
+            data-testid="chambers-search-input"
           />
         </div>
         <Button
@@ -155,6 +156,7 @@ export function ChambersTab({ organizationId }: ChambersTabProps) {
             setEditingChamber(null);
             setDialogOpen(true);
           }}
+          data-testid="new-chamber-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           Add Chamber

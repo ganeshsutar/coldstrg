@@ -145,7 +145,7 @@ export function FloorConfigDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" data-testid="floor-config-dialog">
         <DialogHeader>
           <DialogTitle>Configure Floors - {chamber.name}</DialogTitle>
           <DialogDescription>
@@ -159,6 +159,7 @@ export function FloorConfigDialog({
               <div
                 key={floor.id || `new-${index}`}
                 className="grid grid-cols-6 gap-3 items-end p-3 border rounded-lg"
+                data-testid={`floor-row-${index}`}
               >
                 <div className="space-y-1">
                   <Label className="text-xs">Floor #</Label>
@@ -169,6 +170,7 @@ export function FloorConfigDialog({
                     onChange={(e) =>
                       handleFloorChange(index, "floorNumber", parseInt(e.target.value, 10))
                     }
+                    data-testid={`floor-number-input-${index}`}
                   />
                 </div>
                 <div className="space-y-1">
@@ -176,6 +178,7 @@ export function FloorConfigDialog({
                   <Input
                     value={floor.floorName}
                     onChange={(e) => handleFloorChange(index, "floorName", e.target.value)}
+                    data-testid={`floor-name-input-${index}`}
                   />
                 </div>
                 <div className="space-y-1">
@@ -187,6 +190,7 @@ export function FloorConfigDialog({
                     onChange={(e) =>
                       handleFloorChange(index, "fromRack", parseInt(e.target.value, 10))
                     }
+                    data-testid={`floor-from-rack-input-${index}`}
                   />
                 </div>
                 <div className="space-y-1">
@@ -198,6 +202,7 @@ export function FloorConfigDialog({
                     onChange={(e) =>
                       handleFloorChange(index, "toRack", parseInt(e.target.value, 10))
                     }
+                    data-testid={`floor-to-rack-input-${index}`}
                   />
                 </div>
                 <div className="space-y-1">
@@ -209,6 +214,7 @@ export function FloorConfigDialog({
                     onChange={(e) =>
                       handleFloorChange(index, "racksPerRow", parseInt(e.target.value, 10))
                     }
+                    data-testid={`floor-racks-per-row-input-${index}`}
                   />
                 </div>
                 <div>
@@ -218,6 +224,7 @@ export function FloorConfigDialog({
                     size="icon"
                     onClick={() => handleRemoveFloor(index)}
                     disabled={floors.length === 1}
+                    data-testid={`floor-delete-button-${index}`}
                   >
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
@@ -226,16 +233,16 @@ export function FloorConfigDialog({
             ))}
           </div>
 
-          <Button type="button" variant="outline" onClick={handleAddFloor}>
+          <Button type="button" variant="outline" onClick={handleAddFloor} data-testid="add-floor-button">
             <Plus className="h-4 w-4 mr-1" />
             Add Floor
           </Button>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} data-testid="floor-config-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={isPending || floors.length === 0}>
+            <Button type="submit" disabled={isPending || floors.length === 0} data-testid="floor-config-submit-button">
               {isPending ? "Saving..." : "Save Floors"}
             </Button>
           </DialogFooter>

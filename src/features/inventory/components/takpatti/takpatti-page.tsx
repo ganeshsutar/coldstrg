@@ -71,7 +71,7 @@ export function TakpattiPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="takpatti-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -80,7 +80,7 @@ export function TakpattiPage() {
             Weighment slip records
           </p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
+        <Button onClick={() => setDialogOpen(true)} data-testid="new-takpatti-button">
           <Plus className="h-4 w-4 mr-1" />
           New Takpatti
         </Button>
@@ -94,6 +94,7 @@ export function TakpattiPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="takpatti-search-input"
         />
       </div>
 

@@ -130,7 +130,7 @@ export function RentBillListPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="rent-bill-list-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -139,7 +139,7 @@ export function RentBillListPage() {
             Generate and manage storage rent bills
           </p>
         </div>
-        <Button onClick={() => navigate({ to: "/billing/new-bill" })}>
+        <Button onClick={() => navigate({ to: "/billing/new-bill" })} data-testid="rent-bill-new-button">
           <Plus className="h-4 w-4 mr-1" />
           New Bill
         </Button>
@@ -154,11 +154,11 @@ export function RentBillListPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({bills.length})</TabsTrigger>
-          <TabsTrigger value="draft">Draft ({counts.draft})</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
-          <TabsTrigger value="paid">Paid ({counts.paid})</TabsTrigger>
-          <TabsTrigger value="cancelled">
+          <TabsTrigger value="all" data-testid="rent-bill-tab-all">All ({bills.length})</TabsTrigger>
+          <TabsTrigger value="draft" data-testid="rent-bill-tab-draft">Draft ({counts.draft})</TabsTrigger>
+          <TabsTrigger value="pending" data-testid="rent-bill-tab-pending">Pending ({counts.pending})</TabsTrigger>
+          <TabsTrigger value="paid" data-testid="rent-bill-tab-paid">Paid ({counts.paid})</TabsTrigger>
+          <TabsTrigger value="cancelled" data-testid="rent-bill-tab-cancelled">
             Cancelled ({counts.cancelled})
           </TabsTrigger>
         </TabsList>
@@ -172,11 +172,12 @@ export function RentBillListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="rent-bill-search"
         />
       </div>
 
       {/* Table */}
-      <DataTable columns={columns} data={filtered} />
+      <DataTable columns={columns} data={filtered} data-testid="rent-bill-table" />
     </div>
   );
 }

@@ -113,7 +113,7 @@ export function RentListPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="nikasi-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -129,6 +129,7 @@ export function RentListPage() {
             setEditingRent(null);
             setDialogOpen(true);
           }}
+          data-testid="new-nikasi-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           New Dispatch
@@ -137,7 +138,7 @@ export function RentListPage() {
 
       {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+        <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="nikasi-kpi-today-dispatch">
           <CardHeader className="relative">
             <CardDescription>Today's Dispatch</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -151,7 +152,7 @@ export function RentListPage() {
             </div>
           </CardFooter>
         </Card>
-        <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+        <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="nikasi-kpi-month-revenue">
           <CardHeader className="relative">
             <CardDescription>This Month Revenue</CardDescription>
             <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -175,6 +176,7 @@ export function RentListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="nikasi-search-input"
         />
       </div>
 

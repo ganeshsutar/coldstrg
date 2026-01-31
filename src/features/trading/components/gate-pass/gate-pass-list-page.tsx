@@ -145,14 +145,14 @@ export function GatePassListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-64" data-testid="gate-pass-page">
         <div className="text-muted-foreground">Loading gate passes...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="gate-pass-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -166,6 +166,7 @@ export function GatePassListPage() {
             setSelectedGatePass(null);
             setDialogOpen(true);
           }}
+          data-testid="new-gate-pass-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           New Gate Pass
@@ -175,28 +176,28 @@ export function GatePassListPage() {
       {/* KPI Cards */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+          <Card data-testid="gate-pass-kpi-today">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Today</div>
               <div className="text-2xl font-bold">{stats.todayCount}</div>
               <div className="text-xs text-muted-foreground">gate passes</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="gate-pass-kpi-pending-print">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Pending Print</div>
               <div className="text-2xl font-bold">{stats.pendingPrint}</div>
               <div className="text-xs text-muted-foreground">drafts</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="gate-pass-kpi-this-week">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">This Week</div>
               <div className="text-2xl font-bold">{stats.weekCount}</div>
               <div className="text-xs text-muted-foreground">gate passes</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="gate-pass-kpi-total-bags">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Total Bags</div>
               <div className="text-2xl font-bold">
@@ -214,10 +215,10 @@ export function GatePassListPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({gatePasses.length})</TabsTrigger>
-          <TabsTrigger value="today">Today ({counts.today})</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
-          <TabsTrigger value="week">This Week ({counts.week})</TabsTrigger>
+          <TabsTrigger value="all" data-testid="gate-pass-tab-all">All ({gatePasses.length})</TabsTrigger>
+          <TabsTrigger value="today" data-testid="gate-pass-tab-today">Today ({counts.today})</TabsTrigger>
+          <TabsTrigger value="pending" data-testid="gate-pass-tab-pending">Pending ({counts.pending})</TabsTrigger>
+          <TabsTrigger value="week" data-testid="gate-pass-tab-week">This Week ({counts.week})</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -229,6 +230,7 @@ export function GatePassListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="gate-pass-search-input"
         />
       </div>
 

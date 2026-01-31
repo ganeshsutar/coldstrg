@@ -182,7 +182,7 @@ export function ReceiptFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="receipt-form-dialog">
         <DialogHeader>
           <DialogTitle>Record Payment</DialogTitle>
           <DialogDescription>Receipt #: {nextReceiptNo}</DialogDescription>
@@ -194,12 +194,12 @@ export function ReceiptFormDialog({
             <div>
               <Label>Party</Label>
               <Select value={partyId} onValueChange={setPartyId}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="receipt-form-party">
                   <SelectValue placeholder="Select party" />
                 </SelectTrigger>
                 <SelectContent>
                   {parties.map((party: { id: string; name: string }) => (
-                    <SelectItem key={party.id} value={party.id}>
+                    <SelectItem key={party.id} value={party.id} data-testid={`receipt-form-party-option-${party.id}`}>
                       {party.name}
                     </SelectItem>
                   ))}
@@ -212,17 +212,18 @@ export function ReceiptFormDialog({
                 type="date"
                 value={receiptDate}
                 onChange={(e) => setReceiptDate(e.target.value)}
+                data-testid="receipt-form-date"
               />
             </div>
           </div>
 
           {/* Outstanding Display */}
           {partyId && (
-            <div className="p-3 bg-muted rounded-md">
+            <div className="p-3 bg-muted rounded-md" data-testid="receipt-form-outstanding">
               <div className="text-sm text-muted-foreground">
                 Outstanding Balance
               </div>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold" data-testid="receipt-form-outstanding-amount">
                 {formatIndianRupees(outstanding)}
               </div>
             </div>
@@ -237,10 +238,10 @@ export function ReceiptFormDialog({
               onValueChange={(v) => v && setPaymentMode(v as ReceiptPaymentModeValue)}
               className="justify-start mt-1"
             >
-              <ToggleGroupItem value="CASH">Cash</ToggleGroupItem>
-              <ToggleGroupItem value="CHEQUE">Cheque</ToggleGroupItem>
-              <ToggleGroupItem value="BANK">Bank</ToggleGroupItem>
-              <ToggleGroupItem value="UPI">UPI</ToggleGroupItem>
+              <ToggleGroupItem value="CASH" data-testid="receipt-form-mode-cash">Cash</ToggleGroupItem>
+              <ToggleGroupItem value="CHEQUE" data-testid="receipt-form-mode-cheque">Cheque</ToggleGroupItem>
+              <ToggleGroupItem value="BANK" data-testid="receipt-form-mode-bank">Bank</ToggleGroupItem>
+              <ToggleGroupItem value="UPI" data-testid="receipt-form-mode-upi">UPI</ToggleGroupItem>
             </ToggleGroup>
           </div>
 
@@ -252,9 +253,10 @@ export function ReceiptFormDialog({
               value={amount || ""}
               onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
               placeholder="Enter amount"
+              data-testid="receipt-form-amount"
             />
             {amount > 0 && (
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1" data-testid="receipt-form-amount-words">
                 {convertAmountToWords(amount)}
               </p>
             )}
@@ -262,13 +264,14 @@ export function ReceiptFormDialog({
 
           {/* Cheque Details */}
           {paymentMode === "CHEQUE" && (
-            <div className="grid grid-cols-2 gap-4 p-4 border rounded-md">
+            <div className="grid grid-cols-2 gap-4 p-4 border rounded-md" data-testid="receipt-form-cheque-section">
               <div>
                 <Label>Cheque Number</Label>
                 <Input
                   value={chequeNo}
                   onChange={(e) => setChequeNo(e.target.value)}
                   placeholder="Cheque #"
+                  data-testid="receipt-form-cheque-number"
                 />
               </div>
               <div>
@@ -277,6 +280,7 @@ export function ReceiptFormDialog({
                   type="date"
                   value={chequeDate}
                   onChange={(e) => setChequeDate(e.target.value)}
+                  data-testid="receipt-form-cheque-date"
                 />
               </div>
               <div>
@@ -285,6 +289,7 @@ export function ReceiptFormDialog({
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
                   placeholder="Bank name"
+                  data-testid="receipt-form-cheque-bank"
                 />
               </div>
               <div>
@@ -293,6 +298,7 @@ export function ReceiptFormDialog({
                   value={branchName}
                   onChange={(e) => setBranchName(e.target.value)}
                   placeholder="Branch name"
+                  data-testid="receipt-form-cheque-branch"
                 />
               </div>
               <div className="col-span-2 flex items-center space-x-2">
@@ -300,6 +306,7 @@ export function ReceiptFormDialog({
                   id="pdc"
                   checked={isPdcCheque}
                   onCheckedChange={(c) => setIsPdcCheque(!!c)}
+                  data-testid="receipt-form-pdc"
                 />
                 <label
                   htmlFor="pdc"
@@ -319,6 +326,7 @@ export function ReceiptFormDialog({
                 value={upiRef}
                 onChange={(e) => setUpiRef(e.target.value)}
                 placeholder="UPI transaction ID"
+                data-testid="receipt-form-upi-ref"
               />
             </div>
           )}
@@ -331,13 +339,14 @@ export function ReceiptFormDialog({
                 value={bankRef}
                 onChange={(e) => setBankRef(e.target.value)}
                 placeholder="Transaction reference"
+                data-testid="receipt-form-bank-ref"
               />
             </div>
           )}
 
           {/* Bill Adjustment */}
           {partyId && unpaidBills.length > 0 && (
-            <div className="space-y-4">
+            <div className="space-y-4" data-testid="receipt-form-bill-adjustment-section">
               <div className="flex items-center justify-between">
                 <Label>Bill Adjustment</Label>
                 <div className="flex items-center space-x-2">
@@ -345,6 +354,7 @@ export function ReceiptFormDialog({
                     id="auto"
                     checked={autoAdjust}
                     onCheckedChange={(c) => setAutoAdjust(!!c)}
+                    data-testid="receipt-form-auto-adjust"
                   />
                   <label
                     htmlFor="auto"
@@ -355,7 +365,7 @@ export function ReceiptFormDialog({
                 </div>
               </div>
 
-              <div className="border rounded-md max-h-48 overflow-auto">
+              <div className="border rounded-md max-h-48 overflow-auto" data-testid="receipt-form-bill-table">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -420,17 +430,19 @@ export function ReceiptFormDialog({
               onChange={(e) => setNarration(e.target.value)}
               placeholder="Payment description..."
               rows={2}
+              data-testid="receipt-form-narration"
             />
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} data-testid="receipt-form-cancel">
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={isPending || !partyId || amount <= 0}
+            data-testid="receipt-form-submit"
           >
             {isPending ? "Saving..." : "Save Receipt"}
           </Button>

@@ -32,7 +32,7 @@ export function AmadKpiCards({ amadList }: AmadKpiCardsProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="amad-kpi-today">
         <CardHeader className="relative">
           <CardDescription>Today's Inward</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -47,7 +47,7 @@ export function AmadKpiCards({ amadList }: AmadKpiCardsProps) {
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="amad-kpi-total-stock">
         <CardHeader className="relative">
           <CardDescription>Total Stock</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -62,7 +62,7 @@ export function AmadKpiCards({ amadList }: AmadKpiCardsProps) {
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="amad-kpi-partial">
         <CardHeader className="relative">
           <CardDescription>Partial Dispatch</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -77,7 +77,7 @@ export function AmadKpiCards({ amadList }: AmadKpiCardsProps) {
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="amad-kpi-pending">
         <CardHeader className="relative">
           <CardDescription>Pending</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums">

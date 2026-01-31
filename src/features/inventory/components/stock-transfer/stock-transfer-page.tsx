@@ -73,7 +73,7 @@ export function StockTransferPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="transfer-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -84,7 +84,7 @@ export function StockTransferPage() {
             Transfer stock between rooms and parties
           </p>
         </div>
-        <Button onClick={() => setWizardOpen(true)}>
+        <Button onClick={() => setWizardOpen(true)} data-testid="new-transfer-button">
           <Plus className="h-4 w-4 mr-1" />
           New Transfer
         </Button>
@@ -98,6 +98,7 @@ export function StockTransferPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="transfer-search-input"
         />
       </div>
 

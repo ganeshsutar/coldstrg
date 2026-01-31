@@ -272,7 +272,7 @@ export function BillGenerationWizard() {
     step === 3;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-testid="bill-wizard-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -283,19 +283,19 @@ export function BillGenerationWizard() {
             Bill #: {nextBillNo || "..."}
           </p>
         </div>
-        <Button variant="outline" onClick={() => navigate({ to: "/billing/rent-bills" })}>
+        <Button variant="outline" onClick={() => navigate({ to: "/billing/rent-bills" })} data-testid="bill-wizard-cancel">
           Cancel
         </Button>
       </div>
 
       {/* Step Indicators */}
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-4" data-testid="bill-wizard-steps">
         {[
           { step: 1 as WizardStep, label: "Select Amads", icon: Package },
           { step: 2 as WizardStep, label: "Add Charges", icon: Calculator },
           { step: 3 as WizardStep, label: "Preview & Generate", icon: FileText },
         ].map(({ step: s, label, icon: Icon }, i) => (
-          <div key={s} className="flex items-center gap-2">
+          <div key={s} className="flex items-center gap-2" data-testid={`bill-wizard-step-${s}`}>
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
                 step >= s
@@ -329,7 +329,7 @@ export function BillGenerationWizard() {
         <CardContent>
           {/* Step 1: Select Amads */}
           {step === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-4" data-testid="bill-wizard-step1-content">
               <div className="max-w-md">
                 <Label>Select Party</Label>
                 <Select
@@ -339,12 +339,12 @@ export function BillGenerationWizard() {
                     setSelectedAmadIds(new Set());
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="bill-wizard-party-select">
                     <SelectValue placeholder="Select a party" />
                   </SelectTrigger>
                   <SelectContent>
                     {parties.map((party) => (
-                      <SelectItem key={party.id} value={party.id}>
+                      <SelectItem key={party.id} value={party.id} data-testid={`bill-wizard-party-option-${party.id}`}>
                         {party.name}{" "}
                         {party.city && (
                           <span className="text-muted-foreground">
@@ -360,20 +360,20 @@ export function BillGenerationWizard() {
               {selectedPartyId && (
                 <>
                   <div className="flex items-center justify-between">
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-muted-foreground" data-testid="bill-wizard-amad-count">
                       {partyAmads.length} unbilled Amads available
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={selectAllAmads}>
+                      <Button variant="outline" size="sm" onClick={selectAllAmads} data-testid="bill-wizard-select-all">
                         Select All
                       </Button>
-                      <Button variant="outline" size="sm" onClick={clearAllAmads}>
+                      <Button variant="outline" size="sm" onClick={clearAllAmads} data-testid="bill-wizard-clear-all">
                         Clear
                       </Button>
                     </div>
                   </div>
 
-                  <div className="border rounded-md">
+                  <div className="border rounded-md" data-testid="bill-wizard-amad-table">
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -399,13 +399,14 @@ export function BillGenerationWizard() {
                           </TableRow>
                         ) : (
                           partyAmads.map((amad) => (
-                            <TableRow key={amad.id}>
+                            <TableRow key={amad.id} data-testid={`bill-wizard-amad-row-${amad.id}`}>
                               <TableCell>
                                 <Checkbox
                                   checked={selectedAmadIds.has(amad.id)}
                                   onCheckedChange={() =>
                                     toggleAmadSelection(amad.id)
                                   }
+                                  data-testid={`bill-wizard-amad-checkbox-${amad.id}`}
                                 />
                               </TableCell>
                               <TableCell className="font-medium">
@@ -435,25 +436,25 @@ export function BillGenerationWizard() {
                   </div>
 
                   {selectedAmadIds.size > 0 && (
-                    <div className="bg-muted p-4 rounded-md">
+                    <div className="bg-muted p-4 rounded-md" data-testid="bill-wizard-selection-summary">
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <div className="text-muted-foreground">
                             Selected Amads
                           </div>
-                          <div className="text-lg font-medium">
+                          <div className="text-lg font-medium" data-testid="bill-wizard-selected-count">
                             {selectedAmadIds.size}
                           </div>
                         </div>
                         <div>
                           <div className="text-muted-foreground">Total Bags</div>
-                          <div className="text-lg font-medium">
+                          <div className="text-lg font-medium" data-testid="bill-wizard-total-bags">
                             {totals.totalBags}
                           </div>
                         </div>
                         <div>
                           <div className="text-muted-foreground">Est. Rent</div>
-                          <div className="text-lg font-medium">
+                          <div className="text-lg font-medium" data-testid="bill-wizard-est-rent">
                             {formatIndianRupees(totals.totalRent)}
                           </div>
                         </div>
@@ -467,11 +468,11 @@ export function BillGenerationWizard() {
 
           {/* Step 2: Add Charges */}
           {step === 2 && (
-            <div className="space-y-6">
+            <div className="space-y-6" data-testid="bill-wizard-step2-content">
               {/* Rent Summary */}
               <div>
                 <h4 className="font-medium mb-2">Rent Summary</h4>
-                <div className="border rounded-md">
+                <div className="border rounded-md" data-testid="bill-wizard-rent-table">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -546,6 +547,7 @@ export function BillGenerationWizard() {
                         size="sm"
                         onClick={() => addCharge(comp)}
                         disabled={charges.some((c) => c.component === comp)}
+                        data-testid={`bill-wizard-add-charge-${comp.toLowerCase()}`}
                       >
                         + {comp}
                       </Button>
@@ -621,14 +623,14 @@ export function BillGenerationWizard() {
                     value={gstType}
                     onValueChange={(v) => setGstType(v as GstTypeValue)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="bill-wizard-gst-type">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="INTRA_STATE">
+                      <SelectItem value="INTRA_STATE" data-testid="bill-wizard-gst-intra">
                         Intra-State (CGST+SGST)
                       </SelectItem>
-                      <SelectItem value="INTER_STATE">
+                      <SelectItem value="INTER_STATE" data-testid="bill-wizard-gst-inter">
                         Inter-State (IGST)
                       </SelectItem>
                     </SelectContent>
@@ -640,6 +642,7 @@ export function BillGenerationWizard() {
                     type="number"
                     value={gstRate}
                     onChange={(e) => setGstRate(parseFloat(e.target.value) || 0)}
+                    data-testid="bill-wizard-gst-rate"
                   />
                 </div>
               </div>
@@ -653,6 +656,7 @@ export function BillGenerationWizard() {
                   onChange={(e) =>
                     setDiscountAmount(parseFloat(e.target.value) || 0)
                   }
+                  data-testid="bill-wizard-discount"
                 />
               </div>
             </div>
@@ -660,9 +664,9 @@ export function BillGenerationWizard() {
 
           {/* Step 3: Preview */}
           {step === 3 && (
-            <div className="space-y-6">
+            <div className="space-y-6" data-testid="bill-wizard-step3-content">
               {/* Bill Summary */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6" data-testid="bill-wizard-preview">
                 <div>
                   <h4 className="font-medium mb-2">Bill Details</h4>
                   <dl className="space-y-1 text-sm">
@@ -751,6 +755,7 @@ export function BillGenerationWizard() {
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Any additional notes for the bill..."
                   rows={3}
+                  data-testid="bill-wizard-notes"
                 />
               </div>
             </div>
@@ -764,6 +769,7 @@ export function BillGenerationWizard() {
           variant="outline"
           onClick={() => setStep((s) => (s - 1) as WizardStep)}
           disabled={step === 1}
+          data-testid="bill-wizard-back"
         >
           <ChevronLeft className="h-4 w-4 mr-1" />
           Back
@@ -773,6 +779,7 @@ export function BillGenerationWizard() {
             <Button
               onClick={() => setStep((s) => (s + 1) as WizardStep)}
               disabled={!canGoNext}
+              data-testid="bill-wizard-next"
             >
               Next
               <ChevronRight className="h-4 w-4 ml-1" />
@@ -781,6 +788,7 @@ export function BillGenerationWizard() {
             <Button
               onClick={handleSubmit}
               disabled={createMutation.isPending || !canGoNext}
+              data-testid="bill-wizard-generate-button"
             >
               {createMutation.isPending ? "Generating..." : "Generate Bill"}
             </Button>

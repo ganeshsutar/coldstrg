@@ -28,7 +28,7 @@ export function QuantityStep({
   const availableQuantity = selectedAmad?.totalPackets || 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="shifting-quantity-step">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Quantity to Shift</CardTitle>
@@ -54,6 +54,7 @@ export function QuantityStep({
                 max={selectedAmad?.pkt1 || 0}
                 value={state.pkt1}
                 onChange={(e) => onStateChange({ pkt1: parseInt(e.target.value, 10) || 0 })}
+                data-testid="shifting-form-pkt1-input"
               />
             </div>
             <div className="space-y-4">
@@ -65,6 +66,7 @@ export function QuantityStep({
                 max={selectedAmad?.pkt2 || 0}
                 value={state.pkt2}
                 onChange={(e) => onStateChange({ pkt2: parseInt(e.target.value, 10) || 0 })}
+                data-testid="shifting-form-pkt2-input"
               />
             </div>
             <div className="space-y-4">
@@ -76,11 +78,12 @@ export function QuantityStep({
                 max={selectedAmad?.pkt3 || 0}
                 value={state.pkt3}
                 onChange={(e) => onStateChange({ pkt3: parseInt(e.target.value, 10) || 0 })}
+                data-testid="shifting-form-pkt3-input"
               />
             </div>
             <div className="space-y-4">
               <Label>Total</Label>
-              <div className="h-10 flex items-center font-medium">
+              <div className="h-10 flex items-center font-medium" data-testid="shifting-form-total-quantity">
                 {totalQuantity} bags
               </div>
             </div>
@@ -99,7 +102,7 @@ export function QuantityStep({
               value={state.reason}
               onValueChange={(value) => onStateChange({ reason: value })}
             >
-              <SelectTrigger>
+              <SelectTrigger data-testid="shifting-form-reason-select">
                 <SelectValue placeholder="Select reason" />
               </SelectTrigger>
               <SelectContent>
@@ -120,6 +123,7 @@ export function QuantityStep({
               onChange={(e) => onStateChange({ remarks: e.target.value })}
               rows={3}
               placeholder="Additional notes..."
+              data-testid="shifting-form-remarks-input"
             />
           </div>
         </CardContent>

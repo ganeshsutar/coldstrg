@@ -43,6 +43,7 @@ export function AmadTabFilters({
           size="sm"
           onClick={() => onTabChange(tab.id)}
           className="whitespace-nowrap"
+          data-testid={`amad-tab-${tab.id}`}
         >
           {tab.label}
           <span className="ml-1.5 rounded-full bg-background/20 px-1.5 py-0.5 text-xs">

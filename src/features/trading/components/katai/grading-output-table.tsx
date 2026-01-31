@@ -120,6 +120,7 @@ export function GradingOutputTable({
                 }
                 disabled={readOnly}
                 className="text-center"
+                data-testid={`katai-form-${grade.id}-bags-input`}
               />
               <div className="text-xs text-muted-foreground text-center">
                 {percentage.toFixed(1)}%
@@ -174,7 +175,7 @@ export function GradingOutputTable({
       >
         <div className="flex justify-between items-center">
           <div>
-            <div className="font-medium">
+            <div className="font-medium" data-testid="katai-form-output-total">
               Input: {bagsGraded} bags | Output: {total} bags
             </div>
             {!isBalanced && (
@@ -189,6 +190,7 @@ export function GradingOutputTable({
             className={`text-lg font-bold ${
               isBalanced ? "text-green-600" : "text-amber-600"
             }`}
+            data-testid="katai-form-balance-indicator"
           >
             {isBalanced ? "✓ Balanced" : "⚠ Unbalanced"}
           </div>

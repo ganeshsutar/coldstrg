@@ -17,6 +17,15 @@ npx ampx sandbox     # Start local cloud sandbox for development
 npx ampx generate    # Generate GraphQL client code after schema changes
 ```
 
+**E2E Testing (Playwright):**
+```bash
+npm run test:e2e         # Run all e2e tests
+npm run test:e2e:ui      # Open Playwright UI for debugging
+npm run test:e2e:headed  # Run tests in headed browser mode
+```
+
+E2E tests are in `e2e/tests/` using Page Object pattern (`e2e/pages/`). Tests use `data-testid` attributes for element selection. Copy `e2e/.env.example` to `e2e/.env` and set test credentials before running.
+
 **Requirements:** Node >= 20.20.0, npm >= 10.8.0
 
 ## Documentation
@@ -34,6 +43,13 @@ Design documentation in `docs/src/`. Key documents:
 - `backend.ts` - Main backend definition combining auth + data
 - `auth/resource.ts` - Cognito authentication (email-based)
 - `data/resource.ts` - GraphQL schema with 50+ models and enums
+
+**E2E Tests (`e2e/`):**
+```
+e2e/
+├── pages/            # Page Object classes (login.page.ts, etc.)
+└── tests/            # Test specs organized by feature
+```
 
 **Frontend (`src/`):**
 ```

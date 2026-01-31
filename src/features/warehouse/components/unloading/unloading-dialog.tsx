@@ -119,7 +119,7 @@ export function UnloadingDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="unloading-form-dialog">
         <DialogHeader>
           <DialogTitle>Unload Goods from Rack</DialogTitle>
           <DialogDescription>
@@ -131,7 +131,7 @@ export function UnloadingDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="unloadingNo">Unloading #</Label>
-              <Input id="unloadingNo" value={unloadingNo} disabled />
+              <Input id="unloadingNo" value={unloadingNo} disabled data-testid="unloading-form-unloading-no-input" />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
@@ -140,6 +140,7 @@ export function UnloadingDialog({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                data-testid="unloading-form-date-input"
               />
             </div>
           </div>
@@ -184,6 +185,7 @@ export function UnloadingDialog({
                 min="0"
                 value={pkt1}
                 onChange={(e) => setPkt1(e.target.value)}
+                data-testid="unloading-form-pkt1-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -194,6 +196,7 @@ export function UnloadingDialog({
                 min="0"
                 value={pkt2}
                 onChange={(e) => setPkt2(e.target.value)}
+                data-testid="unloading-form-pkt2-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -204,11 +207,12 @@ export function UnloadingDialog({
                 min="0"
                 value={pkt3}
                 onChange={(e) => setPkt3(e.target.value)}
+                data-testid="unloading-form-pkt3-input"
               />
             </div>
             <div className="flex flex-col gap-2">
               <Label>Total</Label>
-              <div className="h-10 flex items-center font-medium">
+              <div className="h-10 flex items-center font-medium" data-testid="unloading-form-total-quantity">
                 {totalQuantity} bags
               </div>
             </div>
@@ -221,6 +225,7 @@ export function UnloadingDialog({
               value={vehicleNo}
               onChange={(e) => setVehicleNo(e.target.value)}
               placeholder="e.g., UP32AB1234"
+              data-testid="unloading-form-vehicle-no-input"
             />
           </div>
 
@@ -231,14 +236,15 @@ export function UnloadingDialog({
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               rows={2}
+              data-testid="unloading-form-remarks-input"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} data-testid="unloading-form-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={!isValid || createMutation.isPending}>
+            <Button type="submit" disabled={!isValid || createMutation.isPending} data-testid="unloading-form-submit-button">
               {createMutation.isPending ? "Saving..." : "Unload Goods"}
             </Button>
           </DialogFooter>

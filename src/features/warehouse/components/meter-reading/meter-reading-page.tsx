@@ -14,7 +14,7 @@ export function MeterReadingPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="meter-reading-page">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Meter Reading</h1>
         <p className="text-sm text-muted-foreground">

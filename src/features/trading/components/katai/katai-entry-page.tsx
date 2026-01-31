@@ -146,7 +146,7 @@ export function KataiEntryPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="katai-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -160,6 +160,7 @@ export function KataiEntryPage() {
             setEditingKatai(null);
             setDialogOpen(true);
           }}
+          data-testid="new-grading-button"
         >
           <Plus className="h-4 w-4 mr-1" />
           New Grading
@@ -169,28 +170,28 @@ export function KataiEntryPage() {
       {/* KPI Cards */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+          <Card data-testid="katai-kpi-total-records">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Total Records</div>
               <div className="text-2xl font-bold">{stats.totalRecords}</div>
               <div className="text-xs text-muted-foreground">gradings</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="katai-kpi-in-progress">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">In Progress</div>
               <div className="text-2xl font-bold">{stats.inProgressCount}</div>
               <div className="text-xs text-muted-foreground">active</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="katai-kpi-completed">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Completed</div>
               <div className="text-2xl font-bold">{stats.completedCount}</div>
               <div className="text-xs text-muted-foreground">finished</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card data-testid="katai-kpi-total-graded">
             <CardContent className="pt-4">
               <div className="text-sm text-muted-foreground">Total Graded</div>
               <div className="text-2xl font-bold">
@@ -208,12 +209,12 @@ export function KataiEntryPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({katais.length})</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
-          <TabsTrigger value="in_progress">
+          <TabsTrigger value="all" data-testid="katai-tab-all">All ({katais.length})</TabsTrigger>
+          <TabsTrigger value="pending" data-testid="katai-tab-pending">Pending ({counts.pending})</TabsTrigger>
+          <TabsTrigger value="in_progress" data-testid="katai-tab-in-progress">
             In Progress ({counts.inProgress})
           </TabsTrigger>
-          <TabsTrigger value="completed">
+          <TabsTrigger value="completed" data-testid="katai-tab-completed">
             Completed ({counts.completed})
           </TabsTrigger>
         </TabsList>
@@ -227,6 +228,7 @@ export function KataiEntryPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
+          data-testid="katai-search-input"
         />
       </div>
 

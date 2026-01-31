@@ -47,7 +47,7 @@ export function TemperatureDashboard({ organizationId }: TemperatureDashboardPro
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <Select value={selectedChamberId} onValueChange={setSelectedChamberId}>
-          <SelectTrigger className="w-64">
+          <SelectTrigger className="w-64" data-testid="temp-chamber-filter">
             <SelectValue placeholder="All Chambers" />
           </SelectTrigger>
           <SelectContent>
@@ -60,7 +60,7 @@ export function TemperatureDashboard({ organizationId }: TemperatureDashboardPro
           </SelectContent>
         </Select>
 
-        <Button onClick={() => setDialogOpen(true)}>
+        <Button onClick={() => setDialogOpen(true)} data-testid="new-temp-log-button">
           <Plus className="h-4 w-4 mr-1" />
           Log Reading
         </Button>

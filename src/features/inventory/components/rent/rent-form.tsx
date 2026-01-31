@@ -199,7 +199,7 @@ export function RentForm({
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="serialNo">Serial No</Label>
-                <Input id="serialNo" type="number" value={serialNo} disabled />
+                <Input id="serialNo" type="number" value={serialNo} disabled data-testid="nikasi-form-serial-input" />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="date">Date</Label>
@@ -209,12 +209,13 @@ export function RentForm({
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   required
+                  data-testid="nikasi-form-date-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="amad">Select Amad</Label>
                 <Select value={amadId} onValueChange={handleAmadSelect}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" data-testid="nikasi-form-amad-select">
                     <SelectValue placeholder="Select Amad" />
                   </SelectTrigger>
                   <SelectContent>
@@ -235,6 +236,7 @@ export function RentForm({
                   value={partyName}
                   onChange={(e) => setPartyName(e.target.value)}
                   required
+                  data-testid="nikasi-form-party-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -243,6 +245,7 @@ export function RentForm({
                   id="receiverName"
                   value={receiverName}
                   onChange={(e) => setReceiverName(e.target.value)}
+                  data-testid="nikasi-form-receiver-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -251,6 +254,7 @@ export function RentForm({
                   id="vehicleNo"
                   value={vehicleNo}
                   onChange={(e) => setVehicleNo(e.target.value)}
+                  data-testid="nikasi-form-vehicle-input"
                 />
               </div>
             </div>
@@ -267,6 +271,7 @@ export function RentForm({
                   type="number"
                   value={pkt1}
                   onChange={(e) => setPkt1(e.target.value)}
+                  data-testid="nikasi-form-pkt1-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -275,6 +280,7 @@ export function RentForm({
                   type="number"
                   value={pkt2}
                   onChange={(e) => setPkt2(e.target.value)}
+                  data-testid="nikasi-form-pkt2-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -283,12 +289,13 @@ export function RentForm({
                   type="number"
                   value={pkt3}
                   onChange={(e) => setPkt3(e.target.value)}
+                  data-testid="nikasi-form-pkt3-input"
                 />
               </div>
             </div>
             <div className="rounded-md bg-muted/50 p-3 text-sm">
               <span className="text-muted-foreground">Total Packets: </span>
-              <span className="font-semibold">{totalPackets}</span>
+              <span className="font-semibold" data-testid="nikasi-form-total-packets">{totalPackets}</span>
             </div>
           </div>
         )}
@@ -303,6 +310,7 @@ export function RentForm({
                   type="number"
                   value={storageDays}
                   onChange={(e) => setStorageDays(e.target.value)}
+                  data-testid="nikasi-form-storage-days-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -312,6 +320,7 @@ export function RentForm({
                   step="0.01"
                   value={rate}
                   onChange={(e) => setRate(e.target.value)}
+                  data-testid="nikasi-form-rate-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -321,6 +330,7 @@ export function RentForm({
                   step="0.01"
                   value={rentAmount.toFixed(2)}
                   disabled
+                  data-testid="nikasi-form-rent-amount"
                 />
               </div>
             </div>
@@ -332,6 +342,7 @@ export function RentForm({
                   step="0.01"
                   value={loadingAmt}
                   onChange={(e) => setLoadingAmt(e.target.value)}
+                  data-testid="nikasi-form-loading-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -341,6 +352,7 @@ export function RentForm({
                   step="0.01"
                   value={unloadingAmt}
                   onChange={(e) => setUnloadingAmt(e.target.value)}
+                  data-testid="nikasi-form-unloading-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -350,6 +362,7 @@ export function RentForm({
                   step="0.01"
                   value={dumpingAmt}
                   onChange={(e) => setDumpingAmt(e.target.value)}
+                  data-testid="nikasi-form-dumping-input"
                 />
               </div>
             </div>
@@ -361,6 +374,7 @@ export function RentForm({
                   step="0.01"
                   value={cgst}
                   onChange={(e) => setCgst(e.target.value)}
+                  data-testid="nikasi-form-cgst-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -370,6 +384,7 @@ export function RentForm({
                   step="0.01"
                   value={sgst}
                   onChange={(e) => setSgst(e.target.value)}
+                  data-testid="nikasi-form-sgst-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -379,12 +394,13 @@ export function RentForm({
                   step="0.01"
                   value={igst}
                   onChange={(e) => setIgst(e.target.value)}
+                  data-testid="nikasi-form-igst-input"
                 />
               </div>
             </div>
             <div className="rounded-md bg-muted/50 p-3 text-sm">
               <span className="text-muted-foreground">Bill Amount: </span>
-              <span className="font-semibold">
+              <span className="font-semibold" data-testid="nikasi-form-bill-amount">
                 {`\u20B9${billAmount.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -402,13 +418,14 @@ export function RentForm({
               type="button"
               variant="outline"
               onClick={() => setCurrentStep(currentStep - 1)}
+              data-testid="nikasi-form-back-button"
             >
               Back
             </Button>
           )}
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} data-testid="nikasi-form-cancel-button">
             Cancel
           </Button>
           {currentStep < 3 ? (
@@ -416,6 +433,7 @@ export function RentForm({
               type="button"
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={!partyName || !date}
+              data-testid="nikasi-form-next-button"
             >
               Next
             </Button>
@@ -423,6 +441,7 @@ export function RentForm({
             <Button
               type="submit"
               disabled={isPending || !partyName || !date}
+              data-testid="nikasi-form-submit-button"
             >
               {isPending ? "Saving..." : isEdit ? "Update" : "Create"}
             </Button>

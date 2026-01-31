@@ -92,7 +92,7 @@ export function BillPreview() {
   const isCancelled = bill.status === "CANCELLED";
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-testid="bill-preview-page">
       {/* Header */}
       <div className="flex items-center justify-between print:hidden">
         <div className="flex items-center gap-4">
@@ -100,11 +100,12 @@ export function BillPreview() {
             variant="ghost"
             size="icon"
             onClick={() => navigate({ to: "/billing/rent-bills" })}
+            data-testid="bill-preview-back"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-tight" data-testid="bill-preview-number">
               Bill #{bill.billNo}
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -123,6 +124,7 @@ export function BillPreview() {
                   ? "destructive"
                   : "secondary"
             }
+            data-testid="bill-preview-status"
           >
             {bill.status}
           </Badge>
@@ -130,11 +132,11 @@ export function BillPreview() {
         <div className="flex gap-2">
           {isDraft && (
             <>
-              <Button variant="outline" onClick={handleConfirm}>
+              <Button variant="outline" onClick={handleConfirm} data-testid="bill-preview-confirm">
                 <Check className="h-4 w-4 mr-1" />
                 Confirm
               </Button>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant="outline" onClick={handleCancel} data-testid="bill-preview-cancel">
                 <X className="h-4 w-4 mr-1" />
                 Cancel
               </Button>
@@ -142,19 +144,19 @@ export function BillPreview() {
           )}
           {!isCancelled && (
             <>
-              <Button variant="outline" onClick={handlePrint}>
+              <Button variant="outline" onClick={handlePrint} data-testid="bill-preview-print">
                 <Printer className="h-4 w-4 mr-1" />
                 Print
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" data-testid="bill-preview-pdf">
                 <Download className="h-4 w-4 mr-1" />
                 PDF
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" data-testid="bill-preview-email">
                 <Mail className="h-4 w-4 mr-1" />
                 Email
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" data-testid="bill-preview-whatsapp">
                 <MessageSquare className="h-4 w-4 mr-1" />
                 WhatsApp
               </Button>

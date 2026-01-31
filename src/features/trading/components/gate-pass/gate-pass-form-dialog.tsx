@@ -202,7 +202,7 @@ function GatePassFormContent({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle data-testid="gate-pass-form-dialog-title">
           {isEditing ? "Edit Gate Pass" : "New Gate Pass"}
         </DialogTitle>
       </DialogHeader>
@@ -220,6 +220,7 @@ function GatePassFormContent({
                 <Input
                   value={formatGpNo(gatePass?.gpNo ?? nextGpNo)}
                   disabled
+                  data-testid="gate-pass-form-gp-no-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -229,6 +230,7 @@ function GatePassFormContent({
                   type="date"
                   value={gpDate}
                   onChange={(e) => setGpDate(e.target.value)}
+                  data-testid="gate-pass-form-date-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -238,6 +240,7 @@ function GatePassFormContent({
                   type="time"
                   value={gpTime}
                   onChange={(e) => setGpTime(e.target.value)}
+                  data-testid="gate-pass-form-time-input"
                 />
               </div>
             </div>
@@ -253,12 +256,12 @@ function GatePassFormContent({
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <Label>Link to Deal (Optional)</Label>
-                <Select value={saudaId} onValueChange={handleSaudaChange}>
-                  <SelectTrigger>
+                <Select value={saudaId || "none"} onValueChange={(v) => handleSaudaChange(v === "none" ? "" : v)}>
+                  <SelectTrigger data-testid="gate-pass-form-sauda-select">
                     <SelectValue placeholder="Select deal" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No linked deal</SelectItem>
+                    <SelectItem value="none">No linked deal</SelectItem>
                     {openSaudas.map((sauda) => (
                       <SelectItem key={sauda.id} value={sauda.id}>
                         {formatSaudaNo(sauda.saudaNo)} - {sauda.sellerPartyName} → {sauda.buyerPartyName}
@@ -281,6 +284,7 @@ function GatePassFormContent({
                   step="0.01"
                   value={rate || ""}
                   onChange={(e) => setRate(parseFloat(e.target.value) || 0)}
+                  data-testid="gate-pass-form-rate-input"
                 />
               </div>
             </div>
@@ -289,7 +293,7 @@ function GatePassFormContent({
               <div className="flex flex-col gap-2">
                 <Label>Seller (From) *</Label>
                 <Select value={sellerPartyId} onValueChange={setSellerPartyId}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="gate-pass-form-seller-select">
                     <SelectValue placeholder="Select seller" />
                   </SelectTrigger>
                   <SelectContent>
@@ -303,12 +307,12 @@ function GatePassFormContent({
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Buyer (To)</Label>
-                <Select value={buyerPartyId} onValueChange={setBuyerPartyId}>
-                  <SelectTrigger>
+                <Select value={buyerPartyId || "none"} onValueChange={(v) => setBuyerPartyId(v === "none" ? "" : v)}>
+                  <SelectTrigger data-testid="gate-pass-form-buyer-select">
                     <SelectValue placeholder="Select buyer" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Not specified</SelectItem>
+                    <SelectItem value="none">Not specified</SelectItem>
                     {partyAccounts.map((account) => (
                       <SelectItem key={account.id} value={account.id}>
                         {account.name} ({account.code})
@@ -326,6 +330,7 @@ function GatePassFormContent({
                 value={buyerLocation}
                 onChange={(e) => setBuyerLocation(e.target.value)}
                 placeholder="Delivery address"
+                data-testid="gate-pass-form-buyer-location-input"
               />
             </div>
           </CardContent>
@@ -337,13 +342,13 @@ function GatePassFormContent({
             <CardTitle className="text-base">
               Select Amads for Dispatch
               {totalPackets > 0 && (
-                <span className="ml-2 text-primary font-bold">
+                <span className="ml-2 text-primary font-bold" data-testid="gate-pass-form-total-packets">
                   ({totalPackets} bags selected)
                 </span>
               )}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent data-testid="gate-pass-form-amad-selector">
             <AmadSelector amads={availableAmads} onChange={setDetails} />
           </CardContent>
         </Card>
@@ -362,6 +367,7 @@ function GatePassFormContent({
                   value={transport}
                   onChange={(e) => setTransport(e.target.value)}
                   placeholder="Transport company"
+                  data-testid="gate-pass-form-transport-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -371,6 +377,7 @@ function GatePassFormContent({
                   value={vehicleNo}
                   onChange={(e) => setVehicleNo(e.target.value)}
                   placeholder="e.g., UP 32 AB 1234"
+                  data-testid="gate-pass-form-vehicle-no-input"
                 />
               </div>
             </div>
@@ -381,6 +388,7 @@ function GatePassFormContent({
                   id="driverName"
                   value={driverName}
                   onChange={(e) => setDriverName(e.target.value)}
+                  data-testid="gate-pass-form-driver-name-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -390,6 +398,7 @@ function GatePassFormContent({
                   value={driverContact}
                   onChange={(e) => setDriverContact(e.target.value)}
                   placeholder="Phone number"
+                  data-testid="gate-pass-form-driver-contact-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -398,6 +407,7 @@ function GatePassFormContent({
                   id="biltiNo"
                   value={biltiNo}
                   onChange={(e) => setBiltiNo(e.target.value)}
+                  data-testid="gate-pass-form-bilti-no-input"
                 />
               </div>
             </div>
@@ -413,17 +423,19 @@ function GatePassFormContent({
             rows={2}
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
+            data-testid="gate-pass-form-remarks-input"
           />
         </div>
       </div>
 
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel}>
+        <Button variant="outline" onClick={onCancel} data-testid="gate-pass-form-cancel-button">
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isPending || !sellerPartyId || details.length === 0}
+          data-testid="gate-pass-form-submit-button"
         >
           {isPending ? "Saving..." : isEditing ? "Update" : "Create Gate Pass"}
         </Button>
@@ -459,7 +471,7 @@ export function GatePassFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" data-testid="gate-pass-form-dialog">
         {open && (
           <GatePassFormContent
             key={formKey}

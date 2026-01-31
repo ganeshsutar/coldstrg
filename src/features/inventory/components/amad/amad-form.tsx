@@ -234,6 +234,7 @@ export function AmadForm({
                   type="number"
                   value={amadNo}
                   disabled
+                  data-testid="amad-form-amad-no-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -244,6 +245,7 @@ export function AmadForm({
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   required
+                  data-testid="amad-form-date-input"
                 />
               </div>
             </div>
@@ -251,7 +253,7 @@ export function AmadForm({
               <div className="flex flex-col gap-2">
                 <Label htmlFor="partyName">Party Name</Label>
                 <Select value={partyId} onValueChange={handlePartyChange}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="amad-form-party-select">
                     <SelectValue placeholder="Select party" />
                   </SelectTrigger>
                   <SelectContent>
@@ -269,6 +271,7 @@ export function AmadForm({
                   id="villageName"
                   value={villageName}
                   onChange={(e) => setVillageName(e.target.value)}
+                  data-testid="amad-form-village-input"
                 />
               </div>
             </div>
@@ -279,6 +282,7 @@ export function AmadForm({
                   id="post"
                   value={post}
                   onChange={(e) => setPost(e.target.value)}
+                  data-testid="amad-form-post-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -287,6 +291,7 @@ export function AmadForm({
                   id="district"
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
+                  data-testid="amad-form-district-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -295,6 +300,7 @@ export function AmadForm({
                   id="road"
                   value={road}
                   onChange={(e) => setRoad(e.target.value)}
+                  data-testid="amad-form-road-input"
                 />
               </div>
             </div>
@@ -308,7 +314,7 @@ export function AmadForm({
               <div className="flex flex-col gap-2">
                 <Label htmlFor="commodity">Commodity</Label>
                 <Select value={commodityId} onValueChange={handleCommodityChange}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" data-testid="amad-form-commodity-select">
                     <SelectValue placeholder="Select commodity" />
                   </SelectTrigger>
                   <SelectContent>
@@ -326,12 +332,13 @@ export function AmadForm({
                   id="variety"
                   value={variety}
                   onChange={(e) => setVariety(e.target.value)}
+                  data-testid="amad-form-variety-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="chamber">Chamber</Label>
                 <Select value={chamberId} onValueChange={handleChamberChange}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" data-testid="amad-form-chamber-select">
                     <SelectValue placeholder="Select chamber" />
                   </SelectTrigger>
                   <SelectContent>
@@ -352,7 +359,7 @@ export function AmadForm({
                   onValueChange={handleFloorChange}
                   disabled={!chamberId || chamberFloors.length === 0}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" data-testid="amad-form-floor-select">
                     <SelectValue placeholder={chamberId ? "Select floor" : "Select chamber first"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -372,6 +379,7 @@ export function AmadForm({
                   step="0.01"
                   value={rentRate}
                   onChange={(e) => setRentRate(e.target.value)}
+                  data-testid="amad-form-rent-rate-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -381,6 +389,7 @@ export function AmadForm({
                   type="number"
                   value={graceDays}
                   onChange={(e) => setGraceDays(e.target.value)}
+                  data-testid="amad-form-grace-days-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -389,6 +398,7 @@ export function AmadForm({
                   id="eWayBillNo"
                   value={eWayBillNo}
                   onChange={(e) => setEWayBillNo(e.target.value)}
+                  data-testid="amad-form-eway-bill-input"
                 />
               </div>
             </div>
@@ -421,6 +431,7 @@ export function AmadForm({
                       placeholder="Count"
                       value={pkt1}
                       onChange={(e) => setPkt1(e.target.value)}
+                      data-testid="amad-form-pkt1-count-input"
                     />
                   </div>
                   <div>
@@ -430,6 +441,7 @@ export function AmadForm({
                       placeholder="Weight"
                       value={pwt1}
                       onChange={(e) => setPwt1(e.target.value)}
+                      data-testid="amad-form-pkt1-weight-input"
                     />
                   </div>
                 </div>
@@ -443,6 +455,7 @@ export function AmadForm({
                       placeholder="Count"
                       value={pkt2}
                       onChange={(e) => setPkt2(e.target.value)}
+                      data-testid="amad-form-pkt2-count-input"
                     />
                   </div>
                   <div>
@@ -452,6 +465,7 @@ export function AmadForm({
                       placeholder="Weight"
                       value={pwt2}
                       onChange={(e) => setPwt2(e.target.value)}
+                      data-testid="amad-form-pkt2-weight-input"
                     />
                   </div>
                 </div>
@@ -465,6 +479,7 @@ export function AmadForm({
                       placeholder="Count"
                       value={pkt3}
                       onChange={(e) => setPkt3(e.target.value)}
+                      data-testid="amad-form-pkt3-count-input"
                     />
                   </div>
                   <div>
@@ -474,6 +489,7 @@ export function AmadForm({
                       placeholder="Weight"
                       value={pwt3}
                       onChange={(e) => setPwt3(e.target.value)}
+                      data-testid="amad-form-pkt3-weight-input"
                     />
                   </div>
                 </div>
@@ -482,11 +498,11 @@ export function AmadForm({
             <div className="grid grid-cols-2 gap-4 rounded-md bg-muted/50 p-3">
               <div className="text-sm">
                 <span className="text-muted-foreground">Total Packets: </span>
-                <span className="font-semibold">{totalPackets}</span>
+                <span className="font-semibold" data-testid="amad-form-total-packets">{totalPackets}</span>
               </div>
               <div className="text-sm">
                 <span className="text-muted-foreground">Total Weight: </span>
-                <span className="font-semibold">
+                <span className="font-semibold" data-testid="amad-form-total-weight">
                   {totalWeight.toLocaleString("en-IN")} kg
                 </span>
               </div>
@@ -504,6 +520,7 @@ export function AmadForm({
                   id="mark1"
                   value={mark1}
                   onChange={(e) => setMark1(e.target.value)}
+                  data-testid="amad-form-mark1-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -512,6 +529,7 @@ export function AmadForm({
                   id="mark2"
                   value={mark2}
                   onChange={(e) => setMark2(e.target.value)}
+                  data-testid="amad-form-mark2-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -520,6 +538,7 @@ export function AmadForm({
                   id="partyMark"
                   value={partyMark}
                   onChange={(e) => setPartyMark(e.target.value)}
+                  data-testid="amad-form-party-mark-input"
                 />
               </div>
             </div>
@@ -534,13 +553,14 @@ export function AmadForm({
               type="button"
               variant="outline"
               onClick={() => setCurrentStep(currentStep - 1)}
+              data-testid="amad-form-back-button"
             >
               Back
             </Button>
           )}
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} data-testid="amad-form-cancel-button">
             Cancel
           </Button>
           {currentStep < 4 ? (
@@ -548,6 +568,7 @@ export function AmadForm({
               type="button"
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={!partyId || !date}
+              data-testid="amad-form-next-button"
             >
               Next
             </Button>
@@ -555,6 +576,7 @@ export function AmadForm({
             <Button
               type="submit"
               disabled={isPending || !partyId || !date}
+              data-testid="amad-form-submit-button"
             >
               {isPending ? "Saving..." : isEdit ? "Update" : "Create"}
             </Button>

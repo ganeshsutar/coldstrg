@@ -60,41 +60,41 @@ export function PartyKpiCards({ accounts }: PartyKpiCardsProps) {
   };
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" data-testid="party-kpi-cards">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="kpi-total-debtors">
         <CardHeader className="relative">
           <CardDescription>Total Debtors</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="kpi-total-debtors-value">
             {formatCurrency(metrics.totalDebit)}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <TrendingUp className="h-4 w-4 text-green-600" />
-            <span>{metrics.debtorCount} parties owe you</span>
+            <span data-testid="kpi-total-debtors-count">{metrics.debtorCount} parties owe you</span>
           </div>
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="kpi-total-creditors">
         <CardHeader className="relative">
           <CardDescription>Total Creditors</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="kpi-total-creditors-value">
             {formatCurrency(metrics.totalCredit)}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <TrendingDown className="h-4 w-4 text-red-600" />
-            <span>{metrics.creditorCount} parties to pay</span>
+            <span data-testid="kpi-total-creditors-count">{metrics.creditorCount} parties to pay</span>
           </div>
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="kpi-pending-rent">
         <CardHeader className="relative">
           <CardDescription>Pending Rent</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="kpi-pending-rent-value">
             {formatCurrency(metrics.pendingRent)}
           </CardTitle>
         </CardHeader>
@@ -106,10 +106,10 @@ export function PartyKpiCards({ accounts }: PartyKpiCardsProps) {
         </CardFooter>
       </Card>
 
-      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card">
+      <Card className="@container/card bg-gradient-to-t from-primary/5 to-card" data-testid="kpi-pending-interest">
         <CardHeader className="relative">
           <CardDescription>Pending Interest</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums">
+          <CardTitle className="text-2xl font-semibold tabular-nums" data-testid="kpi-pending-interest-value">
             {formatCurrency(metrics.pendingInterest)}
           </CardTitle>
         </CardHeader>

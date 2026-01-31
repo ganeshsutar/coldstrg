@@ -44,7 +44,7 @@ export function ChamberDialog({
 }: ChamberDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="chamber-form-dialog">
         {open && (
           <ChamberForm
             chamber={chamber}
@@ -155,6 +155,7 @@ function ChamberForm({
               onChange={(e) => setCode(e.target.value)}
               required
               disabled={isEdit}
+              data-testid="chamber-form-code-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -165,6 +166,7 @@ function ChamberForm({
               value={roomNumber}
               onChange={(e) => setRoomNumber(e.target.value)}
               required
+              data-testid="chamber-form-room-number-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -173,7 +175,7 @@ function ChamberForm({
               value={isActive ? "active" : "inactive"}
               onValueChange={(v) => setIsActive(v === "active")}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" data-testid="chamber-form-status-select">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -192,6 +194,7 @@ function ChamberForm({
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              data-testid="chamber-form-name-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -200,6 +203,7 @@ function ChamberForm({
               id="nameHindi"
               value={nameHindi}
               onChange={(e) => setNameHindi(e.target.value)}
+              data-testid="chamber-form-name-hindi-input"
             />
           </div>
         </div>
@@ -213,6 +217,7 @@ function ChamberForm({
               min="1"
               value={floors}
               onChange={(e) => setFloors(e.target.value)}
+              data-testid="chamber-form-floors-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -223,6 +228,7 @@ function ChamberForm({
               min="0"
               value={totalRacks}
               onChange={(e) => setTotalRacks(e.target.value)}
+              data-testid="chamber-form-total-racks-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -233,6 +239,7 @@ function ChamberForm({
               min="1"
               value={racksPerRow}
               onChange={(e) => setRacksPerRow(e.target.value)}
+              data-testid="chamber-form-racks-per-row-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -243,6 +250,7 @@ function ChamberForm({
               min="1"
               value={rackCapacity}
               onChange={(e) => setRackCapacity(e.target.value)}
+              data-testid="chamber-form-rack-capacity-input"
             />
           </div>
         </div>
@@ -256,6 +264,7 @@ function ChamberForm({
               step="0.1"
               value={targetTemperature}
               onChange={(e) => setTargetTemperature(e.target.value)}
+              data-testid="chamber-form-target-temp-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -266,6 +275,7 @@ function ChamberForm({
               step="0.1"
               value={minTemperature}
               onChange={(e) => setMinTemperature(e.target.value)}
+              data-testid="chamber-form-min-temp-input"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -276,6 +286,7 @@ function ChamberForm({
               step="0.1"
               value={maxTemperature}
               onChange={(e) => setMaxTemperature(e.target.value)}
+              data-testid="chamber-form-max-temp-input"
             />
           </div>
         </div>
@@ -287,14 +298,15 @@ function ChamberForm({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
+            data-testid="chamber-form-description-input"
           />
         </div>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} data-testid="chamber-form-cancel-button">
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending || !name || !code}>
+          <Button type="submit" disabled={isPending || !name || !code} data-testid="chamber-form-submit-button">
             {isPending ? "Saving..." : isEdit ? "Update" : "Create"}
           </Button>
         </DialogFooter>

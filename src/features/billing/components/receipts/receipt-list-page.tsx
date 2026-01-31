@@ -140,7 +140,7 @@ export function ReceiptListPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:gap-6">
+    <div className="flex flex-col gap-4 md:gap-6" data-testid="receipt-list-page">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -149,7 +149,7 @@ export function ReceiptListPage() {
             Record and manage payment receipts
           </p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
+        <Button onClick={() => setDialogOpen(true)} data-testid="receipt-new-button">
           <Plus className="h-4 w-4 mr-1" />
           New Receipt
         </Button>
@@ -161,12 +161,12 @@ export function ReceiptListPage() {
         onValueChange={(v) => setActiveTab(v as FilterTab)}
       >
         <TabsList>
-          <TabsTrigger value="all">All ({receipts.length})</TabsTrigger>
-          <TabsTrigger value="draft">Draft ({counts.draft})</TabsTrigger>
-          <TabsTrigger value="confirmed">
+          <TabsTrigger value="all" data-testid="receipt-tab-all">All ({receipts.length})</TabsTrigger>
+          <TabsTrigger value="draft" data-testid="receipt-tab-draft">Draft ({counts.draft})</TabsTrigger>
+          <TabsTrigger value="confirmed" data-testid="receipt-tab-confirmed">
             Confirmed ({counts.confirmed})
           </TabsTrigger>
-          <TabsTrigger value="cancelled">
+          <TabsTrigger value="cancelled" data-testid="receipt-tab-cancelled">
             Cancelled ({counts.cancelled})
           </TabsTrigger>
         </TabsList>
@@ -180,11 +180,12 @@ export function ReceiptListPage() {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           className="pl-9"
+          data-testid="receipt-search"
         />
       </div>
 
       {/* Table */}
-      <DataTable columns={columns} data={filtered} />
+      <DataTable columns={columns} data={filtered} data-testid="receipt-table" />
 
       {/* Form Dialog */}
       {organizationId && (

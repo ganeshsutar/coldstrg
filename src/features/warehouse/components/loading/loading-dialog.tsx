@@ -117,7 +117,7 @@ export function LoadingDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="loading-form-dialog">
         <DialogHeader>
           <DialogTitle>Load Goods into Rack</DialogTitle>
           <DialogDescription>
@@ -129,7 +129,7 @@ export function LoadingDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="loadingNo">Loading #</Label>
-              <Input id="loadingNo" value={loadingNo} disabled />
+              <Input id="loadingNo" value={loadingNo} disabled data-testid="loading-form-loading-no-input" />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="date">Date</Label>
@@ -138,6 +138,7 @@ export function LoadingDialog({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                data-testid="loading-form-date-input"
               />
             </div>
           </div>
@@ -181,6 +182,7 @@ export function LoadingDialog({
                 min="0"
                 value={pkt1}
                 onChange={(e) => setPkt1(e.target.value)}
+                data-testid="loading-form-pkt1-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -191,6 +193,7 @@ export function LoadingDialog({
                 min="0"
                 value={pkt2}
                 onChange={(e) => setPkt2(e.target.value)}
+                data-testid="loading-form-pkt2-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -201,11 +204,12 @@ export function LoadingDialog({
                 min="0"
                 value={pkt3}
                 onChange={(e) => setPkt3(e.target.value)}
+                data-testid="loading-form-pkt3-input"
               />
             </div>
             <div className="flex flex-col gap-2">
               <Label>Total</Label>
-              <div className="h-10 flex items-center font-medium">
+              <div className="h-10 flex items-center font-medium" data-testid="loading-form-total-quantity">
                 {totalQuantity} bags
               </div>
             </div>
@@ -218,14 +222,15 @@ export function LoadingDialog({
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               rows={2}
+              data-testid="loading-form-remarks-input"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} data-testid="loading-form-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={!isValid || createMutation.isPending}>
+            <Button type="submit" disabled={!isValid || createMutation.isPending} data-testid="loading-form-submit-button">
               {createMutation.isPending ? "Saving..." : "Load Goods"}
             </Button>
           </DialogFooter>

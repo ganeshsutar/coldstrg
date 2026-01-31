@@ -139,6 +139,7 @@ export function getPartyColumns({
             variant="ghost"
             size="icon-xs"
             onClick={() => onView(row.original)}
+            data-testid={`party-view-button-${row.original.id}`}
           >
             <Eye className="h-3.5 w-3.5" />
           </Button>
@@ -146,6 +147,7 @@ export function getPartyColumns({
             variant="ghost"
             size="icon-xs"
             onClick={() => onEdit(row.original)}
+            data-testid={`party-edit-button-${row.original.id}`}
           >
             <Pencil className="h-3.5 w-3.5" />
           </Button>
@@ -153,6 +155,7 @@ export function getPartyColumns({
             variant="ghost"
             size="icon-xs"
             onClick={() => onDelete(row.original)}
+            data-testid={`party-delete-button-${row.original.id}`}
           >
             <Trash2 className="h-3.5 w-3.5 text-destructive" />
           </Button>
@@ -160,6 +163,7 @@ export function getPartyColumns({
             variant="ghost"
             size="icon-xs"
             onClick={() => onView(row.original)}
+            data-testid={`party-expand-button-${row.original.id}`}
           >
             <ChevronRight className="h-3.5 w-3.5" />
           </Button>

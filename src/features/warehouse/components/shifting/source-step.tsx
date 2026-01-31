@@ -20,7 +20,7 @@ export function SourceStep({
   onAmadSelect,
 }: SourceStepProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="shifting-source-step">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Source Location</CardTitle>

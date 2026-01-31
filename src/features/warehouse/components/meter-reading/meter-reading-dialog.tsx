@@ -38,7 +38,7 @@ export function MeterReadingDialog({
   const { data: chambers = [] } = useChambers(organizationId);
   const createMutation = useCreateMeterReading();
 
-  const [chamberId, setChamberId] = useState<string>(preselectedChamber?.id || "");
+  const [chamberId, setChamberId] = useState<string>(preselectedChamber?.id || "general");
   const [meterNumber, setMeterNumber] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [time, setTime] = useState(
@@ -50,7 +50,7 @@ export function MeterReadingDialog({
 
   const { data: latestReading } = useLatestMeterReading(
     organizationId,
-    chamberId || undefined
+    chamberId === "general" ? undefined : chamberId
   );
 
   const handleOpenChange = useCallback((newOpen: boolean) => {
@@ -65,7 +65,7 @@ export function MeterReadingDialog({
     onOpenChange(newOpen);
   }, [onOpenChange, preselectedChamber]);
 
-  const selectedChamber = chambers.find((c) => c.id === chamberId);
+  const selectedChamber = chamberId === "general" ? undefined : chambers.find((c) => c.id === chamberId);
   const previousReading = latestReading?.currentReading || 0;
 
   const consumption = currentReading
@@ -83,7 +83,7 @@ export function MeterReadingDialog({
       previousReading,
       consumption,
       unit: "kWh",
-      ...(chamberId && { chamberId }),
+      ...(chamberId && chamberId !== "general" && { chamberId }),
       ...(selectedChamber && { chamberName: selectedChamber.name }),
       ...(meterNumber && { meterNumber }),
       ...(time && { readingTime: time }),
@@ -103,7 +103,7 @@ export function MeterReadingDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" data-testid="meter-reading-dialog">
         <DialogHeader>
           <DialogTitle>Record Meter Reading</DialogTitle>
           <DialogDescription>
@@ -115,11 +115,11 @@ export function MeterReadingDialog({
           <div className="flex flex-col gap-2">
             <Label htmlFor="chamber">Chamber (Optional)</Label>
             <Select value={chamberId} onValueChange={setChamberId}>
-              <SelectTrigger>
+              <SelectTrigger data-testid="meter-form-chamber-select">
                 <SelectValue placeholder="Select chamber (optional)" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">General Meter</SelectItem>
+                <SelectItem value="general">General Meter</SelectItem>
                 {chambers.map((chamber) => (
                   <SelectItem key={chamber.id} value={chamber.id}>
                     {chamber.name}
@@ -136,6 +136,7 @@ export function MeterReadingDialog({
               value={meterNumber}
               onChange={(e) => setMeterNumber(e.target.value)}
               placeholder="e.g., MTR001"
+              data-testid="meter-form-meter-number-input"
             />
           </div>
 
@@ -147,6 +148,7 @@ export function MeterReadingDialog({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                data-testid="meter-form-date-input"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -156,11 +158,12 @@ export function MeterReadingDialog({
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
+                data-testid="meter-form-time-input"
               />
             </div>
           </div>
 
-          <div className="p-3 bg-muted rounded-lg">
+          <div className="p-3 bg-muted rounded-lg" data-testid="meter-form-previous-reading">
             <div className="text-sm text-muted-foreground">Previous Reading</div>
             <div className="text-lg font-medium">{previousReading.toFixed(2)} kWh</div>
           </div>
@@ -174,11 +177,12 @@ export function MeterReadingDialog({
               value={currentReading}
               onChange={(e) => setCurrentReading(e.target.value)}
               required
+              data-testid="meter-form-current-reading-input"
             />
           </div>
 
           {currentReading && (
-            <div className="p-3 bg-primary/10 rounded-lg">
+            <div className="p-3 bg-primary/10 rounded-lg" data-testid="meter-form-consumption">
               <div className="text-sm text-muted-foreground">Consumption</div>
               <div className="text-xl font-bold text-primary">
                 {consumption.toFixed(2)} kWh
@@ -192,6 +196,7 @@ export function MeterReadingDialog({
               id="recordedBy"
               value={recordedBy}
               onChange={(e) => setRecordedBy(e.target.value)}
+              data-testid="meter-form-recorded-by-input"
             />
           </div>
 
@@ -202,14 +207,15 @@ export function MeterReadingDialog({
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
               rows={2}
+              data-testid="meter-form-remarks-input"
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} data-testid="meter-form-cancel-button">
               Cancel
             </Button>
-            <Button type="submit" disabled={!isValid || createMutation.isPending}>
+            <Button type="submit" disabled={!isValid || createMutation.isPending} data-testid="meter-form-submit-button">
               {createMutation.isPending ? "Saving..." : "Save Reading"}
             </Button>
           </DialogFooter>

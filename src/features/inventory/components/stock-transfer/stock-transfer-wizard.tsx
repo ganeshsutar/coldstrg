@@ -40,7 +40,7 @@ export function StockTransferWizard({
 }: StockTransferWizardProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" data-testid="transfer-form-dialog">
         {open && (
           <WizardContent
             nextTransferNo={nextTransferNo}
@@ -182,7 +182,7 @@ function WizardContent({
             <div className="flex flex-col gap-2">
               <Label>Select Amad</Label>
               <Select value={amadId} onValueChange={handleAmadSelect}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full" data-testid="transfer-form-amad-select">
                   <SelectValue placeholder="Select Amad to transfer from" />
                 </SelectTrigger>
                 <SelectContent>
@@ -196,7 +196,7 @@ function WizardContent({
             </div>
 
             {selectedAmad && (
-              <div className="rounded-md bg-muted/50 p-3 space-y-1 text-sm">
+              <div className="rounded-md bg-muted/50 p-3 space-y-1 text-sm" data-testid="transfer-form-amad-info">
                 <div>
                   <span className="text-muted-foreground">Party: </span>
                   {selectedAmad.partyName}
@@ -225,6 +225,7 @@ function WizardContent({
                   type="number"
                   value={pkt1}
                   onChange={(e) => setPkt1(e.target.value)}
+                  data-testid="transfer-form-pkt1-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -233,6 +234,7 @@ function WizardContent({
                   type="number"
                   value={pkt2}
                   onChange={(e) => setPkt2(e.target.value)}
+                  data-testid="transfer-form-pkt2-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -241,12 +243,13 @@ function WizardContent({
                   type="number"
                   value={pkt3}
                   onChange={(e) => setPkt3(e.target.value)}
+                  data-testid="transfer-form-pkt3-input"
                 />
               </div>
             </div>
             <div className="rounded-md bg-muted/50 p-3 text-sm">
               <span className="text-muted-foreground">Transfer Packets: </span>
-              <span className="font-semibold">{totalPackets}</span>
+              <span className="font-semibold" data-testid="transfer-form-total-packets">{totalPackets}</span>
             </div>
           </div>
         )}
@@ -257,7 +260,7 @@ function WizardContent({
             <div className="flex flex-col gap-2">
               <Label>Destination Party</Label>
               <Select value={toPartyId} onValueChange={handleToPartyChange}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="transfer-form-to-party-select">
                   <SelectValue placeholder="Select destination party" />
                 </SelectTrigger>
                 <SelectContent>
@@ -275,6 +278,7 @@ function WizardContent({
                 value={destRoom}
                 onChange={(e) => setDestRoom(e.target.value)}
                 placeholder="Enter destination room"
+                data-testid="transfer-form-dest-room-input"
               />
             </div>
           </div>
@@ -283,7 +287,7 @@ function WizardContent({
         {/* Step 3: Confirm */}
         {currentStep === 3 && (
           <div className="space-y-4">
-            <div className="rounded-md border p-4 space-y-2 text-sm">
+            <div className="rounded-md border p-4 space-y-2 text-sm" data-testid="transfer-form-summary">
               <div className="font-medium text-base mb-3">Transfer Summary</div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -318,6 +322,7 @@ function WizardContent({
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 placeholder="Optional remarks"
+                data-testid="transfer-form-remarks-input"
               />
             </div>
           </div>
@@ -331,13 +336,14 @@ function WizardContent({
               type="button"
               variant="outline"
               onClick={() => setCurrentStep(currentStep - 1)}
+              data-testid="transfer-form-back-button"
             >
               Back
             </Button>
           )}
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} data-testid="transfer-form-cancel-button">
             Cancel
           </Button>
           {currentStep < 3 ? (
@@ -345,6 +351,7 @@ function WizardContent({
               type="button"
               onClick={() => setCurrentStep(currentStep + 1)}
               disabled={currentStep === 1 && (!amadId || totalPackets === 0)}
+              data-testid="transfer-form-next-button"
             >
               Next
             </Button>
@@ -352,6 +359,7 @@ function WizardContent({
             <Button
               type="submit"
               disabled={isPending}
+              data-testid="transfer-form-submit-button"
             >
               {isPending ? "Transferring..." : "Confirm Transfer"}
             </Button>

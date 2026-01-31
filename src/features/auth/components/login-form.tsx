@@ -49,7 +49,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card data-testid="login-form">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -60,7 +60,7 @@ export function LoginForm({
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               {error && (
-                <div className="text-sm text-destructive">{error}</div>
+                <div className="text-sm text-destructive" data-testid="login-error-message">{error}</div>
               )}
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -72,6 +72,7 @@ export function LoginForm({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
+                  data-testid="login-email-input"
                 />
               </div>
               <div className="grid gap-2">
@@ -93,6 +94,7 @@ export function LoginForm({
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
                     className="pr-10"
+                    data-testid="login-password-input"
                   />
                   <button
                     type="button"
@@ -104,7 +106,7 @@ export function LoginForm({
                   </button>
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full" disabled={loading} data-testid="login-submit-button">
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </div>

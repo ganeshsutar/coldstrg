@@ -162,7 +162,7 @@ export function ShiftingWizard({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="shifting-wizard-dialog">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Shift Goods Between Racks</DialogTitle>
@@ -170,7 +170,7 @@ export function ShiftingWizard({
 
         {/* Progress */}
         <div className="space-y-4">
-          <Progress value={progress} className="h-2" />
+          <Progress value={progress} className="h-2" data-testid="shifting-wizard-progress" />
           <div className="flex justify-between text-xs text-muted-foreground">
             {STEPS.map((step) => (
               <span
@@ -224,21 +224,22 @@ export function ShiftingWizard({
             variant="outline"
             onClick={handleBack}
             disabled={state.step === 1}
+            data-testid="shifting-wizard-back-button"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back
           </Button>
           <div className="flex gap-2">
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} data-testid="shifting-wizard-cancel-button">
               Cancel
             </Button>
             {state.step < 4 ? (
-              <Button type="button" onClick={handleNext} disabled={!canProceed()}>
+              <Button type="button" onClick={handleNext} disabled={!canProceed()} data-testid="shifting-wizard-next-button">
                 Next
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             ) : (
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={isPending} data-testid="shifting-wizard-confirm-button">
                 <Check className="h-4 w-4 mr-1" />
                 {isPending ? "Processing..." : "Confirm Shift"}
               </Button>

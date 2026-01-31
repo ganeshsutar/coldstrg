@@ -170,7 +170,7 @@ function KataiFormContent({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle data-testid="katai-form-dialog-title">
           {isEditing ? "Edit Grading (Katai)" : "New Grading (Katai)"}
         </DialogTitle>
       </DialogHeader>
@@ -188,6 +188,7 @@ function KataiFormContent({
                 <Input
                   value={formatKataiNo(katai?.kataiNo ?? nextKataiNo)}
                   disabled
+                  data-testid="katai-form-katai-no-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -197,6 +198,7 @@ function KataiFormContent({
                   type="date"
                   value={kataiDate}
                   onChange={(e) => setKataiDate(e.target.value)}
+                  data-testid="katai-form-date-input"
                 />
               </div>
             </div>
@@ -219,7 +221,7 @@ function KataiFormContent({
                     setAmadId(""); // Reset amad when party changes
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="katai-form-party-select">
                     <SelectValue placeholder="Select party" />
                   </SelectTrigger>
                   <SelectContent>
@@ -238,7 +240,7 @@ function KataiFormContent({
                   onValueChange={setAmadId}
                   disabled={!partyId}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="katai-form-amad-select">
                     <SelectValue placeholder="Select amad" />
                   </SelectTrigger>
                   <SelectContent>
@@ -253,7 +255,7 @@ function KataiFormContent({
             </div>
 
             {selectedAmad && (
-              <div className="p-3 bg-muted rounded-lg text-sm">
+              <div className="p-3 bg-muted rounded-lg text-sm" data-testid="katai-form-amad-info">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <span className="text-muted-foreground">Commodity: </span>
@@ -281,6 +283,7 @@ function KataiFormContent({
                 max={selectedAmad?.totalPackets ?? undefined}
                 value={bagsGraded || ""}
                 onChange={(e) => setBagsGraded(parseInt(e.target.value) || 0)}
+                data-testid="katai-form-bags-graded-input"
               />
               {selectedAmad && bagsGraded > (selectedAmad.totalPackets ?? 0) && (
                 <p className="text-xs text-destructive">
@@ -323,6 +326,7 @@ function KataiFormContent({
                   value={laborName}
                   onChange={(e) => setLaborName(e.target.value)}
                   placeholder="Worker name"
+                  data-testid="katai-form-labor-name-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -334,6 +338,7 @@ function KataiFormContent({
                   step="0.5"
                   value={laborRate || ""}
                   onChange={(e) => setLaborRate(parseFloat(e.target.value) || 0)}
+                  data-testid="katai-form-labor-rate-input"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -342,6 +347,7 @@ function KataiFormContent({
                   value={formatCurrency(charges)}
                   disabled
                   className="font-semibold"
+                  data-testid="katai-form-total-charges"
                 />
               </div>
             </div>
@@ -357,17 +363,19 @@ function KataiFormContent({
             rows={2}
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
+            data-testid="katai-form-remarks-input"
           />
         </div>
       </div>
 
       <DialogFooter>
-        <Button variant="outline" onClick={onCancel}>
+        <Button variant="outline" onClick={onCancel} data-testid="katai-form-cancel-button">
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isPending || !partyId || !amadId || bagsGraded <= 0}
+          data-testid="katai-form-submit-button"
         >
           {isPending ? "Saving..." : isEditing ? "Update" : "Save Grading"}
         </Button>
@@ -402,7 +410,7 @@ export function KataiFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" data-testid="katai-form-dialog">
         {open && (
           <KataiFormContent
             key={formKey}

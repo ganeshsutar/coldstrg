@@ -22,6 +22,7 @@ export function RentBillKpiCards({ stats, isLoading }: RentBillKpiCardsProps) {
       icon: FileText,
       iconColor: "text-blue-500",
       bgColor: "bg-blue-50",
+      testId: "rent-bill-kpi-bills-this-month",
     },
     {
       title: "Pending Bills",
@@ -30,6 +31,7 @@ export function RentBillKpiCards({ stats, isLoading }: RentBillKpiCardsProps) {
       icon: Clock,
       iconColor: "text-orange-500",
       bgColor: "bg-orange-50",
+      testId: "rent-bill-kpi-pending",
     },
     {
       title: "Collections This Month",
@@ -38,6 +40,7 @@ export function RentBillKpiCards({ stats, isLoading }: RentBillKpiCardsProps) {
       icon: IndianRupee,
       iconColor: "text-green-500",
       bgColor: "bg-green-50",
+      testId: "rent-bill-kpi-collections",
     },
     {
       title: "GST Payable",
@@ -46,6 +49,7 @@ export function RentBillKpiCards({ stats, isLoading }: RentBillKpiCardsProps) {
       icon: Receipt,
       iconColor: "text-purple-500",
       bgColor: "bg-purple-50",
+      testId: "rent-bill-kpi-gst",
     },
   ];
 
@@ -68,9 +72,9 @@ export function RentBillKpiCards({ stats, isLoading }: RentBillKpiCardsProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4" data-testid="rent-bill-kpi-cards">
       {kpiData.map((kpi) => (
-        <Card key={kpi.title}>
+        <Card key={kpi.title} data-testid={kpi.testId}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               {kpi.title}

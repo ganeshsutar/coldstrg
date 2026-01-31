@@ -158,7 +158,7 @@ function PartyFormInner({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" data-testid="party-form">
       {/* Classification & Basic Info - 4 columns with custom widths */}
       <div className="grid grid-cols-[2fr_2fr_1fr_1fr] gap-4">
         <div className="flex flex-col gap-2">
@@ -167,7 +167,7 @@ function PartyFormInner({
             value={partyType}
             onValueChange={(val) => handlePartyTypeChange(val as PartyTypeValue)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full" data-testid="party-form-type-select">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -185,7 +185,7 @@ function PartyFormInner({
             value={parentId}
             onValueChange={(val) => setParentId(val)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full" data-testid="party-form-parent-select">
               <SelectValue placeholder="Select parent" />
             </SelectTrigger>
             <SelectContent>
@@ -201,6 +201,7 @@ function PartyFormInner({
           <Label htmlFor="code">Party Code</Label>
           <Input
             id="code"
+            data-testid="party-form-code-input"
             value={code}
             onChange={(e) => {
               setCode(e.target.value);
@@ -218,7 +219,7 @@ function PartyFormInner({
             value={nature}
             onValueChange={(val) => setNature(val as AccountNatureValue)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full" data-testid="party-form-nature-select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -237,6 +238,7 @@ function PartyFormInner({
           <Label htmlFor="name">Party Name</Label>
           <Input
             id="name"
+            data-testid="party-form-name-input"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -252,6 +254,7 @@ function PartyFormInner({
           <Label htmlFor="nameHindi">Name (Hindi)</Label>
           <Input
             id="nameHindi"
+            data-testid="party-form-name-hindi-input"
             value={nameHindi}
             onChange={(e) => setNameHindi(e.target.value)}
             placeholder="हिंदी में नाम"
@@ -296,6 +299,7 @@ function PartyFormInner({
             <Label htmlFor="phone">Phone</Label>
             <Input
               id="phone"
+              data-testid="party-form-phone-input"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Mobile number"
@@ -366,6 +370,7 @@ function PartyFormInner({
             <Label htmlFor="openingBalance">Opening Balance</Label>
             <Input
               id="openingBalance"
+              data-testid="party-form-opening-balance-input"
               type="number"
               step="0.01"
               value={openingBalance}
@@ -403,10 +408,11 @@ function PartyFormInner({
           type="button"
           variant="outline"
           onClick={onCancel}
+          data-testid="party-form-cancel-button"
         >
           Cancel
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending} data-testid="party-form-submit-button">
           {isPending ? "Saving..." : isEditing ? "Update Party" : "Add Party"}
         </Button>
       </DialogFooter>
@@ -434,7 +440,7 @@ export function PartyFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" data-testid="party-form-dialog">
         <DialogHeader>
           <DialogTitle>{isEditing ? "Edit Party" : "Add New Party"}</DialogTitle>
         </DialogHeader>
