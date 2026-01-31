@@ -194,7 +194,6 @@ export function ReceiptListPage() {
           organizationId={organizationId}
           nextReceiptNo={nextReceiptNo}
           preselectedPartyId={search.partyId}
-          preselectedBillId={search.billId}
           onSave={handleSave}
           isPending={createMutation.isPending}
         />
